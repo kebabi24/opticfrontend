@@ -1,0 +1,64 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Configuration Modules'" [class]="'card-head-lg'">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="form" [formGroup]="cfgForm">
+
+                
+
+                <div class="row">
+
+               
+                    <div class="form-group col-2">
+
+                        <label class="form-group"> Gestion Projet: *</label>
+                    
+                        <span class="switch switch-icon ">
+                            <label>
+                                <input type="checkbox"  formControlName="cfg_pm_module"
+                                    class="form-control form-control-sm form-control-solid">
+                                <span></span>
+                            </label>
+                        </span>
+                    </div>
+
+
+
+                </div>
+                <div class="row">
+
+               
+                    <div class="form-group col-2">
+
+                        <label class="form-group"> Paiement Multiple: *</label>
+                    
+                        <span class="switch switch-icon ">
+                            <label>
+                                <input type="checkbox"  formControlName="cfg_pay_multiple"
+                                    class="form-control form-control-sm form-control-solid">
+                                <span></span>
+                            </label>
+                        </span>
+                    </div>
+
+
+
+                </div>
+
+
+            </form>
+        </div>
+
+    </kt-portlet-body>
+
+
+</kt-portlet>

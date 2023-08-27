@@ -1,0 +1,189 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="title" [class]="'card-head-lg'">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+        </ng-container>
+    </kt-portlet-header>
+<kt-portlet-body>
+    <div class="example-preview">
+        <form class="kt-form" [formGroup]="ccForm">
+            
+
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Code: *</label>
+                        <input type="text" formControlName="cc_ctr" [(ngModel)]="ccEdit.cc_ctr"
+                            [className]="ccForm.controls['cc_ctr'].errors && (ccForm.controls['cc_ctr'].dirty || ccForm.controls['cc_ctr'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                        <div *ngIf="ccForm.controls['cc_ctr'].errors && (ccForm.controls['cc_ctr'].dirty || ccForm.controls['cc_ctr'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label class="form-group">Description: *</label>
+                        <input type="text" formControlName="cc_desc" 
+                            [className]="ccForm.controls['cc_desc'].errors && (ccForm.controls['cc_desc'].dirty || ccForm.controls['cc_desc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                        <div *ngIf="ccForm.controls['cc_desc'].errors && (ccForm.controls['cc_desc'].dirty || ccForm.controls['cc_desc'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group"> Actif: </label>
+                        <div class="col-6">
+                            <span class="switch switch-icon ">
+                                <label>
+                                    <input type="checkbox" name="Permanent"
+                                        class="form-control form-control-sm form-control-solid" formControlName="cc_active">
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                </div>    
+                <div class="form-group col-12 row">
+                    <label class="col-2 col-form-label text-right"> Plage des Comptes: </label>
+                </div>
+
+
+                <div class="row col-lg-12">
+                    <button class="btn btn-primary btn-elevate col-lg-2" (click)="addNewItem()">Ajouter une
+                        plage</button>
+                </div>
+                <br>
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="200" gridId="plagemvGrid" [columnDefinitions]="mvcolumnDefinitions"
+                    [gridOptions]="mvgridOptions" [dataset]="mvdataset" (onAngularGridCreated)="mvGridReady($event)">
+                </angular-slickgrid>
+                </div>
+
+                <div class="form-group col-12 row">
+                    <label class="col-2 col-form-label text-right"> Plage des Sous Comptes: </label>
+                </div>
+                <div class="row col-lg-12">
+                    <button class="btn btn-primary btn-elevate col-lg-2" (click)="addNewItemsub()">Ajouter une
+                        plage</button>
+                </div>
+                <br>
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="200" gridId="plagesubGrid" [columnDefinitions]="subcolumnDefinitions"
+                    [gridOptions]="subgridOptions" [dataset]="subdataset" (onAngularGridCreated)="subGridReady($event)">
+                </angular-slickgrid>
+                </div>
+
+
+            </form>
+        </div>
+
+        <div>
+            <ng-template #content4 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir Compte</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griditem"
+                            [columnDefinitions]="columnDefinitions4" (onAngularGridCreated)="angularGridReady4($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged4($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions4" [dataset]="accounts">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+            <button hidden id="openItemsGrid" class="btn btn-primary" (click)="open4(content4)">Launch demo
+                modal</button>
+
+        </div>
+        <div>
+            <ng-template #content5 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir Compte</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griditem"
+                            [columnDefinitions]="columnDefinitions5" (onAngularGridCreated)="angularGridReady5($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged5($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions5" [dataset]="accounts">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+            <button hidden id="openItems2Grid" class="btn btn-primary" (click)="open5(content5)">Launch demo
+                modal</button>
+
+        </div>
+        <div>
+            <ng-template #content6 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir Sous Compte</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griditem"
+                            [columnDefinitions]="columnDefinitions6" (onAngularGridCreated)="angularGridReady6($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged6($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions6" [dataset]="subs">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+            <button hidden id="openItemssubGrid" class="btn btn-primary" (click)="open6(content6)">Launch demo
+                modal</button>
+
+        </div>
+
+        <div>
+            <ng-template #content7 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir Sous Compte</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griditem"
+                            [columnDefinitions]="columnDefinitions7" (onAngularGridCreated)="angularGridReady7($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged7($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions7" [dataset]="subs">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+            <button hidden id="openItemssub2Grid" class="btn btn-primary" (click)="open7(content7)">Launch demo
+                modal</button>
+
+        </div>
+    </kt-portlet-body>
+</kt-portlet>

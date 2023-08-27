@@ -1,0 +1,142 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Ajouter Unité de Mesure'" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+
+
+            <!-- <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-sm" id="dropdownBasic1" ngbDropdownToggle><i
+                        class="icon-2x text-dark-50 flaticon-more-v2"></i></button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item">Sauvgarder et quitter</button>
+
+                </div>
+            </div> -->
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="form" [formGroup]="mesureForm">
+
+                <kt-alert *ngIf="isExist" type="warn" [showCloseButton]="true" [duration]="10000"
+                                    (close)="onAlertClose($event)">
+                                    Ce Code existe deja
+                </kt-alert>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Unité Principale: *</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" formControlName="um_um" 
+                                [className]="mesureForm.controls['um_um'].errors && (mesureForm.controls['um_um'].dirty || mesureForm.controls['um_um'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open3(content,'um_um')">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                            <div *ngIf="mesureForm.controls['um_um'].errors && (mesureForm.controls['um_um'].dirty || mesureForm.controls['um_um'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+                    </div>
+                </div>
+                <div class='row'>    
+                    <div class="form-group col-2">
+                        <label class="form-group">Unité Remplacement: *</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" formControlName="um_alt_um"
+                                [className]="mesureForm.controls['um_alt_um'].errors && (mesureForm.controls['um_alt_um'].dirty || mesureForm.controls['um_alt_um'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open3(content,'um_alt_um')">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                            <div *ngIf="mesureForm.controls['um_alt_um'].errors && (mesureForm.controls['um_alt_um'].dirty || mesureForm.controls['um_alt_um'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+                    </div>
+
+                </div>
+                
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Article:</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" class="form-control form-control-solid" formControlName="um_part"  aria-describedby="basic-addon2" (change)="onChangeCode()">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)=open4(content4)>
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    
+                    
+                </div>
+                <div class="row">
+                    <div class="form-group col-3">
+                        <label class="form-group">Conversion: </label>
+                        <input type="number" formControlName="um_conv" class='form-control form-control-sm form-control-solid' >
+                    </div>
+              
+                </div>
+                
+            </form>
+        </div>
+
+        <div>
+            <ng-template #content4 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir l'article</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griditem" [columnDefinitions]="columnDefinitions4" (onAngularGridCreated)="angularGridReady4($event)" (sgOnSelectedRowsChanged)="handleSelectedRowsChanged4($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions4" [dataset]="items">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+            <button hidden id="openItemsGrid" class="btn btn-primary" (click)="open4(content4)">Launch demo modal</button>
+
+        </div>
+        <div>
+            <ng-template #content let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir </h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                            [columnDefinitions]="columnDefinitions3" (onAngularGridCreated)="angularGridReady3($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged3($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions3" [dataset]="data">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+    
+    </kt-portlet-body>
+</kt-portlet>

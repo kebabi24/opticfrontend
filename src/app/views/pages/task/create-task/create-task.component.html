@@ -1,0 +1,198 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Ajouter Instruction'" [class]="'card-head-lg'">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+            <form class="kt-form" [formGroup]="taskForm">
+                <kt-alert *ngIf="isExist" type="warn" [showCloseButton]="true" [duration]="10000"
+                (close)="onAlertClose($event)">
+                Ce Code existe deja
+            </kt-alert>
+
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Code: *</label>
+                        <input type="text" formControlName="tk_code"  (change)="onChangeCode()"
+                            [className]="taskForm.controls['tk_code'].errors && (taskForm.controls['tk_code'].dirty || taskForm.controls['tk_code'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                        <div *ngIf="taskForm.controls['tk_code'].errors && (taskForm.controls['tk_code'].dirty || taskForm.controls['tk_code'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                     </div>
+
+                    
+               
+                    <div class="form-group col-6">
+                        <label class="form-group">Description: *</label>
+                        <input type="text" formControlName="tk_desc"  
+                            [className]="taskForm.controls['tk_desc'].errors && (taskForm.controls['tk_desc'].dirty || taskForm.controls['tk_desc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                        <div *ngIf="taskForm.controls['tk_desc'].errors && (taskForm.controls['tk_desc'].dirty || taskForm.controls['tk_desc'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                     </div>
+
+                    
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group ">Unite de mesure:</label>
+
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" formControlName="tk_um"
+                                [className]="taskForm.controls['tk_um'].errors && (taskForm.controls['tk_um'].dirty || taskForm.controls['tk_um'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                (change)="changeUm()" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open3(content)">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                            <div *ngIf="taskForm.controls['tk_um'].errors && (taskForm.controls['tk_um'].dirty || taskForm.controls['tk_um'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+
+                    </div>  
+               
+                    <div class="form-group col-2">
+                        <label class="form-group">Prix Unitaire: *</label>
+                        <input type="number" formControlName="tk_price"  
+                            [className]="taskForm.controls['tk_price'].errors && (taskForm.controls['tk_price'].dirty || taskForm.controls['tk_price'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                        <div *ngIf="taskForm.controls['tk_price'].errors && (taskForm.controls['tk_price'].dirty || taskForm.controls['tk_price'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                    </div>
+
+               
+               
+               
+                </div>             
+                <div class="form-group col-12 row">
+                    <label class="col-2 col-form-label text-right"> Détail de l'instruction: </label>
+                </div>
+
+
+                <div class="row col-lg-12">
+                    <button class="btn btn-primary btn-elevate col-lg-2" (click)="addNewItem()">Ajouter un
+                        outil</button>
+                </div>
+                <br>
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="300" gridId="plagemvGrid" [columnDefinitions]="mvcolumnDefinitions"
+                    [gridOptions]="mvgridOptions" [dataset]="mvdataset" (onAngularGridCreated)="mvGridReady($event)">
+                </angular-slickgrid>
+                </div>
+
+            </form>
+        </div>
+
+        <div>
+            <ng-template #content let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir </h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                            [columnDefinitions]="columnDefinitions3" (onAngularGridCreated)="angularGridReady3($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged3($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions3" [dataset]="data">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+
+
+        <div>
+            <ng-template #contentjob let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choisir Métier </h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="gridjob"
+                            [columnDefinitions]="columnDefinitionsjob"
+                            (onAngularGridCreated)="angularGridReadyjob($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChangedjob($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptionsjob" [dataset]="datajob">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+            <button hidden id="openJobsGrid" class="btn btn-primary" (click)="openjob(contentjob)">Launch demo
+                modal</button>
+        </div>
+
+        <div>
+            <ng-template #contentlevel let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choisir Niveau </h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="gridlevel"
+                            [columnDefinitions]="columnDefinitionslevel"
+                            (onAngularGridCreated)="angularGridReadylevel($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChangedlevel($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptionslevel" [dataset]="datalevel">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+            <button hidden id="openLevelsGrid" class="btn btn-primary" (click)="openlevel(contentlevel)">Launch demo
+                modal</button>
+        </div>
+        <div>
+            <ng-template #contenttool let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choisir Liste </h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="gridlevel"
+                            [columnDefinitions]="columnDefinitionstool"
+                            (onAngularGridCreated)="angularGridReadytool($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChangedtool($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptionstool" [dataset]="datatool">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+            <button hidden id="openToolsGrid" class="btn btn-primary" (click)="opentool(contenttool)">Launch demo
+                modal</button>
+        </div>
+
+    </kt-portlet-body>
+</kt-portlet>

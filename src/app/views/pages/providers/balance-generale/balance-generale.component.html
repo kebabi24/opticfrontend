@@ -1,0 +1,97 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Generation activité Fournisseur'" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuler</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">R�initialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+
+
+            <!-- <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-sm" id="dropdownBasic1" ngbDropdownToggle><i
+                        class="icon-2x text-dark-50 flaticon-more-v2"></i></button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item">Sauvgarder et quitter</button>
+
+                </div>
+
+            </div> -->
+
+
+        </ng-container>
+
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="form" [formGroup]="tagForm">
+
+                <div class="row">
+                    <div class="form-group col-3">
+                        <label class="form-group">Code fournisseur:</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control form-control-solid"  formControlName="vd_addr_1"
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-3">
+                        <label class="form-group">A:</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control form-control-solid"  formControlName="vd_addr_2"
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label class="form-group">Date: </label>
+
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-solid" placeholder="jj-mm-aaaa"
+                                name="usrg_val_en_date" ngbDatepicker formControlName="date_1"
+                                #usrg_val_en_date="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="usrg_val_en_date.toggle()" type="button">
+                                    <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-6">
+                        <label class="form-group">A: </label>
+
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-solid" placeholder="jj-mm-aaaa"
+                                name="usrg_val_en_date_2" ngbDatepicker formControlName="date_2"
+                                #usrg_val_en_date_2="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="usrg_val_en_date_2.toggle()" type="button">
+                                    <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                   
+                </div>
+                
+            </form>
+        </div>
+
+    </kt-portlet-body>
+</kt-portlet>
+
+
+
+

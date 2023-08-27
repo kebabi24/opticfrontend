@@ -1,0 +1,216 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Ajouter un Tarif'" [class]="'card-head-lg'">
+        <ng-container ktPortletTools>
+            
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="form" [formGroup]="priceForm">
+                <kt-alert *ngIf="isExist" type="warn" [showCloseButton]="true" [duration]="10000"
+                    (close)="onAlertClose($event)">
+                    Ce Code existe deja
+                </kt-alert>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Code Tarif: *</label>
+                        <input type="text" (change)="onChangeCode()"
+                        [className]="priceForm.controls['pi_list'].errors && (priceForm.controls['pi_list'].dirty || priceForm.controls['pi_list'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                        formControlName="pi_list">
+                            <div *ngIf="priceForm.controls['pi_list'].errors && (priceForm.controls['pi_list'].dirty || priceForm.controls['pi_list'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                     </div>
+
+                    <div class="form-group col-6">
+                        <label class="form-group">Description: *</label>
+                        <input type="text"
+                        [className]="priceForm.controls['pi_desc'].errors && (priceForm.controls['pi_desc'].dirty || priceForm.controls['pi_desc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                        formControlName="pi_desc">
+                    <div *ngIf="priceForm.controls['pi_desc'].errors && (priceForm.controls['pi_desc'].dirty || priceForm.controls['pi_desc'].touched)"
+                        class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Categorie Client: </label>
+
+                            <div class="input-group input-group-sm">
+
+                                <input type="text" class="form-control form-control-solid" formControlName="pi_cs_code" (change)="changeCode('pi_cs_code')"
+                                    aria-describedby="basic-addon2" >
+                                <div class="input-group-append">
+                                    <span class="input-group-text" (click)="open3(content,'pi_cs_code')">
+                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                </div>
+                            </div>
+                    </div>   
+                    <div class="form-group col-2">
+                        <label class="form-group">Categorie Produit: </label>
+
+                            <div class="input-group input-group-sm">
+
+                                <input type="text" class="form-control form-control-solid" formControlName="pi_part_code" (change)="changeCode('pi_part_code')"
+                                    aria-describedby="basic-addon2" >
+                                <div class="input-group-append">
+                                    <span class="input-group-text" (click)="open3(content,'pi_part_code')">
+                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                </div>
+                            </div>
+                    </div>   
+                </div>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">UM: </label>
+
+                            <div class="input-group input-group-sm">
+
+                                <input type="text" class="form-control form-control-solid" formControlName="pi_um" (change)="changeCode('pi_um')"
+                                    aria-describedby="basic-addon2" >
+                                <div class="input-group-append">
+                                    <span class="input-group-text" (click)="open3(content,'pi_um')">
+                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                </div>
+                            </div>
+                    </div>   
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Devise: </label>
+
+                            <div class="input-group input-group-sm">
+
+                                <input type="text" class="form-control form-control-solid" formControlName="pi_curr" 
+                                    aria-describedby="basic-addon2" (change)="changeCurr()" >
+                                <div class="input-group-append">
+                                    <span class="input-group-text" (click)="open2(content2)">
+                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                </div>
+                            </div>
+                    </div>   
+
+                </div>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Debut Validité :</label>
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-sm form-control-solid"  formControlName="pi_start" 
+                                 placeholder="jj-mm-aaaa" name="pi_start" ngbDatepicker f
+                                #pi_start="ngbDatepicker"   >
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="pi_start.toggle()"  type="button">
+                                    <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                </button>
+                            </div>
+                            
+                        </div>
+
+
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Fin  Validité:</label>
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-sm form-control-solid" formControlName="pi_expire"
+                                 placeholder="jj-mm-aaaa" name="pi_expire" ngbDatepicker
+                                #pi_expire="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="pi_expire.toggle()" type="button">
+                                    <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    
+
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group ">Type Tarif:</label>
+
+                        <select
+                            [className]="priceForm.controls['pi_amt_type'].errors && (priceForm.controls['pi_amt_type'].dirty || priceForm.controls['pi_amt_type'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="pi_amt_type" (change)="onChangeCode()" id="exampleSelects7">
+                            <option value=""></option>
+                            <option value="PT">Prix Tarif</option>
+                            <option value="PR">Prix Remise</option>
+                        
+                            
+                        </select>
+                        <div *ngIf="priceForm.controls['pi_amt_type'].errors && (priceForm.controls['pi_amt_type'].dirty || priceForm.controls['pi_amt_type'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                    </div>
+                
+
+                </div>
+                <div class="form-group col-12 row">
+                    <label class="col-2 col-form-label text-right"> Palier Qte: </label>
+                </div>
+
+
+                <div class="row col-lg-12">
+                    <button class="btn btn-primary btn-elevate col-lg-2" (click)="addNewItem()">Ajouter </button>
+                </div>
+                <br>
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="300" gridId="plagemvGrid" [columnDefinitions]="mvcolumnDefinitions"
+                    [gridOptions]="mvgridOptions" [dataset]="mvdataset" (onAngularGridCreated)="mvGridReady($event)">
+                </angular-slickgrid>
+                </div>
+
+            </form>
+        </div>
+        <div>
+            <ng-template #content let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir </h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                            [columnDefinitions]="columnDefinitions3" (onAngularGridCreated)="angularGridReady3($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged3($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions3" [dataset]="data">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+        <div>
+            <ng-template #content2 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir la Devise</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="gridpro"
+                            [columnDefinitions]="columnDefinitions2" (onAngularGridCreated)="angularGridReady2($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged2($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions2" [dataset]="devises">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+    </kt-portlet-body>
+</kt-portlet>

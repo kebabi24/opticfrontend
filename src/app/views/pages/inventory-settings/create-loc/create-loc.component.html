@@ -1,0 +1,296 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Ajouter un Emplacement'" [class]="'card-head-lg'">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="form" [formGroup]="locationForm">
+
+                <kt-alert *ngIf="isExist" type="warn" [showCloseButton]="true" [duration]="10000"
+                    (close)="onAlertClose($event)">
+                    Ce Code existe deja
+                </kt-alert>
+
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Site: *</label>
+                    
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" formControlName="loc_site"
+                                [className]="locationForm.controls['loc_site'].errors && (locationForm.controls['loc_site'].dirty || locationForm.controls['loc_site'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="opensite(contentsite,'loc_site')">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                            <div *ngIf="locationForm.controls['loc_site'].errors && (locationForm.controls['loc_site'].dirty || locationForm.controls['loc_site'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Emplacement: *</label>
+                        <input type="text" (change)="onChangeCode()"
+                            [className]="locationForm.controls['loc_loc'].errors && (locationForm.controls['loc_loc'].dirty || locationForm.controls['loc_loc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="loc_loc">
+                                <div *ngIf="locationForm.controls['loc_loc'].errors && (locationForm.controls['loc_loc'].dirty || locationForm.controls['loc_loc'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label class="form-group">Description: *</label>
+                        
+                        <input type="text"
+                        [className]="locationForm.controls['loc_desc'].errors && (locationForm.controls['loc_desc'].dirty || locationForm.controls['loc_desc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                        formControlName="loc_desc">
+                    <div *ngIf="locationForm.controls['loc_desc'].errors && (locationForm.controls['loc_desc'].dirty || locationForm.controls['loc_desc'].touched)"
+                        class="invalid-feedback">Ce Champs est obligatoire</div>
+
+
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Status: *</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" formControlName="loc_status"  (change)="changeStatus('loc_status')"
+                                [className]="locationForm.controls['loc_status'].errors && (locationForm.controls['loc_status'].dirty || locationForm.controls['loc_status'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="openstatus(contentstatus,'loc_status')">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                            <div *ngIf="locationForm.controls['loc_status'].errors && (locationForm.controls['loc_status'].dirty || locationForm.controls['loc_status'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Projet: *</label>
+                    
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" class="form-control form-control-solid" formControlName="loc_project"
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="openpm(contentpm)">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-2">
+
+                        <label class="form-group"> Permanent: *</label>
+                    
+                        <span class="switch switch-icon ">
+                            <label>
+                                <input type="checkbox" name="Permanent" formControlName="loc_perm"
+                                    class="form-control form-control-sm form-control-solid">
+                                <span></span>
+                            </label>
+                        </span>
+                    </div>
+
+
+
+                </div>
+
+                <div class="row">
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Type: * </label>
+                            <select class="form-control form-control-sm form-control-solid" formControlName="loc_type" id="exampleSelects">
+                                <option value=""></option>
+                                <option *ngFor="let elem of loc_type" [value]="elem.code_value">
+                                    {{elem.code_cmmt}}</option>
+                            </select>
+
+                    </div>
+  
+                    <div class="form-group col-2">
+
+                            <label class="form-group"> Article Unique: </label>
+                        
+                            <span class="switch switch-icon ">
+                                <label>
+                                    <input type="checkbox" name="Unique" formControlName="loc_single"
+                                        class="form-control form-control-sm form-control-solid">
+                                    <span></span>
+                                </label>
+                            </span>
+                    </div>
+
+
+
+                </div>
+                <div class="row">
+                    <div class="form-group col-2">
+
+                        <label class="form-group"> Lot/Référence Unique: </label>
+                        
+                            <span class="switch switch-icon ">
+                                <label>
+                                    <input type="checkbox" name="ref_unique" formControlName="loc__qad01"
+                                        class="form-control form-control-sm form-control-solid">
+                                    <span></span>
+                                </label>
+                            </span>
+
+                    </div>
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Capacité: </label>
+                            <input type="number" class="form-control form-control-sm form-control-solid" formControlName="loc_cap"
+                                placeholder="0">
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">UM: </label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" class="form-control form-control-solid"  (change)="changeUm()"
+                                formControlName="loc_cap_um" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open3(content,'pt_um')">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-2">
+
+                        <label class="form-group"> Transfert de Propriété: </label>
+                            <span class="switch switch-icon ">
+                                <label>
+                                    <input type="checkbox" name="prop" formControlName="loc_xfer_ownership"
+                                        class="form-control form-control-sm form-control-solid">
+                                    <span></span>
+                                </label>
+                            </span>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+    </kt-portlet-body>
+
+    <div>
+        <ng-template #contentsite let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <h4 class="modal-title">Choissir Site </h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                        [columnDefinitions]="columnDefinitionssite" (onAngularGridCreated)="angularGridReadysite($event)"
+                        (sgOnSelectedRowsChanged)="handleSelectedRowsChangedsite($event.detail.eventData, $event.detail.args)"
+                        [gridOptions]="gridOptionssite" [dataset]="datasite">
+                    </angular-slickgrid>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+            </div>
+        </ng-template>
+    </div>
+    <div>
+        <ng-template #contentstatus let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <h4 class="modal-title">Choissir Status </h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                        [columnDefinitions]="columnDefinitionsstatus" (onAngularGridCreated)="angularGridReadystatus($event)"
+                        (sgOnSelectedRowsChanged)="handleSelectedRowsChangedstatus($event.detail.eventData, $event.detail.args)"
+                        [gridOptions]="gridOptionsstatus" [dataset]="datastatus">
+                    </angular-slickgrid>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+            </div>
+        </ng-template>
+    </div>
+    <div>
+        <ng-template #content let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <h4 class="modal-title">Choissir </h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                        [columnDefinitions]="columnDefinitions3" (onAngularGridCreated)="angularGridReady3($event)"
+                        (sgOnSelectedRowsChanged)="handleSelectedRowsChanged3($event.detail.eventData, $event.detail.args)"
+                        [gridOptions]="gridOptions3" [dataset]="data">
+                    </angular-slickgrid>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+            </div>
+        </ng-template>
+    </div>
+    <div>
+        <ng-template #contentpm let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <h4 class="modal-title">Choissir Projet </h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                        [columnDefinitions]="columnDefinitionspm" (onAngularGridCreated)="angularGridReadypm($event)"
+                        (sgOnSelectedRowsChanged)="handleSelectedRowsChangedpm($event.detail.eventData, $event.detail.args)"
+                        [gridOptions]="gridOptionspm" [dataset]="datapm">
+                    </angular-slickgrid>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+            </div>
+        </ng-template>
+    </div>
+</kt-portlet>

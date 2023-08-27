@@ -1,0 +1,136 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Modification Status CC'" [class]="'card-head-lg'"
+        [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="form row" [formGroup]="soForm">
+                <kt-alert *ngIf="hasFormErrors" type="warn" [showCloseButton]="true" [duration]="10000"
+                    (close)="onAlertClose($event)">
+                    {{message}}
+                </kt-alert>
+                <div class="col-9">
+                    <div class="row">
+                        <div class="form-group col-2">
+                            <label class="form-group">Numero BC:</label>
+                            <div class="input-group input-group-sm">
+
+                                <input type="text" class="form-control form-control-solid" formControlName="so_nbr"
+                                    aria-describedby="basic-addon2" (change)="onChangePoNbr()">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" (click)=open5(content5)>
+                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <div class="form-group col-2">
+                            <label class="form-group">Client :</label>
+                            <div class="input-group input-group-sm">
+
+                                <input type="text" class="form-control form-control-solid" formControlName="so_cust"
+                                    aria-describedby="basic-addon2">
+                                
+                            </div>
+
+                        </div>
+                        <div class="form-group col-3">
+                            <label class="form-group">Nom :</label>
+                            <div class="input-group input-group-sm">
+
+                                <input type="text" class="form-control form-control-solid" formControlName="name"
+                                    aria-describedby="basic-addon2">
+                                
+                            </div>
+
+                        </div>
+                        
+                        <div class="form-group col-3">
+                            <label class="form-group">Date :</label>
+                            <div class="input-group input-group-sm">
+                                <input
+                                    [className]="soForm.controls['so_ord_date'].errors && (soForm.controls['so_ord_date'].dirty || soForm.controls['so_ord_date'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                    formControlName="so_ord_date" placeholder="jj-mm-aaaa" name="dp" ngbDatepicker f
+                                    #dd="ngbDatepicker">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" (click)="dd.toggle()" type="button">
+                                        <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                    </button>
+                                </div>
+                                <div *ngIf="soForm.controls['so_ord_date'].errors && (soForm.controls['so_ord_date'].dirty || soForm.controls['so_ord_date'].touched)"
+                                    class="invalid-feedback">Ce Champs est obligatoire</div>
+                            </div>
+
+
+                        </div>
+                        
+                    </div>
+                   
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="mGrid"
+                            [columnDefinitions]="columnDefinitions" [gridOptions]="gridOptions" [dataset]="dataset"
+                            (onAngularGridCreated)="gridReady($event)">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="form-group col-3">
+                    <label class="form-group">Confirme :</label>
+                    <div class="input-group input-group-sm">
+
+                        <span class="switch switch-icon">
+                            <label>
+                                <input type="checkbox" class="form-control form-control-sm form-control-solid" formControlName="so_conf" />
+                                <span></span>
+                            </label>
+                        </span>
+                    </div>
+
+                  
+                </div>
+               
+                   
+               
+            </form>
+        </div>
+
+        
+        
+        <div>
+            <ng-template #content5 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir Le Bon Commande</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griditem"
+                            [columnDefinitions]="columnDefinitions5" (onAngularGridCreated)="angularGridReady5($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged5($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions5" [dataset]="sos">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+            <button hidden id="openItemsGrid" class="btn btn-primary" (click)="open5(content5)">Launch demo
+                modal</button>
+
+        </div>
+        
+    </kt-portlet-body>
+</kt-portlet>

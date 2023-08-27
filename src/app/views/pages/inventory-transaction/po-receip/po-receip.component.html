@@ -1,0 +1,2430 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" title="Ajouter une Réception Monture" [class]="'card-head-lg'"
+        [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="form" [formGroup]="prhForm">
+                <kt-alert *ngIf="hasFormErrors" type="warn" [showCloseButton]="true" [duration]="10000"
+                    (close)="onAlertClose($event)">
+                    {{message}}
+                </kt-alert>
+                <div class="row">
+                    
+                    <div class="form-group col-2">
+                        <label class="form-group">N° BC:</label>
+                        <div class="input-group input-group-sm">
+
+                             <input type="text"   id="prh_nbr"
+                             class="form-control form-control-solid"
+                            formControlName="prh_nbr" (change)="onChangeOA()" aria-describedby="basic-addon2">
+                        
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open5(content5)">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                           
+                       
+                           
+                        </div>
+
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Fournisseur:</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" class="form-control form-control-solid"  formControlName="prh_vend"
+                                aria-describedby="basic-addon2"  >
+                                <div class="input-group-append">
+                                    <span class="input-group-text" (click)="openvend(contentvend)">
+                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-3">
+                        <label class="form-group">Nom:  </label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" class="form-control form-control-solid"  formControlName="name"
+                                aria-describedby="basic-addon2"  disabled >
+                           
+                        </div>
+
+                    </div>
+                    
+                    <div class="form-group col-2">
+                        <label class="form-group">Date de creation:</label>
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-sm form-control-solid" formControlName="prh_rcp_date"
+                                 placeholder="jj-mm-aaaa" name="prh_rcp_date" ngbDatepicker f
+                                #prh_rcp_date="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="prh_rcp_date.toggle()" type="button">
+                                    <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                </button>
+                            </div>
+                            
+                        </div>
+
+
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Site:</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" class="form-control form-control-solid" id="prh_site" formControlName="prh_site" (change)="onChangesite()"
+                                aria-describedby="basic-addon2" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="opensite(contentsite)">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">   
+                    
+                    <div class="form-group col-4">
+                        <label class="form-group">N° BL/Facture:</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" class="form-control form-control-solid"  formControlName="prh_xinvoice"
+                                aria-describedby="basic-addon2" >
+                            
+                        </div>
+
+                    </div>
+                    <div class="form-group col-3">
+                        <label class="form-group">Devise:</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" class="form-control form-control-solid"  formControlName="prh_curr"
+                                aria-describedby="basic-addon2" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="opencurr(contentcurr)">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Taux Change:</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="number" class="form-control form-control-solid"  formControlName="prh_ex_rate"
+                                aria-describedby="basic-addon2">
+                        </div>
+
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Taux Change:</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="number" class="form-control form-control-solid"  formControlName="prh_ex_rate2"
+                                aria-describedby="basic-addon2">
+                        </div>
+
+                    </div>
+
+                   
+                </div>
+
+                
+                <div class="row">
+                    <div class="form-group col-4">
+                        <label class="form-group">Observation:</label>
+                        <textarea class="form-control form-control-sm form-control-solid" formControlName="prh_rmks"
+                            rows="2"></textarea>
+                    </div>
+                    <div class="form-group col-3">
+                        <label class="form-group">Taxable:</label>
+                        <div class="input-group input-group-sm">
+
+                            <span class="switch switch-icon">
+                                <label>
+                                    <input type="checkbox" class="form-control form-control-sm form-control-solid" formControlName="taxable" (change)="onChangeTAX()" />
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+
+                    </div>
+                    
+                    <!--div class="form-group col-2">
+                        <label class="form-group">Taux de tax:</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" class="form-control form-control-solid" formControlName="prh_taxc" (change)="changeTax()"
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="opentax(contenttax)">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+
+                    </div-->
+                    <div class="form-group col-2">
+                        <label class="form-group">Condition de règlement :</label>
+                        <select
+                            [className]="prhForm.controls['prh_cr_terms'].errors && (prhForm.controls['prh_cr_terms'].dirty || prhForm.controls['prh_cr_terms'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="prh_cr_terms" id="exampleSelects2" (change)="calculatetot()" >
+                            <option value=""></option>
+                            <option *ngFor="let elem of prh_cr_terms" [value]="elem.code_value">
+                                {{elem.code_value}} {{elem.code_cmmt}}</option>
+                        </select>
+                        <div *ngIf="prhForm.controls['prh_cr_terms'].errors && (prhForm.controls['prh_cr_terms'].dirty || prhForm.controls['prh_cr_terms'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Imprimer:</label>
+                        <div class="input-group input-group-sm">
+
+                            <span class="switch switch-icon">
+                                <label>
+                                    <input type="checkbox" class="form-control form-control-sm form-control-solid" formControlName="print"/>
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <button class="btn btn-sm btn-primary btn-elevate col-lg-4" (click)="addNewItem()">Ajouter un
+                        Article</button>
+                </div>
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="300" gridId="mGrid"
+                        [columnDefinitions]="columnDefinitions" [gridOptions]="gridOptions" [dataset]="dataset"
+                        (onAngularGridCreated)="gridReady($event)">
+                    </angular-slickgrid>
+                </div>
+            </form>
+            <form class="form" [formGroup]="totForm">
+                <h3 class="card-title text-center" col-6>Totaux:                </h3>
+                <div class row col-6>
+                   
+                        
+                        <div class="form-group-sm row">
+                            <label class="col-9 col-form-label  text-right ">Total HT</label>
+                            <div class="col-2">
+                                <input class="form-control" type="number"  style="text-align: right;" formControlName="tht">
+                            </div>
+                        </div>
+                    
+                        <div class="form-group-sm row">
+                            <label class="col-9 col-form-label  text-right ">TVA</label>
+                            <div class="col-2">
+                                <input class="form-control" type="number" style="text-align: right;" formControlName="tva">
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label class="col-9 col-form-label  text-right ">Timbre</label>
+                            <div class="col-2">
+                                <input class="form-control" type="number" style="text-align: right;" formControlName="timbre">
+                            </div>
+                        </div>
+                        <div class="form-group-sm row">
+                            <label class="col-9 col-form-label  text-right ">TTC</label>
+                            <div class="col-2">
+                                <input class="form-control" type="number" style="text-align: right;" formControlName="ttc">
+                            </div>
+                        </div>
+                    
+                </div>            
+            </form>
+        </div>
+
+       
+
+        
+        <div>
+            <ng-template #content4 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir l'article</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griditem"
+                            [columnDefinitions]="columnDefinitions4" (onAngularGridCreated)="angularGridReady4($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged4($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions4" [dataset]="items">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+            <button hidden id="openItemsGrid" class="btn btn-primary" (click)="open4(content4)">Launch demo
+                modal</button>
+
+        </div>
+
+        <div>
+            <ng-template #content5 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir OA</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="gridpos"
+                            [columnDefinitions]="columnDefinitions5" (onAngularGridCreated)="angularGridReady5($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged5($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions5" [dataset]="pos">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+            <button hidden id="openItemsGrid" class="btn btn-primary" (click)="open5(content5)">Launch demo
+                modal</button>
+
+        </div>
+        <div>
+            <ng-template #contentcurr let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir la Devise</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="gridpro"
+                            [columnDefinitions]="columnDefinitionscurr" (onAngularGridCreated)="angularGridReadycurr($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChangedcurr($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptionscurr" [dataset]="devises">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+        <div>
+            <ng-template #contentsite let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choisir Site </h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="gridsite"
+                            [columnDefinitions]="columnDefinitionssite"
+                            (onAngularGridCreated)="angularGridReadysite($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChangedsite($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptionssite" [dataset]="datasite">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+            <button hidden id="openSitesGrid" class="btn btn-primary" (click)="opensite(contentsite)">Launch demo
+                modal</button>
+        </div>
+    
+        <div>
+            <ng-template #contentloc let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choisir Emplacement </h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="gridloc"
+                            [columnDefinitions]="columnDefinitionsloc"
+                            (onAngularGridCreated)="angularGridReadyloc($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChangedloc($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptionsloc" [dataset]="dataloc">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+            <button hidden id="openLocsGrid" class="btn btn-primary" (click)="openloc(contentloc)">Launch demo
+                modal</button>
+        </div>
+        <div>
+            <ng-template #contentlocdet let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir Lot </h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="gridloc"
+                            [columnDefinitions]="columnDefinitionslocdet"
+                            (onAngularGridCreated)="angularGridReadylocdet($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChangedlocdet($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptionslocdet" [dataset]="datalocdet">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+            <button hidden id="openLocdetsGrid" class="btn btn-primary" (click)="openlocdet(contentlocdet)">Launch demo
+                modal</button>
+        </div>
+        <div>
+            <ng-template #contentum let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir UM</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="gridum"
+                            [columnDefinitions]="columnDefinitionsum" (onAngularGridCreated)="angularGridReadyum($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChangedum($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptionsum" [dataset]="ums">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+            <button hidden id="openUmsGrid" class="btn btn-primary" (click)="openum(contentum)">Launch demo
+                modal</button>
+    
+        </div>
+        <div>
+            <ng-template #contentvend let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir le FOURNISSEUR</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="gridpro"
+                            [columnDefinitions]="columnDefinitionsvend" (onAngularGridCreated)="angularGridReadyvend($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChangedvend($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptionsvend" [dataset]="providers">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+
+
+        <!---------------------------------------------monture------------------------------------------------------->
+
+        <div>
+            <ng-template #contentmnt let-c="close" let-d="dismiss">
+                <kt-portlet>
+                    <kt-portlet-header [sticky]="true" [title]="'Ajouter Monture'" [class]="'card-head-lg'" [viewLoading$]="loading$">
+                      
+                    </kt-portlet-header>
+                    <kt-portlet-body>
+                        <div class="example-preview">
+                            <div>
+                                <ngb-tabset>
+                                    <ngb-tab>
+                                        <ng-template ngbTabTitle>
+                                            Données Monture , Données Stock Monture
+                                            <div style="width: 10px;"></div>
+                                            <a *ngIf="hasFormErrors1"
+                                                class="btn btn-sm btn-icon btn-light-danger pulse pulse-danger mr-5">
+                                                <i class="flaticon2-information"></i>
+                                                <span class="pulse-ring"></span>
+                                            </a>
+                                        </ng-template>
+                                        <ng-template ngbTabContent>
+                                            <form [formGroup]="form1" class="form">
+                
+                                                <!--kt-alert *ngIf="hasFormErrors1" type="warn" [showCloseButton]="true" [duration]="10000"
+                                                    (close)="onAlertClose($event)">
+                                                    Modifiez quelques éléments et réessayez de soumettre.
+                                                </kt-alert-->
+                                                <kt-alert *ngIf="isExist" type="warn" [showCloseButton]="true" [duration]="10000"
+                                                    (close)="onAlertClose($event)">
+                                                    Ce Code existe deja
+                                                </kt-alert>
+                
+                                                <div class="row">
+                                                    <!--div class="form-group col-2">
+                                                        <label class="form-group">Code Monture:</label>
+                
+                                                        <input type="text" formControlName="pt_part" (change)="onChangeCode()"
+                                                            [className]="form1.controls['pt_part'].errors && (form1.controls['pt_part'].dirty || form1.controls['pt_part'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                                                        <div *ngIf="form1.controls['pt_part'].errors && (form1.controls['pt_part'].dirty || form1.controls['pt_part'].touched)"
+                                                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                
+                                                    </div-->
+                                                    <div class="form-group col-6">
+                                                        <label class="form-group">Description:</label>
+                                                        <input type="text" (change)="onChangeCode()"
+                                                            [className]="form1.controls['pt_desc1'].errors && (form1.controls['pt_desc1'].dirty || form1.controls['pt_desc1'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                                            formControlName="pt_desc1">
+                                                        <div *ngIf="form1.controls['pt_desc1'].errors && (form1.controls['pt_desc1'].dirty || form1.controls['pt_desc1'].touched)"
+                                                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                
+                                                    </div>
+                                                    <!--div class="form-group col-2">
+                                                        <label class="form-group ">Unite de mesure:</label>
+                
+                                                        <div class="input-group input-group-sm">
+                
+                                                            <input type="text" formControlName="pt_um"
+                                                                [className]="form1.controls['pt_um'].errors && (form1.controls['pt_um'].dirty || form1.controls['pt_um'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                                                (change)="changeUm()" aria-describedby="basic-addon2">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" (click)="open3(content,'pt_um')">
+                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                            </div>
+                                                            <div *ngIf="form1.controls['pt_um'].errors && (form1.controls['pt_um'].dirty || form1.controls['pt_um'].touched)"
+                                                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                                                        </div>
+                
+                                                    </div-->
+                                                </div>
+                
+                                                <div class="row">
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group "> Fournisseur:</label>
+                                                        <div class="input-group input-group-sm">
+                
+                                                            <input type="text" class="form-control form-control-solid"
+                                                                (change)="changeProvider()" formControlName="pt_vend"
+                                                                aria-describedby="basic-addon2">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" (click)="openprov(contentprov)">
+                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                            </div>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" (click)="openvendor(contentvendor)">
+                                                                    <i class="text-dark-50 flaticon2-add"></i> </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--div class="form-group col-2">
+                                                        <label class="form-group ">Ligne Prod:</label>
+                
+                                                        <div class="input-group input-group-sm">
+                
+                                                            <input type="text"
+                                                                [className]="form1.controls['pt_prod_line'].errors && (form1.controls['pt_prod_line'].dirty || form1.controls['pt_prod_line'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                                                (change)="changePl()" formControlName="pt_prod_line"
+                                                                aria-describedby="basic-addon2">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" (click)=openpl(contentpl)>
+                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                            </div>
+                                                           
+                
+                                                        </div>
+                                                    </div-->
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Type Monture:</label>
+                                                        <div class="input-group input-group-sm">
+                                                            <select
+                                                                [className]="form1.controls['pt_part_type'].errors && (form1.controls['pt_part_type'].dirty || form1.controls['pt_part_type'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                                                formControlName="pt_part_type" id="exampleSelects1">
+                                                                <option value=""></option>
+                                                                <option *ngFor="let elem of pt_part_type" [value]="elem.code_value">
+                                                                    {{elem.code_value}} {{elem.code_cmmt}}</option>
+                
+                                                            </select>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" (click)="opencode(contentcode,'pt_part_type')">
+                                                                    <i class="text-dark-50 flaticon2-add"></i> </span>
+                                                            </div> 
+                                                            <div *ngIf="form1.controls['pt_part_type'].errors && (form1.controls['pt_part_type'].dirty || form1.controls['pt_part_type'].touched)"
+                                                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                                                        </div>    
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Famille</label>
+                                                        <div class="input-group input-group-sm">
+                                                            <select
+                                                                [className]="form1.controls['pt_draw'].errors && (form1.controls['pt_draw'].dirty || form1.controls['pt_draw'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                                                formControlName="pt_draw" id="exampleSelects2">
+                                                                <option value=""></option>
+                                                                <option *ngFor="let elem of pt_draw" [value]="elem.code_value">
+                                                                    {{elem.code_value}} {{elem.code_cmmt}}</option>
+                                                            </select>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" (click)="opencode(contentcode,'pt_draw')">
+                                                                    <i class="text-dark-50 flaticon2-add"></i> </span>
+                                                            </div> 
+                                                            <div *ngIf="form1.controls['pt_draw'].errors && (form1.controls['pt_draw'].dirty || form1.controls['pt_draw'].touched)"
+                                                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Sous Famille:</label>
+                                                        <div class="input-group input-group-sm">
+                                                        
+                                                            <select class="form-control form-control-sm form-control-solid"
+                                                                formControlName="pt_rev" id="exampleSelects3">
+                                                                <option value=""></option>
+                                                                <option *ngFor="let elem of pt_rev" [value]="elem.code_value">
+                                                                    {{elem.code_value}} {{elem.code_cmmt}}</option>
+                                                            </select>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" (click)="opencode(contentcode,'pt_rev')">
+                                                                    <i class="text-dark-50 flaticon2-add"></i> </span>
+                                                            </div> 
+                
+                                                        </div>
+                                                    </div>
+                
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Marque:</label>
+                                                        <div class="input-group input-group-sm">
+                                                        
+                                                            <select class="form-control form-control-sm form-control-solid"
+                                                                formControlName="pt_group" id="exampleSelects4">
+                                                                <option value=""></option>
+                                                                <option *ngFor="let elem of pt_group" [value]="elem.code_value">
+                                                                    {{elem.code_value}} {{elem.code_cmmt}}</option>
+                                                            </select>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" (click)="opencode(contentcode,'pt_group')">
+                                                                    <i class="text-dark-50 flaticon2-add"></i> </span>
+                                                            </div> 
+                                                        </div>    
+                                                    </div>
+                                                    
+                
+                
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Couleur:</label>
+                                                        <div class="input-group input-group-sm">
+                                                        
+                                                            <select class="form-control form-control-sm form-control-solid"
+                                                                formControlName="pt_dsgn_grp" id="exampleSelects4">
+                                                                <option value=""></option>
+                                                                <option *ngFor="let elem of pt_dsgn_grp" [value]="elem.code_value">
+                                                                    {{elem.code_value}} {{elem.code_cmmt}}</option>
+                                                            </select>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" (click)="opencode(contentcode,'pt_dsgn_grp')">
+                                                                    <i class="text-dark-50 flaticon2-add"></i> </span>
+                                                            </div> 
+                                                        </div>    
+                                                    </div>
+                                                    
+                                                    <div class="form-group col-4">
+                                                        <label class="form-group">Code a Bare:</label>
+                
+                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                            formControlName="pt_article">
+                                                    </div>
+                
+                                                 </div>
+                                                <div class="separator separator-solid"></div>
+                                                <div class="row">
+                                                    <div class="form-group col-2"></div>
+                                                </div>
+                                                <h3>Données Stock Monture </h3>
+                                                <div class="row">
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Classe ABC:</label>
+                
+                                                        <select
+                                                            [className]="form1.controls['pt_abc'].errors && (form1.controls['pt_abc'].dirty || form1.controls['pt_abc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                                            formControlName="pt_abc" id="exampleSelects7">
+                                                            <option value=""></option>
+                                                            <option value="A">A</option>
+                                                            <option value="B">B</option>
+                                                            <option value="C">C</option>
+                
+                
+                                                        </select>
+                                                        <div *ngIf="form1.controls['pt_abc'].errors && (form1.controls['pt_abc'].dirty || form1.controls['pt_abc'].touched)"
+                                                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                
+                                                    </div>
+                                                    
+                                                
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group">Site:</label>
+                                                        <div class="input-group input-group-sm">
+                
+                                                            <input type="text"
+                                                                [className]="form1.controls['pt_site'].errors && (form1.controls['pt_site'].dirty || form1.controls['pt_site'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                                                (change)="changeSite()" formControlName="pt_site"
+                                                                aria-describedby="basic-addon2">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text"
+                                                                    (click)="opensite(contentsite,'pt_site')">
+                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                            </div>
+                                                            <div *ngIf="form1.controls['pt_site'].errors && (form1.controls['pt_site'].dirty || form1.controls['pt_site'].touched)"
+                                                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Emplacement:</label>
+                                                        <div class="input-group input-group-sm">
+                
+                                                            <input type="text"
+                                                                [className]="form1.controls['pt_loc'].errors && (form1.controls['pt_loc'].dirty || form1.controls['pt_loc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                                                (change)="changeLoc()" formControlName="pt_loc"
+                                                                aria-describedby="basic-addon2">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" (click)="openloc(contentloc,'pt_loc')">
+                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                            </div>
+                                                            <div *ngIf="form1.controls['pt_loc'].errors && (form1.controls['pt_loc'].dirty || form1.controls['pt_loc'].touched)"
+                                                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                                                        </div>
+                                                    </div>
+                                                
+                                                </div>
+                
+                
+                                             
+                                                <div class="row">
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Prix D'achat:</label>
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="number" class="form-control form-control-sm form-control-solid"
+                                                                formControlName="pt_pur_price" (change)="changeMarge()">
+                                                        </div>
+                                                    </div>
+                                                   
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Marge:</label>
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="number" class="form-control form-control-sm form-control-solid"
+                                                                formControlName="pt_marge" (change)="changeMarge()" >
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Prix:</label>
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="number" class="form-control form-control-sm form-control-solid"
+                                                                formControlName="pt_price">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group">Taxe:</label>
+                                                        <div class="col-6">
+                                                            <span class="switch switch-icon">
+                                                                <label>
+                                                                    <input type="checkbox" (change)="calculateprice()"
+                                                                        class="form-control form-control-sm form-control-solid"
+                                                                        formControlName="pt_taxable" name="select" />
+                                                                    <span></span>
+                                                                </label>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group "> Taux taxe:</label>
+                
+                                                        <div class="input-group input-group-sm">
+                
+                                                            <input type="text" class="form-control form-control-solid"
+                                                                formControlName="pt_taxc" aria-describedby="basic-addon2">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" (click)=opentax(contenttax)>
+                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                            </div>
+                                                        </div>
+                
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Prix TTC:</label>
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="number" class="form-control form-control-sm form-control-solid"
+                                                                formControlName="pt_sales_price">
+                                                        </div>
+                                                    </div>
+                                                   
+                
+                
+                                                </div>
+                
+                                            </form>
+                                        </ng-template>
+                                    </ngb-tab>
+                                    <!--ngb-tab>
+                                        <ng-template ngbTabTitle>
+                                            Données planification Article
+                                            <div style="width: 10px;"></div>
+                                            <a *ngIf="hasFormErrors3"
+                                                class="btn btn-sm btn-icon btn-light-danger pulse pulse-danger mr-5">
+                                                <i class="flaticon2-information"></i>
+                                                <span class="pulse-ring"></span>
+                                            </a>
+                                        </ng-template>
+                                        <ng-template ngbTabContent>
+                                            <form [formGroup]="form3" class="form">
+                
+                                                <kt-alert *ngIf="hasFormErrors" type="warn" [showCloseButton]="true" [duration]="10000"
+                                                    (close)="onAlertClose($event)">
+                                                    Modifiez quelques éléments et réessayez de soumettre.
+                                                </kt-alert>
+                                                <div class="row">
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Plan direct:</label>
+                
+                                                        <span class="switch switch-icon">
+                                                            <label>
+                                                                <input type="checkbox"
+                                                                    class="form-control form-control-sm form-control-solid"
+                                                                    formControlName="pt_ms" name="select" />
+                                                                <span></span>
+                                                            </label>
+                                                        </span>
+                
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Achat/Planif</label>
+                
+                                                        <div class="input-group input-group-sm">
+                
+                                                            <input type="text" class="form-control form-control-solid"
+                                                                (change)="changeSeq()" formControlName="pt_buyer"
+                                                                aria-describedby="basic-addon2">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" (click)="openseq(contentseq)">
+                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                            </div>
+                                                        </div>
+                
+                                                    </div>
+                
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group "> Fournisseur:</label>
+                                                        <div class="input-group input-group-sm">
+                
+                                                            <input type="text" class="form-control form-control-solid"
+                                                                (change)="changeProvider()" formControlName="pt_vend"
+                                                                aria-describedby="basic-addon2">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" (click)="openprov(contentprov)">
+                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Proposition:</label>
+                                                        <span class="switch switch-icon">
+                                                            <label>
+                                                                <input type="checkbox"
+                                                                    class="form-control form-control-sm form-control-solid"
+                                                                    formControlName="pt_plan_ord" name="select" />
+                                                                <span></span>
+                                                            </label>
+                                                        </span>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Fantome:</label>
+                
+                                                        <span class="switch switch-icon">
+                                                            <label>
+                                                                <input type="checkbox"
+                                                                    class="form-control form-control-sm form-control-solid"
+                                                                    formControlName="pt_phantom" name="select" />
+                                                                <span></span>
+                                                            </label>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Ordre minimum:</label>
+                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                            formControlName="pt_ord_min">
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Ordre maximum:</label>
+                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                            formControlName="pt_ord_max">
+                                                    </div>
+                
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Horizon:</label>
+                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                            formControlName="pt_timefence">
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group "> Site OA:</label>
+                                                        <div class="input-group input-group-sm">
+                
+                                                            <input type="text" class="form-control form-control-solid"
+                                                                formControlName="pt_po_site" aria-describedby="basic-addon2">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text"
+                                                                    (click)="opensite(contentsite,'pt_po_site')">
+                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">MPR Requis:</label>
+                                                        <span class="switch switch-icon">
+                                                            <label>
+                                                                <input type="checkbox"
+                                                                    class="form-control form-control-sm form-control-solid"
+                                                                    name="select" />
+                                                                <span></span>
+                                                            </label>
+                                                        </span>
+                                                    </div>
+                
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Achat fabrication</label>
+                
+                                                        <select class="form-control form-control-sm form-control-solid"
+                                                            formControlName="pt_pm_code" id="exampleSelects13">
+                                                            <option value=""></option>
+                                                            <option *ngFor="let elem of pt_pm_code" [value]="elem.code_value">
+                                                                {{elem.code_value}} {{elem.code_cmmt}}</option>
+                                                        </select>
+                
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Ordre multiple:</label>
+                
+                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                            formControlName="pt_ord_mult">
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Lancement:</label>
+                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                            formControlName="pt_ord_pol">
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group "> Type configuration:</label>
+                
+                                                        <div class="input-group input-group-sm">
+                
+                                                            <input type="text" class="form-control form-control-solid"
+                                                                formControlName="pt_cfg_type" aria-describedby="basic-addon2">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                            </div>
+                                                        </div>
+                
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Rend s/ope:</label>
+                                                        <span class="switch switch-icon">
+                                                            <label>
+                                                                <input type="checkbox"
+                                                                    class="form-control form-control-sm form-control-solid"
+                                                                    formControlName="pt_op_yield" name="select" />
+                                                                <span></span>
+                                                            </label>
+                                                        </span>
+                                                    </div>
+                
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">QTE comm:</label>
+                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                            formConrtolName="pt_ord_qty">
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">CTRL:</label>
+                                                        <span class="switch switch-icon">
+                                                            <label>
+                                                                <input type="checkbox"
+                                                                    class="form-control form-control-sm form-control-solid"
+                                                                    formControlName="pt_insp_rqd" name="select" />
+                                                                <span></span>
+                                                            </label>
+                                                        </span>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Pourcentage rendement:</label>
+                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                            formControlName="pt_yield_pct">
+                                                    </div>
+                
+                
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">QTE lot:</label>
+                                                        <input type="text" class="form-control form-control-sm form-control-solid">
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group "> Delai:</label>
+                                                        <div class="input-group input-group-sm">
+                
+                                                            <input type="number" class="form-control form-control-solid"
+                                                                formControlName="pt_insp_lead" aria-describedby="basic-addon2">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">DI cum:</label>
+                
+                                                        <input type="text" class="form-control form-control-sm form-control-solid">
+                
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Temps exe:</label>
+                
+                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                            formControlName="pt_run">
+                                                    </div>
+                
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group "> Periode:</label>
+                                                        <div class="input-group input-group-sm">
+                
+                                                            <input type="text" class="form-control form-control-solid"
+                                                                formControlName="pt_ord_per" aria-describedby="basic-addon2">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group "> Del fa:</label>
+                                                        <div class="input-group input-group-sm">
+                
+                                                            <input type="number" class="form-control form-control-solid"
+                                                                formControlName="pt_mfg_lead" aria-describedby="basic-addon2">
+                
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group "> Del ac:</label>
+                                                        <div class="input-group input-group-sm">
+                
+                                                            <input type="number" class="form-control form-control-solid"
+                                                                formControlName="pt_pur_lead" aria-describedby="basic-addon2">
+                
+                                                        </div>
+                                                    </div>
+                
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Regl:</label>
+                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                            formControlName="pt_setup">
+                                                    </div>
+                
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Stock securite:</label>
+                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                            formControlName="pt_sfty_stk">
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Type TAIE:</label>
+                                                        <div class="input-group input-group-sm">
+                
+                                                            <input type="text" class="form-control form-control-solid"
+                                                                aria-describedby="basic-addon2">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">del securite:</label>
+                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                            formControlName="pt_sfty_time">
+                                                    </div>
+                
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">ATP force:</label>
+                                                        <div class="input-group input-group-sm">
+                
+                                                            <input type="text" class="form-control form-control-solid"
+                                                                aria-describedby="basic-addon2">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group">Traite TAIE AUTO:</label>
+                                                        <span class="switch switch-icon">
+                                                            <label>
+                                                                <input type="checkbox"
+                                                                    class="form-control form-control-sm form-control-solid"
+                                                                    name="select" />
+                                                                <span></span>
+                                                            </label>
+                                                        </span>
+                                                    </div>
+                
+                
+                
+                                                </div>
+                                                <div class="row">
+                
+                
+                
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Point:</label>
+                                                        <input type="number" class="form-control form-control-sm form-control-solid"
+                                                            formControlName="pt_rop">
+                                                    </div>
+                
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group">Famille ATP:</label>
+                                                        <span class="switch switch-icon">
+                                                            <label>
+                                                                <input type="checkbox"
+                                                                    class="form-control form-control-sm form-control-solid"
+                                                                    formControlName="pt_atp_family" name="select" />
+                                                                <span></span>
+                                                            </label>
+                                                        </span>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Code reseau:</label>
+                                                        <div class="input-group input-group-sm">
+                
+                                                            <input type="text" class="form-control form-control-solid"
+                                                                formControlName="pt_network" aria-describedby="basic-addon2">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" (click)="open3(content,'pt_network')">
+                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Revision:</label>
+                                                        <select class="form-control form-control-sm form-control-solid"
+                                                            id="exampleSelects15">
+                
+                                                        </select>
+                                                    </div>
+                
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Seq exec 1:</label>
+                                                        <select class="form-control form-control-sm form-control-solid"
+                                                            formControlName="pt_run_seq1" id="exampleSelects16">
+                                                            <option value=""></option>
+                                                            <option *ngFor="let elem of pt_run_seq1" [value]="elem.code_value">
+                                                                {{elem.code_value}} {{elem.code_cmmt}}</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Code gamme:</label>
+                                                        <div class="input-group input-group-sm">
+                
+                                                            <input type="text" class="form-control form-control-solid"
+                                                                formControlName="pt_routing" aria-describedby="basic-addon2">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">2:</label>
+                                                        <select class="form-control form-control-sm form-control-solid"
+                                                            formControlName="pt_run_seq2" id="exampleSelects17">
+                                                            <option value=""></option>
+                                                            <option *ngFor="let elem of pt_run_seq2" [value]="elem.code_value">
+                                                                {{elem.code_value}} {{elem.code_cmmt}}</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group ">Code nomen/f:</label>
+                                                        <div class="input-group input-group-sm">
+                
+                                                            <input type="text" class="form-control form-control-solid"
+                                                                aria-describedby="basic-addon2" formControlName="pt_bom_code">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label class="form-group">Liste servit:</label>
+                                                        <span class="switch switch-icon">
+                                                            <label>
+                                                                <input type="checkbox"
+                                                                    class="form-control form-control-sm form-control-solid"
+                                                                    formControlName="pt_iss_pol" name="select" />
+                                                                <span></span>
+                                                            </label>
+                                                        </span>
+                                                    </div>
+                
+                
+                                                </div>
+                                            </form>
+                                        </ng-template>
+                                    </ngb-tab-->
+                                    <ngb-tab>
+                                        <ng-template ngbTabTitle>
+                                            Données prix Article, Données CG , Données Cout Actuel
+                                            <div style="width: 10px;"></div>
+                                            <a *ngIf="hasFormErrors4"
+                                                class="btn btn-sm btn-icon btn-light-danger pulse pulse-danger mr-5">
+                                                <i class="flaticon2-information"></i>
+                                                <span class="pulse-ring"></span>
+                                            </a>
+                                        </ng-template>
+                                        <ng-template ngbTabContent>
+                                            <!--form [formGroup]="form4" class="form">
+                
+                                                <kt-alert *ngIf="hasFormErrors4" type="warn" [showCloseButton]="true" [duration]="10000"
+                                                    (close)="onAlertClose($event)">
+                                                    Modifiez quelques éléments et réessayez de soumettre.
+                                                </kt-alert>
+                
+                                    
+                                                < <h3>Données Cout Actuel </h3>
+                                                <div class="row">
+                                                    <angular-slickgrid class="col-12" gridHeight="300" gridId="gridCA"
+                                                        [columnDefinitions]="columnDefinitions2" [gridOptions]="gridOptions2"
+                                                        [dataset]="dataset2">
+                                                    </angular-slickgrid>
+                                                </div>>
+                                            </form-->
+                
+                                            <form [formGroup]="sctForm" class="form">
+                                                <div class="separator separator-solid"></div>
+                                                <h3>Données CG </h3>
+                                                <div class="row">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Element</th>
+                                                                <th scope="col">Ce Niveau</th>
+                                                                <th scope="col">Niveau INf</th>
+                                                                <th scope="col">Total</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">Matiere</th>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_mtl_tl"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_mtl_ll"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Main d'œuvre</th>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_lbr_tl"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_lbr_ll"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" form
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">FG variable</th>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_bdn_tl"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_bdn_ll"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">FG Fixes</th>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_ovh_tl"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_ovh_ll"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">SS-trai</th>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_sub_tl"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_sub_ll"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                
+                                                </div>
+                                            </form>
+                
+                                            <form [formGroup]="sctForm1" class="form">
+                                                <div class="separator separator-solid"></div>
+                                                <h3>Données Cout Actuel </h3>
+                                                <div class="row">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Element</th>
+                                                                <th scope="col">Ce Niveau</th>
+                                                                <th scope="col">Niveau INf</th>
+                                                                <th scope="col">Total</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">Matiere</th>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_mtl_tl"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_mtl_ll"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Main d'œuvre</th>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_lbr_tl"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_lbr_ll"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" form
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">FG variable</th>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_bdn_tl"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_bdn_ll"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">FG Fixes</th>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_ovh_tl"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_ovh_ll"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">SS-trai</th>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_sub_tl"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" formControlName="sct_sub_ll"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number"
+                                                                        class="form-control form-control-sm form-control-solid">
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                
+                                                </div>
+                                            </form>
+                
+                                        </ng-template>
+                                    </ngb-tab>
+                
+                                </ngb-tabset>
+                            </div>
+                        </div>
+                
+                    </kt-portlet-body>
+                    <div>
+                        <ng-template #content let-c="close" let-d="dismiss">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Choissir </h4>
+                                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                                        [columnDefinitions]="columnDefinitions3" (onAngularGridCreated)="angularGridReady3($event)"
+                                        (sgOnSelectedRowsChanged)="handleSelectedRowsChanged3($event.detail.eventData, $event.detail.args)"
+                                        [gridOptions]="gridOptions3" [dataset]="data">
+                                    </angular-slickgrid>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                            </div>
+                        </ng-template>
+                    </div>
+                    <div>
+                        <ng-template #contentsite let-c="close" let-d="dismiss">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Choissir Site </h4>
+                                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                                        [columnDefinitions]="columnDefinitionssite"
+                                        (onAngularGridCreated)="angularGridReadysite($event)"
+                                        (sgOnSelectedRowsChanged)="handleSelectedRowsChangedsite($event.detail.eventData, $event.detail.args)"
+                                        [gridOptions]="gridOptionssite" [dataset]="datasite">
+                                    </angular-slickgrid>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                            </div>
+                        </ng-template>
+                    </div>
+                
+                    <div>
+                        <ng-template #contentloc let-c="close" let-d="dismiss">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Choissir Emplacement </h4>
+                                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                                        [columnDefinitions]="columnDefinitionsloc" (onAngularGridCreated)="angularGridReadyloc($event)"
+                                        (sgOnSelectedRowsChanged)="handleSelectedRowsChangedloc($event.detail.eventData, $event.detail.args)"
+                                        [gridOptions]="gridOptionsloc" [dataset]="dataloc">
+                                    </angular-slickgrid>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                            </div>
+                        </ng-template>
+                    </div>
+                
+                    <div>
+                        <ng-template #contentpl let-c="close" let-d="dismiss">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Choissir la ligne de Produit</h4>
+                                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <angular-slickgrid class="col-12" gridHeight="300" gridId="griditem"
+                                        [columnDefinitions]="columnDefinitionspl" (onAngularGridCreated)="angularGridReadypl($event)"
+                                        (sgOnSelectedRowsChanged)="handleSelectedRowsChangedpl($event.detail.eventData, $event.detail.args)"
+                                        [gridOptions]="gridOptionspl" [dataset]="datapl">
+                                    </angular-slickgrid>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                            </div>
+                        </ng-template>
+                
+                    </div>
+                    <div>
+                        <ng-template #contentprov let-c="close" let-d="dismiss">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Choissir le FOURNISSEUR</h4>
+                                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <angular-slickgrid class="col-12" gridHeight="300" gridId="gridpro"
+                                        [columnDefinitions]="columnDefinitionsprov"
+                                        (onAngularGridCreated)="angularGridReadyprov($event)"
+                                        (sgOnSelectedRowsChanged)="handleSelectedRowsChangedprov($event.detail.eventData, $event.detail.args)"
+                                        [gridOptions]="gridOptionsprov" [dataset]="providerss">
+                                    </angular-slickgrid>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                            </div>
+                        </ng-template>
+                    </div>
+                
+                    <div>
+                        <ng-template #contentseq let-c="close" let-d="dismiss">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Choissir la SEQUENCE</h4>
+                                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <angular-slickgrid class="col-12" gridHeight="300" gridId="gridSeq"
+                                        [columnDefinitions]="columnDefinitionsseq" (onAngularGridCreated)="angularGridReadyseq($event)"
+                                        (sgOnSelectedRowsChanged)="handleSelectedRowsChangedseq($event.detail.eventData, $event.detail.args)"
+                                        [gridOptions]="gridOptionsseq" [dataset]="sequences">
+                                    </angular-slickgrid>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                            </div>
+                        </ng-template>
+                    </div>
+                    <div>
+                        <ng-template #contentstatus let-c="close" let-d="dismiss">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Choissir le Status</h4>
+                                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <angular-slickgrid class="col-12" gridHeight="300" gridId="gridpro"
+                                        [columnDefinitions]="columnDefinitionsstatus"
+                                        (onAngularGridCreated)="angularGridReadystatus($event)"
+                                        (sgOnSelectedRowsChanged)="handleSelectedRowsChangedstatus($event.detail.eventData, $event.detail.args)"
+                                        [gridOptions]="gridOptionsstatus" [dataset]="datastatus">
+                                    </angular-slickgrid>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                            </div>
+                        </ng-template>
+                    </div>
+                    <div>
+                        <ng-template #contenttax let-c="close" let-d="dismiss">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Choissir </h4>
+                                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                                        [columnDefinitions]="columnDefinitionstax" (onAngularGridCreated)="angularGridReadytax($event)"
+                                        (sgOnSelectedRowsChanged)="handleSelectedRowsChangedtax($event.detail.eventData, $event.detail.args)"
+                                        [gridOptions]="gridOptionstax" [dataset]="datatax">
+                                    </angular-slickgrid>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                            </div>
+                        </ng-template>
+                    </div>
+                
+                    <div>
+                
+                        <ng-template #contentcode let-c="close" let-d="dismiss">
+                            <kt-portlet>
+                                <kt-portlet-header [sticky]="true" [title]="'Ajouter un code'" [class]="'card-head-lg'" [viewLoading$]="loading$">
+                                    <ng-container ktPortletTools>
+                                        <button type="button" (click)="onSubmitCode()" class="btn btn-success btn-sm mr-2">Ajouter </button>
+                            
+                            
+                                    </ng-container>
+                                </kt-portlet-header>
+                                <kt-portlet-body>
+                                    <div class="example-preview">
+                                        <form class="form" [formGroup]="codeForm">
+                
+                                            <kt-alert *ngIf="isExist3" type="warn" [showCloseButton]="true" [duration]="500"
+                                                                (close)="onAlertClose($event)">
+                                                                Ce Code existe deja
+                                            </kt-alert>
+                                        
+                                                    <div class='row'>    
+                                                        <div class="form-group col-2">
+                                                            <label class="form-group">Code: *</label>
+                                                            <input type="text" formControlName="code_value" (change)="onChangeCodemstr()"
+                                                                [className]="codeForm.controls['code_value'].errors && (codeForm.controls['code_value'].dirty || codeForm.controls['code_value'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                                                            <div *ngIf="codeForm.controls['code_value'].errors && (codeForm.controls['code_value'].dirty || codeForm.controls['code_value'].touched) "
+                                                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                                                        </div>
+                
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-6">
+                                                            <label class="form-group">Description: *</label>
+                                                            <input type="text" formControlName="code_cmmt" 
+                                                                [className]="codeForm.controls['code_cmmt'].errors && (codeForm.controls['code_cmmt'].dirty || codeForm.controls['code_cmmt'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                                                            <div *ngIf="codeForm.controls['code_cmmt'].errors && (codeForm.controls['code_cmmt'].dirty || codeForm.controls['code_cmmt'].touched) "
+                                                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                                                        </div>
+                                                    </div>
+                                        
+                                        </form>
+                                     </div>
+                                </kt-portlet-body>
+                            </kt-portlet>   
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                            </div>     
+                        </ng-template>
+                
+                
+                    </div>
+                    <div>
+                        <ng-template #contentvendor let-c="close" let-d="dismiss">
+                            <kt-portlet>
+                                <kt-portlet-header [sticky]="true" [title]="'Ajouter Fournisseur'" [class]="'card-head-lg'" [viewLoading$]="loading$">
+                                    <ng-container ktPortletTools>
+                                      
+                                        <button (click)="onSubmitVendor()" type="button" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+                            
+                            
+                            
+                                    </ng-container>
+                                </kt-portlet-header>
+                                <kt-portlet-body>
+                                    <div class="example-preview">
+                                       
+                                                        <form [formGroup]="addressForm" class="form">
+                            
+                                                            <kt-alert *ngIf="isExist2" type="warn" [showCloseButton]="true" [duration]="500"
+                                                                (close)="onAlertClose($event)">
+                                                                Ce Code existe deja
+                                                            </kt-alert>
+                            
+                                                            <div class="row">
+                                                                <div class="form-group col-4">
+                                                                    <label class="form-group ">Nom:</label>
+                                                                        <input type="text" (change)="onChangeCodeVendor()"
+                                                                            [className]="addressForm.controls['ad_name'].errors && (addressForm.controls['ad_name'].dirty || addressForm.controls['ad_name'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                                                            formControlName="ad_name">
+                                                                        <div *ngIf="addressForm.controls['ad_name'].errors && (addressForm.controls['ad_name'].dirty || addressForm.controls['ad_name'].touched)"
+                                                                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                                                                </div>
+                            
+                                                            </div>
+                            
+                                                            <div class="row">
+                                                                <div class="form-group col-8">
+                                                                    <label class="form-group">Addresse:</label>
+                                                                    
+                                                                        <input type="text"
+                                                                            [className]="addressForm.controls['ad_line1'].errors && (addressForm.controls['ad_line1'].dirty || addressForm.controls['ad_line1'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                                                            formControlName="ad_line1">
+                                                                        <div *ngIf="addressForm.controls['ad_line1'].errors && (addressForm.controls['ad_line1'].dirty || addressForm.controls['ad_line1'].touched)"
+                                                                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                                                                    
+                                                                </div>
+                                                               
+                            
+                                                            </div>
+                            
+                                                            <div class="row">
+                                                                                                  
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Wilaya:</label>
+                                                                        <select class="form-control form-control-sm form-control-solid"
+                                                                            id="exampleSelects2" formControlName="ad_state" (change)="onChangeState()">
+                                                                            <option value=""></option>
+                                                                            <option *ngFor="let elem of ad_state" [value]="elem.code_value">
+                                                                                {{elem.code_value}} {{elem.code_cmmt}}</option>
+                            
+                                                                        </select>
+                                                                    
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Commune:</label>
+                                                                        <select class="form-control form-control-sm form-control-solid"
+                                                                            id="exampleSelects1" formControlName="ad_city">
+                                                                            <option value=""></option>
+                                                                            <option *ngFor="let elem of ad_city" [value]="elem.code_value">
+                                                                                {{elem.code_value}} {{elem.code_cmmt}}</option>
+                            
+                                                                        </select>
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Post:</label>
+                                                                    
+                                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                                            formControlName="ad_zip">
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Contact:</label>
+                                                                   
+                                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                                            formControlName="ad_attn">
+                                                                </div>
+                                                                
+                            
+                            
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Telephone:</label>
+                                                                    
+                                                                        <input type="text"
+                                                                            [className]="addressForm.controls['ad_phone'].errors && (addressForm.controls['ad_phone'].dirty || addressForm.controls['ad_phone'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                                                            formControlName="ad_phone">
+                                                                        <div *ngIf="addressForm.controls['ad_phone'].errors && (addressForm.controls['ad_phone'].dirty || addressForm.controls['ad_phone'].touched)"
+                                                                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                                                                    
+                                                                </div>
+                            
+                                                            </div>
+                                                            
+                                                            <div class="row">
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Type:</label>
+                                                                   
+                                                                        <select class="form-control form-control-sm form-control-solid"
+                                                                            formControlName="vd_type" id="exampleSelects4">
+                                                                            <option value=""></option>
+                                                                            <option *ngFor="let elem of vd_type" [value]="elem.code_value">
+                                                                                {{elem.code_value}} {{elem.code_cmmt}}</option>
+                            
+                                                                        </select>
+                                                                    
+                                                                </div>
+                                                                <!--div class="form-group col-2">
+                                                                    <label class="form-group ">Contact 2:</label>
+                                                                   
+                                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                                            formControlName="ad_attn2">
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Tel 2:</label>
+                                                                    
+                                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                                            formControlName="ad_phone2">
+                                                                    
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Pst:</label>
+                                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                                            formControlName="ad_ext2">
+                                                                </div>
+                            
+                                                                
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Fax 2</label>
+                                                                    
+                                                                        <input type="text" class="form-control form-control-sm form-control-solid" formControlName="ad_fax2">
+                                                                    
+                                                                </div-->
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group "> Banque:</label>
+                                                                    <div class="input-group input-group-sm">
+                            
+                                                                        <input type="text" class="form-control form-control-solid"
+                                                                            formControlName="vd_bank" aria-describedby="basic-addon2">
+                                                                        <div class="input-group-append">
+                                                                            <span class="input-group-text" (click)="openbank(contentbank)">
+                                                                                <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group "> Conditions:</label>
+                                                                    
+                                                                        <div class="input-group input-group-sm">
+                            
+                                                                            <input type="text" class="form-control form-control-solid"
+                                                                                aria-describedby="basic-addon2" formControlName="vd_cr_terms">
+                                                                            <div class="input-group-append">
+                                                                                <span class="input-group-text" (click)="open4(content4,'vd_cr_terms')">
+                                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                                            </div>
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group">A taxer:</label>
+                                                                    
+                                                                        <span class="switch switch-icon">
+                                                                            <label>
+                                                                                <input type="checkbox"
+                                                                                    class="form-control form-control-sm form-control-solid"
+                                                                                    name="select" formControlName="ad_taxable" />
+                                                                                <span></span>
+                                                                            </label>
+                                                                        </span>
+                                                                </div>
+                                                               
+                                                                
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Taux tax:</label>
+                                                                    <div class="input-group input-group-sm">
+                            
+                                                                        <input type="text" class="form-control form-control-solid"
+                                                                            aria-describedby="basic-addon2" formControlName="ad_taxc">
+                                                                        <div class="input-group-append">
+                                                                            <span class="input-group-text" (click)=opentaxv(contenttaxv)>
+                                                                                <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                
+                            
+                                                            </div>
+                                                            <div class="row">
+                                                                
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Marticule Fiscale:</label>
+                                                                    
+                                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                                            formControlName="ad_misc2_id">
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">RC N:</label>
+                                                                    
+                                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                                            formControlName="ad_gst_id">
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">AI N:</label>
+                                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                                            formControlName="ad_pst_id">
+                                                                </div>
+                            
+                                                            
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">NIS N:</label>
+                                                                    
+                                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                                            formControlName="ad_misc1_id">
+                                                                    
+                                                                </div>
+                                                                
+                                                                
+                            
+                                                            </div>
+                                                        </form>
+                                                 
+                                                <!--ngb-tab>
+                                                    <ng-template ngbTabTitle>
+                                                        Données fournisseur
+                                                        <div style="width: 10px;"></div>
+                                                        <a *ngIf="hasProviderFormErrors"
+                                                            class="btn btn-sm btn-icon btn-light-danger pulse pulse-danger mr-5">
+                                                            <i class="flaticon2-information"></i>
+                                                            <span class="pulse-ring"></span>
+                                                        </a>
+                                                    </ng-template>
+                                                    <ng-template ngbTabContent>
+                                                        <form [formGroup]="providerForm" class="form">
+                            
+                                                            <kt-alert *ngIf="hasProviderFormErrors" type="warn" [showCloseButton]="true"
+                                                                [duration]="10000" (close)="onAlertClose($event)">
+                                                                Modifiez quelques éléments et réessayez de soumettre.
+                                                            </kt-alert>
+                            
+                                                            <div class="row">
+                                                                <div class="form-group col-4">
+                                                                    <label class="form-group">Nom Tri:</label>
+                                                                    
+                                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                                            formControlName="vd_sort">
+                                                                    
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Type:</label>
+                                                                   
+                                                                        <select class="form-control form-control-sm form-control-solid"
+                                                                            formControlName="vd_type" id="exampleSelects4">
+                                                                            <option value=""></option>
+                                                                            <option *ngFor="let elem of vd_type" [value]="elem.code_value">
+                                                                                {{elem.code_value}} {{elem.code_cmmt}}</option>
+                            
+                                                                        </select>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                           <div class="row">
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Mode exp:</label>
+                                                                    
+                                                                        <select class="form-control form-control-sm form-control-solid"
+                                                                            formControlName="vd_shipvia" id="exampleSelects5">
+                                                                            <option value=""></option>
+                                                                            <option *ngFor="let elem of vd_shipvia" [value]="elem.code_value">
+                                                                                {{elem.code_value}} {{elem.code_cmmt}}</option>
+                            
+                                                                        </select>
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group "> Banque:</label>
+                                                                    <div class="input-group input-group-sm">
+                            
+                                                                        <input type="text" class="form-control form-control-solid"
+                                                                            formControlName="vd_bank" aria-describedby="basic-addon2">
+                                                                        <div class="input-group-append">
+                                                                            <span class="input-group-text" (click)="openbank(contentbank)">
+                                                                                <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                            <div class="row">    
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group "> Check Form:</label>
+                                                                    
+                                                                        <div class="input-group input-group-sm">
+                            
+                                                                            <input type="text" class="form-control form-control-solid"
+                                                                                aria-describedby="basic-addon2" formControlName="vd_ckfrm">
+                                                                            <div class="input-group-append">
+                                                                                <span class="input-group-text" (click)="open4(content4,'vd_ckfrm')">
+                                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                                            </div>
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group "> Devise:</label>
+                                                                    
+                                                                        <div class="input-group input-group-sm">
+                            
+                                                                            <input type="text" class="form-control form-control-solid"
+                                                                                aria-describedby="basic-addon2" formControlName="vd_curr">
+                                                                            <div class="input-group-append">
+                                                                                <span class="input-group-text" (click)="open2(content2)">
+                                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                                            </div>
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group "> Langue:</label>
+                                                                        <select class="form-control form-control-sm form-control-solid"
+                                                                            id="exampleSelects6" formControlName="vd_lang">
+                                                                            <option value=""></option>
+                                                                            <option *ngFor="let elem of vd_lang" [value]="elem.code_value">
+                                                                                {{elem.code_value}} {{elem.code_cmmt}}</option>
+                            
+                                                                        </select>
+                                                                </div>
+                            
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Contact d'achat</label>
+                                                                        <div class="input-group input-group-sm">
+                            
+                                                                            <input type="text" class="form-control form-control-solid"
+                                                                                formControlName="vd_pur_cntct" aria-describedby="basic-addon2">
+                                                                            <div class="input-group-append">
+                                                                                <span class="input-group-text">
+                                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                                            </div>
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Contact CF:</label>
+                                                                         <div class="input-group input-group-sm">
+                            
+                                                                            <input type="text" class="form-control form-control-solid"
+                                                                                formControlName="vd_ap_cntct" aria-describedby="basic-addon2">
+                                                                            <div class="input-group-append">
+                                                                                <span class="input-group-text">
+                                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group">Crediteur divers:</label>
+                                                                    
+                                                                    <span class="switch switch-icon">
+                                                                        <label>
+                                                                            <input type="checkbox" formControlName="vd_misc_cr"
+                                                                                class="form-control form-control-sm form-control-solid"
+                                                                                name="select" />
+                                                                            <span></span>
+                                                                        </label>
+                                                                    </span>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Transport:</label>
+                                                                    
+                                                                        <div class="input-group input-group-sm">
+                            
+                                                                            <input type="text" class="form-control form-control-solid"
+                                                                                formControlName="vd_carrier_id" aria-describedby="basic-addon2">
+                                                                            <div class="input-group-append">
+                                                                                <span class="input-group-text">
+                                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                                            </div>
+                                                                        </div>
+                                                                
+                                                                </div>
+                                                           
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Groupe promotion</label>
+                                                                    
+                                                                        <select class="form-control form-control-sm form-control-solid"
+                                                                            formControlName="vd_promo" id="exampleSelects8">
+                                                                            <option value=""></option>
+                                                                            <option *ngFor="let elem of vd_promo" [value]="elem.code_value">
+                                                                                {{elem.code_value}} {{elem.code_cmmt}}</option>
+                            
+                                                                        </select>
+                                                                  
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group">Fournisseur kanban:</label>
+                                                                    
+                                                                        <span class="switch switch-icon">
+                                                                            <label>
+                                                                                <input type="checkbox"
+                                                                                    class="form-control form-control-sm form-control-solid"
+                                                                                    formControlName="vd_kanban_supplier" name="select" />
+                                                                                <span></span>
+                                                                            </label>
+                                                                        </span>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </ng-template>
+                                                </ngb-tab-->
+                            
+                                                <!--ngb-tab>
+                                                    <ng-template ngbTabTitle>
+                                                        Données Taxe ADR
+                                                        <div style="width: 10px;"></div>
+                                                        <a *ngIf="hasFormErrors"
+                                                            class="btn btn-sm btn-icon btn-light-danger pulse pulse-danger mr-5">
+                                                            <i class="flaticon2-information"></i>
+                                                            <span class="pulse-ring"></span>
+                                                        </a>
+                                                    </ng-template>
+                                                    <ng-template ngbTabContent>
+                                                        <form [formGroup]="addressForm" class="form">
+                            
+                                                            <kt-alert *ngIf="hasFormErrors" type="warn" [showCloseButton]="true" [duration]="10000"
+                                                                (close)="onAlertClose($event)">
+                                                                Modifiez quelques éléments et réessayez de soumettre.
+                                                            </kt-alert>
+                            
+                                                            <div class="row">
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group">A taxer:</label>
+                                                                    
+                                                                        <span class="switch switch-icon">
+                                                                            <label>
+                                                                                <input type="checkbox"
+                                                                                    class="form-control form-control-sm form-control-solid"
+                                                                                    name="select" formControlName="ad_taxable" />
+                                                                                <span></span>
+                                                                            </label>
+                                                                        </span>
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Zone taxe:</label>
+                                                                    <select class="form-control form-control-sm form-control-solid"
+                                                                        id="exampleSelects2" formControlName="ad_tax_zone">
+                                                                        <option value=""></option>
+                                                                        <option *ngFor="let elem of ad_tax_zone" [value]="elem.code_value">
+                                                                            {{elem.code_value}} {{elem.code_cmmt}}</option>
+                            
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Taux tax:</label>
+                                                                    <div class="input-group input-group-sm">
+                            
+                                                                        <input type="text" class="form-control form-control-solid"
+                                                                            aria-describedby="basic-addon2" formControlName="ad_taxc">
+                                                                        <div class="input-group-append">
+                                                                            <span class="input-group-text" (click)=opentax(contenttax)>
+                                                                                <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Emploi tax:</label>
+                                                                    <select class="form-control form-control-sm form-control-solid"
+                                                                        id="exampleSelects2" formControlName="ad_tax_usage">
+                                                                        <option value=""></option>
+                                                                        <option *ngFor="let elem of ad_tax_usage" [value]="elem.code_value">
+                                                                            {{elem.code_value}} {{elem.code_cmmt}}</option>
+                            
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group">Tax comprise:</label>
+                                                                    <span class="switch switch-icon">
+                                                                        <label>
+                                                                            <input type="checkbox"
+                                                                                class="form-control form-control-sm form-control-solid"
+                                                                                name="select" formControlName="ad_tax_in" />
+                                                                            <span></span>
+                                                                        </label>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </form>
+                                                    </ng-template>
+                                                </ngb-tab-->
+                            
+                                                <!--ngb-tab>
+                                                    <ng-template ngbTabTitle>
+                                                        Données paiement Fournisseur
+                                                        <div style="width: 10px;"></div>
+                                                        <a *ngIf="hasFormErrors"
+                                                            class="btn btn-sm btn-icon btn-light-danger pulse pulse-danger mr-5">
+                                                            <i class="flaticon2-information"></i>
+                                                            <span class="pulse-ring"></span>
+                                                        </a>
+                                                    </ng-template>
+                                                    <ng-template ngbTabContent>
+                                                        <form [formGroup]="providerForm" class="form">
+                            
+                                                            <kt-alert *ngIf="hasProviderFormErrors" type="warn" [showCloseButton]="true" [duration]="10000"
+                                                                (close)="onAlertClose($event)">
+                                                                Modifiez quelques éléments et réessayez de soumettre.
+                                                            </kt-alert>
+                            
+                                                            <div class="row">
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group "> Conditions:</label>
+                                                                    
+                                                                        <div class="input-group input-group-sm">
+                            
+                                                                            <input type="text" class="form-control form-control-solid"
+                                                                                aria-describedby="basic-addon2" formControlName="vd_cr_terms">
+                                                                            <div class="input-group-append">
+                                                                                <span class="input-group-text" (click)="open4(content4,'vd_cr_terms')">
+                                                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                                            </div>
+                                                                        </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">    
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">% remise:</label>
+                                                                    <input type="number" class="form-control form-control-sm form-control-solid"
+                                                                        formControlName="vd_disc_pct">
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Solde acompte:</label>
+                                                                        <input type="number" class="form-control form-control-sm form-control-solid"
+                                                                            formControlName="vd_prepay">
+                                                                </div>
+                                                                
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group ">Numero dibiteur:</label>
+                                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                                            formControlName="vd_debtor">
+                                                                </div>
+                            
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group">OK partiel:</label>
+                                                                        <span class="switch switch-icon">
+                                                                            <label>
+                                                                                <input type="checkbox"
+                                                                                    class="form-control form-control-sm form-control-solid"
+                                                                                    name="select" formControlName="vd_partial" />
+                                                                                <span></span>
+                                                                            </label>
+                                                                        </span>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                            <div class="row">    
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group">Blocage:</label>
+                                                                        <span class="switch switch-icon">
+                                                                            <label>
+                                                                                <input type="checkbox"
+                                                                                    class="form-control form-control-sm form-control-solid"
+                                                                                    name="select" formControlName="vd_hold" />
+                                                                                <span></span>
+                                                                            </label>
+                                                                        </span>
+                                                                </div>
+                                                                <div class="form-group col-2">
+                                                                    <label class="form-group">Specification paiement:</label>
+                                                                        <span class="switch switch-icon">
+                                                                            <label>
+                                                                                <input type="checkbox"
+                                                                                    class="form-control form-control-sm form-control-solid"
+                                                                                    name="select" formControlName="vd_pay_spec" />
+                                                                                <span></span>
+                                                                            </label>
+                                                                        </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="form-group col-4">
+                                                                    <label class="form-group ">N base:</label>
+                                                                        <input type="text" class="form-control form-control-sm form-control-solid"
+                                                                            formControlName="vd_db">
+                                                                </div>
+                                                            </div>
+                            
+                                                        </form>
+                                                    </ng-template>
+                                                </ngb-tab-->
+                                           
+                                    </div>
+                            
+                                    <div>
+                                        <ng-template #content3 let-c="close" let-d="dismiss">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Choissir Compte </h4>
+                                                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                                                        [columnDefinitions]="columnDefinitions3" (onAngularGridCreated)="angularGridReady3($event)"
+                                                        (sgOnSelectedRowsChanged)="handleSelectedRowsChanged3($event.detail.eventData, $event.detail.args)"
+                                                        [gridOptions]="gridOptions3" [dataset]="data">
+                                                    </angular-slickgrid>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                                                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                    <div>
+                                        <ng-template #contenttaxv let-c="close" let-d="dismiss">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Choissir </h4>
+                                                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                                                        [columnDefinitions]="columnDefinitionstaxv" (onAngularGridCreated)="angularGridReadytaxv($event)"
+                                                        (sgOnSelectedRowsChanged)="handleSelectedRowsChangedtaxv($event.detail.eventData, $event.detail.args)"
+                                                        [gridOptions]="gridOptionstaxv" [dataset]="datataxv">
+                                                    </angular-slickgrid>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                                                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                    <div>
+                                        <ng-template #content4 let-c="close" let-d="dismiss">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Choissir </h4>
+                                                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                                                        [columnDefinitions]="columnDefinitions4" (onAngularGridCreated)="angularGridReady4($event)"
+                                                        (sgOnSelectedRowsChanged)="handleSelectedRowsChanged4($event.detail.eventData, $event.detail.args)"
+                                                        [gridOptions]="gridOptions4" [dataset]="datacode">
+                                                    </angular-slickgrid>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                                                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                            
+                                    <div>
+                                        <ng-template #contentbank let-c="close" let-d="dismiss">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Choissir la banque</h4>
+                                                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <angular-slickgrid class="col-12" gridHeight="300" gridId="gridpro"
+                                                        [columnDefinitions]="columnDefinitionsbank" (onAngularGridCreated)="angularGridReadybank($event)"
+                                                        (sgOnSelectedRowsChanged)="handleSelectedRowsChangedbank($event.detail.eventData, $event.detail.args)"
+                                                        [gridOptions]="gridOptionsbank" [dataset]="banks">
+                                                    </angular-slickgrid>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                                                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                    <div>
+                                        <ng-template #content2 let-c="close" let-d="dismiss">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Choissir la Devise</h4>
+                                                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <angular-slickgrid class="col-12" gridHeight="300" gridId="gridpro"
+                                                        [columnDefinitions]="columnDefinitions2" (onAngularGridCreated)="angularGridReady2($event)"
+                                                        (sgOnSelectedRowsChanged)="handleSelectedRowsChanged2($event.detail.eventData, $event.detail.args)"
+                                                        [gridOptions]="gridOptions2" [dataset]="devises">
+                                                    </angular-slickgrid>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                                                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                </kt-portlet-body>
+                            </kt-portlet>
+                                     
+                        </ng-template>
+                       
+                    </div>
+                    
+                </kt-portlet>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                    <button type="button" (click)="onSubmitMnt()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+                </div>     
+            </ng-template>
+            <button hidden id="openGlssGrid" class="btn btn-primary" (click)="newMnt(contentmnt)">Launch demo
+                modal</button>
+        </div>
+        <!---------------------------------------------monture------------------------------------------------------->
+    </kt-portlet-body>
+</kt-portlet>

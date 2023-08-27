@@ -1,0 +1,297 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="title" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="form" [formGroup]="sequenceForm">
+
+                <div class="row">
+                    
+                    <div class="form-group col-2">
+                        <label class="form-group">Code:</label>
+                        <input type="text" formControlName="seq_seq" [(ngModel)]="sequenceEdit.seq_seq"
+                            [className]="sequenceForm.controls['seq_seq'].errors && (sequenceForm.controls['seq_seq'].dirty || sequenceForm.controls['seq_seq'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                        <div *ngIf="sequenceForm.controls['seq_seq'].errors && (sequenceForm.controls['seq_seq'].dirty || sequenceForm.controls['seq_seq'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group ">Module:</label>
+
+                        <input type="text"
+                            [className]="sequenceForm.controls['seq_type'].errors && (sequenceForm.controls['seq_type'].dirty || sequenceForm.controls['seq_type'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="seq_type" id="exampleSelects7">
+                       
+                    </div>
+                    <div class="form-group col-6">
+                        <label class="form-group">Designation:</label>
+                        <input type="text"
+                            [className]="sequenceForm.controls['seq_desc'].errors && (sequenceForm.controls['seq_desc'].dirty || sequenceForm.controls['seq_desc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="seq_desc">
+
+                        <div *ngIf="sequenceForm.controls['seq_desc'].errors && (sequenceForm.controls['seq_desc'].dirty || sequenceForm.controls['seq_desc'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">DATE DEBUT VALIDITE:</label>
+                        <div class="input-group input-group-sm">
+                            <input
+                                [className]="sequenceForm.controls['seq_valid_date_start'].errors && (sequenceForm.controls['seq_valid_date_start'].dirty || sequenceForm.controls['seq_valid_date_start'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                placeholder="jj-mm-aaaa" name="dp" ngbDatepicker formControlName="seq_valid_date_start"
+                                #dd="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="dd.toggle()" type="button">
+                                    <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                </button>
+                            </div>
+                            <div *ngIf="sequenceForm.controls['seq_valid_date_start'].errors && (sequenceForm.controls['seq_valid_date_start'].dirty || sequenceForm.controls['seq_valid_date_start'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">DATE FIN VALIDITE:</label>
+                        <div class="input-group input-group-sm">
+                            <input
+                                [className]="sequenceForm.controls['seq_valid_date_end'].errors && (sequenceForm.controls['seq_valid_date_end'].dirty || sequenceForm.controls['seq_valid_date_end'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                placeholder="jj-mm-aaaa" name="dp1" ngbDatepicker formControlName="seq_valid_date_end"
+                                #d1="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="d1.toggle()" type="button">
+                                    <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                </button>
+                            </div>
+                            <div *ngIf="sequenceForm.controls['seq_valid_date_end'].errors && (sequenceForm.controls['seq_valid_date_end'].dirty || sequenceForm.controls['seq_valid_date_end'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Profile Utilisateurs:</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text"
+                                [className]="sequenceForm.controls['seq_profile'].errors && (sequenceForm.controls['seq_profile'].dirty || sequenceForm.controls['seq_profile'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                formControlName="seq_profile" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open(content)">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                            <div *ngIf="sequenceForm.controls['seq_profile'].errors && (sequenceForm.controls['seq_profile'].dirty || sequenceForm.controls['seq_profile'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">APPROBATEUR 1:</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text"
+                                [className]="sequenceForm.controls['seq_appr1'].errors && (sequenceForm.controls['seq_appr1'].dirty || sequenceForm.controls['seq_appr1'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                formControlName="seq_appr1" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open1(content1)">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                            <div *ngIf="sequenceForm.controls['seq_appr1'].errors && (sequenceForm.controls['seq_appr1'].dirty || sequenceForm.controls['seq_appr1'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Seuil approbation 1 :</label>
+                        <input type="text"
+                            [className]="sequenceForm.controls['seq_appr1_thr'].errors && (sequenceForm.controls['seq_appr1_thr'].dirty || sequenceForm.controls['seq_appr1_thr'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="seq_appr1_thr">
+                        <div *ngIf="sequenceForm.controls['seq_appr1_thr'].errors && (sequenceForm.controls['seq_appr1_thr'].dirty || sequenceForm.controls['seq_appr1_thr'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Niveau d’approbation 1 </label>
+                        <input type="text"
+                            [className]="sequenceForm.controls['seq_appr1_lev'].errors && (sequenceForm.controls['seq_appr1_lev'].dirty || sequenceForm.controls['seq_appr1_lev'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="seq_appr1_lev">
+
+                        <div *ngIf="sequenceForm.controls['seq_appr1_lev'].errors && (sequenceForm.controls['seq_appr1_lev'].dirty || sequenceForm.controls['seq_appr1_lev'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">APPROBATEUR 2:</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text"
+                                [className]="sequenceForm.controls['seq_appr2'].errors && (sequenceForm.controls['seq_appr2'].dirty || sequenceForm.controls['seq_appr2'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                formControlName="seq_appr2" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open2(content1)">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                            <div *ngIf="sequenceForm.controls['seq_appr2'].errors && (sequenceForm.controls['seq_appr2'].dirty || sequenceForm.controls['seq_appr2'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Seuil approbation 2:</label>
+                        <input type="text"
+                            [className]="sequenceForm.controls['seq_appr2_thr'].errors && (sequenceForm.controls['seq_appr2_thr'].dirty || sequenceForm.controls['seq_appr2_thr'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="seq_appr2_thr">
+
+                        <div *ngIf="sequenceForm.controls['seq_appr2_thr'].errors && (sequenceForm.controls['seq_appr2_thr'].dirty || sequenceForm.controls['seq_appr2_thr'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Niveau d’approbation 2: </label>
+                        <input type="text"
+                            [className]="sequenceForm.controls['seq_appr2_lev'].errors && (sequenceForm.controls['seq_appr2_lev'].dirty || sequenceForm.controls['seq_appr2_lev'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="seq_appr2_lev">
+
+                        <div *ngIf="sequenceForm.controls['seq_appr2_lev'].errors && (sequenceForm.controls['seq_appr2_lev'].dirty || sequenceForm.controls['seq_appr2_lev'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">APPROBATEUR 3:</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text"
+                                [className]="sequenceForm.controls['seq_appr3'].errors && (sequenceForm.controls['seq_appr3'].dirty || sequenceForm.controls['seq_appr3'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                formControlName="seq_appr3" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open3(content1)">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                            <div *ngIf="sequenceForm.controls['seq_appr3'].errors && (sequenceForm.controls['seq_appr3'].dirty || sequenceForm.controls['seq_appr3'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Seuil approbation 3:</label>
+                        <input type="text"
+                            [className]="sequenceForm.controls['seq_appr3_thr'].errors && (sequenceForm.controls['seq_appr3_thr'].dirty || sequenceForm.controls['seq_appr3_thr'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="seq_appr3_thr">
+
+                        <div *ngIf="sequenceForm.controls['seq_appr3_thr'].errors && (sequenceForm.controls['seq_appr3_thr'].dirty || sequenceForm.controls['seq_appr3_thr'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Niveau d’approbation 3: </label>
+                        <input type="text"
+                            [className]="sequenceForm.controls['seq_appr3_lev'].errors && (sequenceForm.controls['seq_appr3_lev'].dirty || sequenceForm.controls['seq_appr3_lev'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="seq_appr3_lev">
+                        <div *ngIf="sequenceForm.controls['seq_appr3_lev'].errors && (sequenceForm.controls['seq_appr3_lev'].dirty || sequenceForm.controls['seq_appr3_lev'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Préfixe document:</label>
+                        <input type="text"
+                            [className]="sequenceForm.controls['seq_prefix'].errors && (sequenceForm.controls['seq_prefix'].dirty || sequenceForm.controls['seq_prefix'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="seq_prefix">
+
+
+                        <div *ngIf="sequenceForm.controls['seq_prefix'].errors && (sequenceForm.controls['seq_prefix'].dirty || sequenceForm.controls['seq_prefix'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Valeur inferieure:</label>
+                        <input type="number"
+                            [className]="sequenceForm.controls['seq_dig_range_inf'].errors && (sequenceForm.controls['seq_dig_range_inf'].dirty || sequenceForm.controls['seq_dig_range_inf'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="seq_dig_range_inf">
+
+                        <div *ngIf="sequenceForm.controls['seq_dig_range_inf'].errors && (sequenceForm.controls['seq_dig_range_inf'].dirty || sequenceForm.controls['seq_dig_range_inf'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Valeur supérieure: </label>
+                        <input type="number"
+                            [className]="sequenceForm.controls['seq_dig_range_sup'].errors && (sequenceForm.controls['seq_dig_range_sup'].dirty || sequenceForm.controls['seq_dig_range_sup'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="seq_dig_range_sup">
+
+
+                        <div *ngIf="sequenceForm.controls['seq_dig_range_sup'].errors && (sequenceForm.controls['seq_dig_range_sup'].dirty || sequenceForm.controls['seq_dig_range_sup'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Valeur Actuelle: </label>
+                        <input type="number"
+                            [className]="sequenceForm.controls['seq_curr_val'].errors && (sequenceForm.controls['seq_curr_val'].dirty || sequenceForm.controls['seq_curr_val'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="seq_curr_val">
+
+
+                        <div *ngIf="sequenceForm.controls['seq_dig_range_sup'].errors && (sequenceForm.controls['seq_dig_range_sup'].dirty || sequenceForm.controls['seq_dig_range_sup'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div>
+            <ng-template #content let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir le profil</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="gridCode"
+                            [columnDefinitions]="columnDefinitions" (onAngularGridCreated)="angularGridReady($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions" [dataset]="profiles">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+
+        <div>
+            <ng-template #content1 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir Utilisateur</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="gridUser"
+                            [columnDefinitions]="columnDefinitions1" (onAngularGridCreated)="angularGridReady1($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged1($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions1" [dataset]="users">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+
+    </kt-portlet-body>
+</kt-portlet>

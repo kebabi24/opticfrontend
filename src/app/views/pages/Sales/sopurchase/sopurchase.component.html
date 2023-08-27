@@ -1,0 +1,110 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="false" [title]="'Consultations des Commandes'" [class]="'card-head-lg'">
+        [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+        </ng-container>
+   </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+            <form class="form" [formGroup]="soForm">
+                <div class="row col-6">
+                </div>   
+                <div class="row">
+                    <div class="form-group col-3">
+                       
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-sm form-control-solid"  formControlName="date" 
+                                 placeholder="jj-mm-aaaa" name="date" ngbDatepicker f
+                                #date="ngbDatepicker"   >
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="date.toggle()"  type="button">
+                                    <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                </button>
+                            </div>
+                            
+                        </div>
+
+                    </div>
+                    <div class="form-group col-3">
+                       
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-sm form-control-solid"  formControlName="date1" 
+                                 placeholder="jj-mm-aaaa" name="date1" ngbDatepicker f
+                                #date1="ngbDatepicker"   >
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="date1.toggle()"  type="button">
+                                    <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                </button>
+                            </div>
+                            
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="form-group col-3">
+                        <label class="form-group">Fournisseur :</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" class="form-control form-control-solid" formControlName="vend"  
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open2(content2)">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    
+
+                    <div class="form-group col-3">
+                        <label class="form-group" style="color: white" > 1         </label>
+                        <div class="input-group input-group-sm">
+
+                        <button type="button" style="right: auto;" (click)="solist()" class="btn btn-success btn-sm mr-3">Sauvgarder </button>
+                        </div>
+                    </div>    
+                </div>
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="1000" gridId="mGrid"
+                        [columnDefinitions]="columnDefinitions" [gridOptions]="gridOptions" [dataset]="dataset"
+                        (onAngularGridCreated)="gridReady($event)">
+                    </angular-slickgrid>
+                </div>
+            
+            </form>
+        </div>
+        <div>
+            <ng-template #content2 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir le FOURNISSEUR</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="gridpro"
+                            [columnDefinitions]="columnDefinitions2" (onAngularGridCreated)="angularGridReady2($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged2($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions2" [dataset]="providers">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+        
+    </kt-portlet-body>
+</kt-portlet>
+

@@ -1,0 +1,65 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Ajouter Liste Outil'" [class]="'card-head-lg'">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+            <form class="kt-form" [formGroup]="toolForm">
+                <kt-alert *ngIf="isExist" type="warn" [showCloseButton]="true" [duration]="10000"
+                (close)="onAlertClose($event)">
+                Ce Code existe deja
+            </kt-alert>
+
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Code: *</label>
+                        <input type="text" formControlName="to_code"  (change)="onChangeCode()"
+                            [className]="toolForm.controls['to_code'].errors && (toolForm.controls['to_code'].dirty || toolForm.controls['to_code'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                        <div *ngIf="toolForm.controls['to_code'].errors && (toolForm.controls['to_code'].dirty || toolForm.controls['to_code'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                     </div>
+
+                    
+                </div>
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label class="form-group">Description: *</label>
+                        <input type="text" formControlName="to_desc"  
+                            [className]="toolForm.controls['to_desc'].errors && (toolForm.controls['to_desc'].dirty || toolForm.controls['to_desc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                        <div *ngIf="toolForm.controls['to_desc'].errors && (toolForm.controls['to_desc'].dirty || toolForm.controls['to_desc'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                     </div>
+
+                    
+                </div>
+
+               
+                <div class="form-group col-12 row">
+                    <label class="col-2 col-form-label text-right"> Détail de la liste: </label>
+                </div>
+
+
+                <div class="row col-lg-12">
+                    <button class="btn btn-primary btn-elevate col-lg-2" (click)="addNewItem()">Ajouter un
+                        outil</button>
+                </div>
+                <br>
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="300" gridId="plagemvGrid" [columnDefinitions]="mvcolumnDefinitions"
+                    [gridOptions]="mvgridOptions" [dataset]="mvdataset" (onAngularGridCreated)="mvGridReady($event)">
+                </angular-slickgrid>
+                </div>
+
+            </form>
+        </div>
+
+        
+
+    </kt-portlet-body>
+</kt-portlet>

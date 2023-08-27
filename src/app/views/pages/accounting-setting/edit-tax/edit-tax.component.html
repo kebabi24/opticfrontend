@@ -1,0 +1,198 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="title" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>            
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+        </ng-container>
+
+    </kt-portlet-header>
+    
+    <kt-portlet-body>
+        <div class="example-preview">
+            <form class="form" [formGroup]="taxForm">
+                    
+                
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">code: *</label>
+                        
+                        <input type="text" formControlName="tx2_tax_code"  [(ngModel)]="taxeEdit.tx2_tax_code"
+                        [className]="taxForm.controls['tx2_tax_code'].errors && (taxForm.controls['tx2_tax_code'].dirty || taxForm.controls['tx2_tax_code'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'" disabled>
+                        <div *ngIf="taxForm.controls['tx2_tax_code'].errors && (taxForm.controls['tx2_tax_code'].dirty || taxForm.controls['tx2_tax_code'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                        
+                    </div>
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Type Taxe : </label>
+                            <select
+                            [className]="taxForm.controls['tx2_tax_type'].errors && (taxForm.controls['tx2_tax_type'].dirty || taxForm.controls['tx2_tax_type'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="tx2_tax_type"  id="exampleSelects1">
+                            <option *ngFor="let elem of tx2_tax_type" [value]="elem.code_value">
+                                {{elem.code_cmmt}}</option>
+
+                            </select>
+                            <div *ngIf="taxForm.controls['tx2_tax_type'].errors && (taxForm.controls['tx2_tax_type'].dirty || taxForm.controls['tx2_tax_type'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>    
+                    
+                </div>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Classe: *</label>
+                        <div class="input-group input-group-sm">
+                            <select
+                            [className]="taxForm.controls['tx2_pt_taxc'].errors && (taxForm.controls['tx2_pt_taxc'].dirty || taxForm.controls['tx2_pt_taxc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="tx2_pt_taxc" id="exampleSelects1">
+                            <option *ngFor="let elem of tx2_pt_taxc" [value]="elem.code_value">
+                                {{elem.code_cmmt}}</option>
+
+                            </select>
+                            <div *ngIf="taxForm.controls['tx2_pt_taxc'].errors && (taxForm.controls['tx2_pt_taxc'].dirty || taxForm.controls['tx2_pt_taxc'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+                    </div>
+                    <div class="form-group col-4">
+                        <label class="form-group">Description: *</label>
+                    
+                        <input type="text" formControlName="tx2_desc"
+                        [className]="taxForm.controls['tx2_desc'].errors && (taxForm.controls['tx2_desc'].dirty || taxForm.controls['tx2_desc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                        <div *ngIf="taxForm.controls['tx2_desc'].errors && (taxForm.controls['tx2_desc'].dirty || taxForm.controls['tx2_desc'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                        
+                    </div>
+                </div>
+
+                <div class="row">
+                    
+                    <div class="form-group col-2">
+                        
+                            <label class="form-group">Taux de Taxe: *</label>
+                            <input class="form-control form-control-sm form-control-solid" type="number" formControlName="tx2_tax_pct">
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group"> Taxe Par Ligne: </label>
+                    
+                        <span class="switch switch-icon">
+                            <label>
+                                <input type="checkbox" class="form-control form-control-sm form-control-solid" formControlName="tx2_by_line"
+                                    name="select" />
+                                <span></span>
+                            </label>
+                        </span>
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group"> Base Taxe: </label>
+                    
+                        <input class="form-control form-control-sm form-control-solid" type="text" formControlName="tx2_base" >
+                    </div>
+
+                    <div class="form-group col-2">
+                        <label class="form-group"> Taux Recupérable: </label>
+                        <input class="form-control form-control-sm form-control-solid" type="number" formControlName="tx2_pct_recv">
+                    </div>
+
+
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group"> Date de Validité: *</label>
+                    
+                        <div class="input-group input-group-sm">
+							<input class="form-control form-control-solid" placeholder="jj-mm-aaaa"  formControlName="tx2_effdate"
+							       name="dp"
+							       ngbDatepicker
+							       #dp="ngbDatepicker">
+							<div class="input-group-append">
+								<button class="btn btn-primary" (click)="dp.toggle()" type="button">
+									<i class="flaticon-calendar-with-a-clock-time-tools"></i>
+								</button>
+							</div>
+						</div>
+
+                    </div>
+
+                    <div class="form-group col-2">
+                        <label class="form-group"> Date d'expiration': *</label>
+                    
+                        <div class="input-group input-group-sm">
+							<input class="form-control form-control-solid" placeholder="jj-mm-aaaa" formControlName="tx2_exp_date"
+							       name="dd"
+							       ngbDatepicker
+							       #dd="ngbDatepicker">
+							<div class="input-group-append">
+								<button class="btn btn-primary" (click)="dd.toggle()" type="button">
+									<i class="flaticon-calendar-with-a-clock-time-tools"></i>
+								</button>
+							</div>
+						</div>
+
+                    </div>
+
+
+                    
+                </div>
+
+                
+                <div class="row">
+                    
+                    <div class="form-group col-2">
+                        <label class="form-group"> MAJ Taxe Permise: </label>
+                        <span class="switch switch-icon">
+                            <label>
+                                <input type="checkbox" class="form-control form-control-sm form-control-solid" formControlName="tx2_update_tax"
+                                    name="select" />
+                                <span></span>
+                            </label>
+                        </span>
+                    </div>
+                  
+                    <div class="form-group col-2">
+                        <label class="form-group"> Cumuler a réception: </label>
+                    
+                        <span class="switch switch-icon">
+                            <label>
+                                <input type="checkbox" class="form-control form-control-sm form-control-solid"  formControlName="tx2_rcpt_tax_point"
+                                    name="select" />
+                                <span></span>
+                            </label>
+                        </span>
+                    </div>
+
+                    <div class="form-group col-2">
+                        <label class="form-group"> Taxe Inclusse Permise: </label>
+                    
+                        <span class="switch switch-icon">
+                            <label>
+                                <input type="checkbox"
+                                    class="form-control form-control-sm form-control-solid" formControlName="tx2_tax_in"
+                                    name="select" />
+                                <span></span>
+                            </label>
+                        </span>
+                    </div>
+                    
+                    <div class="form-group col-2">
+                        <label class="form-group"> Taxe cumulée à l'utilisation: </label>
+                    
+                        <span class="switch switch-icon">
+                            <label>
+                                <input type="checkbox"
+                                    class="form-control form-control-sm form-control-solid"  formControlName="tx2_usage_tax_point"
+                                    name="select" />
+                                <span></span>
+                            </label>
+                        </span>
+                    </div>
+
+
+                </div>
+
+               
+               
+            </form>
+        </div>
+           </kt-portlet-body>
+</kt-portlet>

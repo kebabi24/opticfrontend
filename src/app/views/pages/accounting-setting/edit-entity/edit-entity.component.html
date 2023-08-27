@@ -1,0 +1,541 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="title" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="form" [formGroup]="entityForm">
+                    
+                <div class="row"> 
+                    <div class="form-group col-2">
+                        <label class="form-group">Code: *</label>
+                        
+                        <input type="text" formControlName="en_entity" [(ngModel)]="entityEdit.en_entity"
+                        [className]="entityForm.controls['en_entity'].errors && (entityForm.controls['en_entity'].dirty || entityForm.controls['en_entity'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                    <div *ngIf="entityForm.controls['en_entity'].errors && (entityForm.controls['en_entity'].dirty || entityForm.controls['en_entity'].touched) "
+                        class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+                </div>
+                <div class="row"> 
+
+                    <div class="form-group col-6">
+                        <label class="form-group">Description: *</label>
+                        <input type="text" formControlName="en_name" 
+                            [className]="entityForm.controls['en_name'].errors && (entityForm.controls['en_name'].dirty || entityForm.controls['en_name'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                        <div *ngIf="entityForm.controls['en_name'].errors && (entityForm.controls['en_name'].dirty || entityForm.controls['en_name'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+                </div>
+                <div class="row"> 
+
+                    <div class="form-group col-2">
+                        <label class="form-group"> Entitée principale: </label>
+                        <span class="switch switch-icon ">
+                            <label>
+                                <input type="checkbox" formControlName="en_primary"
+                                    class="form-control form-control-sm form-control-solid">
+                                <span></span>
+                            </label>
+                        </span>
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Devise : *</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" formControlName="en_curr" (change)="changeCurr()"
+                                [className]="entityForm.controls['en_curr'].errors && (entityForm.controls['en_curr'].dirty || entityForm.controls['en_curr'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open2(content)">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                            <div *ngIf="entityForm.controls['en_curr'].errors && (entityForm.controls['en_curr'].dirty || entityForm.controls['en_curr'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+
+                        
+                    </div>    
+                </div>
+                <div class="row"> 
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Numéro de protocole suivant:  </label>
+                            <input type="entier" formControlName="en_next_prot" class="form-control form-control-sm"   >
+                       
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group"> Rég FX : </label>
+                        <select  class="form-control form-control-sm" type="text"   formControlName="en_adj_bs"  >
+                            <option value="Bilan ">Bilan</option>
+                            <option value="Cpt Résultat">Cpt Résultat</option>                            
+                        </select>    
+                    </div>
+
+
+                </div>
+
+                <div class="row"> 
+    
+                    <div class="form-group col-2">
+                        <label class="form-group">Numéro PG état Vérif Compta:  </label>
+                            <input type="entier" class="form-control form-control-sm"   formControlName="en_page_num">
+                            
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Adresse De La Société:  </label>
+                            <input type="text" class="form-control form-control-sm"   formControlName="en_addr">
+                            
+                    </div>
+                </div>
+                <div class="row"> 
+
+                    <div class="form-group col-2">
+                        <label class="form-group"> Entitée de Consolidation: </label>
+                        <span class="switch switch-icon ">
+                            <label>
+                                <input type="checkbox" formControlName="en_consolidation"
+                                    class="form-control form-control-sm form-control-solid">
+                                <span></span>
+                            </label>
+                        </span>
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group"> Type : </label>
+                            <select  class="form-control form-control-sm" type="text"   formControlName="en_type">
+                                
+                            </select>    
+                    </div>   
+                </div>
+                <div class="row"> 
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Sous Compte par Defaut: </label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text"  class="form-control form-control-solid"
+                                aria-describedby="basic-addon2" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open3(content,'pl_inv_acct')">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="form-group col-2">
+                        <label class="form-group"> Remplacer: </label>
+                        <span class="switch switch-icon ">
+                            <label>
+                                <input type="checkbox" 
+                                    class="form-control form-control-sm form-control-solid">
+                                <span></span>
+                            </label>
+                        </span>
+                    </div>
+                </div>
+                <div class="row"> 
+                    <div class="form-group col-2">
+                        <label class="form-group">Centre de Coût par Defaut: </label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text"  class="form-control form-control-solid"
+                                aria-describedby="basic-addon2" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="form-group col-2">
+                        <label class="form-group"> Remplacer: </label>
+                        <span class="switch switch-icon ">
+                            <label>
+                                <input type="checkbox" 
+                                    class="form-control form-control-sm form-control-solid">
+                                <span></span>
+                            </label>
+                        </span>
+                    </div>
+                </div>
+                   
+                <div class="row"> 
+
+                    <div class="form-group col-3">
+                        <label class="form-group">Comptabilité Fournisseur (Débit): </label>
+                        
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" formControlName="cfdebit" (change)="changeAcct('cfdebit')"
+                                [className]="entityForm.controls['cfdebit'].errors && (entityForm.controls['cfdebit'].dirty || entityForm.controls['cfdebit'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open3(content3,'cfdebit')">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                            <div *ngIf="entityForm.controls['cfdebit'].errors && (entityForm.controls['cfdebit'].dirty || entityForm.controls['cfdebit'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Sous Compte: </label>
+                        
+                        <div class="input-group input-group-sm">
+                            <input  class="form-control form-control-sm" type="text"   formControlName="scfdebit" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group col-2">
+                        <label class="form-group">Centre de Cout: </label>
+                        <div class="input-group input-group-sm">
+                            <input  class="form-control form-control-sm" type="text"   formControlName="ccfdebit" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+ <!--compte-->
+
+                
+                <div class="row">    
+                    <div class="form-group col-3">
+                        <label class="form-group">Comptabilité Fournisseur (Crédit): </label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" formControlName="cfcredit" (change)="changeAcct('cfcredit')"
+                                [className]="entityForm.controls['cfcredit'].errors && (entityForm.controls['cfcredit'].dirty || entityForm.controls['cfcredit'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open3(content3,'cfcredit')">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                            <div *ngIf="entityForm.controls['cfcredit'].errors && (entityForm.controls['cfcredit'].dirty || entityForm.controls['cfcredit'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Sous Compte: </label>
+                        
+                        <div class="input-group input-group-sm">
+                            <input  class="form-control form-control-sm" type="text"   formControlName="scfcredit" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group col-2">
+                        <label class="form-group">Centre de Cout: </label>
+                        <div class="input-group input-group-sm">
+                            <input  class="form-control form-control-sm" type="text"   formControlName="ccfcredit" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">    
+                    <div class="form-group col-3">
+                        <label class="form-group">Comptabilité Client (Débit) : </label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" formControlName="ccdebit" (change)="changeAcct('ccdebit')"
+                                [className]="entityForm.controls['ccdebit'].errors && (entityForm.controls['ccdebit'].dirty || entityForm.controls['ccdebit'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open3(content3,'ccdebit')">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                            <div *ngIf="entityForm.controls['ccdebit'].errors && (entityForm.controls['ccdebit'].dirty || entityForm.controls['ccdebit'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Sous Compte: </label>
+                        
+                        <div class="input-group input-group-sm">
+                            <input  class="form-control form-control-sm" type="text"   formControlName="sccdebit" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group col-2">
+                        <label class="form-group">Centre de Cout: </label>
+                        <div class="input-group input-group-sm">
+                            <input  class="form-control form-control-sm" type="text"   formControlName="cccdebit" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-3">
+                        <label class="form-group">Comptabilité Client (Crédit): </label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" formControlName="cccredit" (change)="changeAcct('cccredit')"
+                                [className]="entityForm.controls['cccredit'].errors && (entityForm.controls['cccredit'].dirty || entityForm.controls['cccredit'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open3(content3,'cccredit')">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                            <div *ngIf="entityForm.controls['cccredit'].errors && (entityForm.controls['cccredit'].dirty || entityForm.controls['cccredit'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Sous Compte: </label>
+                        
+                        <div class="input-group input-group-sm">
+                            <input  class="form-control form-control-sm" type="text"   formControlName="scccredit" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group col-2">
+                        <label class="form-group">Centre de Cout: </label>
+                        <div class="input-group input-group-sm">
+                            <input  class="form-control form-control-sm" type="text"   formControlName="ccccredit" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="row">
+
+                    <div class="form-group col-3">
+                        <label class="form-group">Immobilisation (Débit): </label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" formControlName="cimdebit" (change)="changeAcct('cimdebit')"
+                                [className]="entityForm.controls['cimdebit'].errors && (entityForm.controls['cimdebit'].dirty || entityForm.controls['cimdebit'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open3(content3,'cimdebit')">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                            <div *ngIf="entityForm.controls['cimdebit'].errors && (entityForm.controls['cimdebit'].dirty || entityForm.controls['cimdebit'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Sous Compte: </label>
+                        
+                        <div class="input-group input-group-sm">
+                            <input  class="form-control form-control-sm" type="text"   formControlName="scimdebit" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group col-2">
+                        <label class="form-group">Centre de Cout: </label>
+                        <div class="input-group input-group-sm">
+                            <input  class="form-control form-control-sm" type="text"   formControlName="ccimdebit" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="form-group col-3">
+                        <label class="form-group">Immobilisation (Crédit): </label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" formControlName="cimcredit" (change)="changeAcct('cimcredit')"
+                                [className]="entityForm.controls['cimcredit'].errors && (entityForm.controls['cimcredit'].dirty || entityForm.controls['cimcredit'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open3(content3,'cimcredit')">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                            <div *ngIf="entityForm.controls['cimcredit'].errors && (entityForm.controls['cimcredit'].dirty || entityForm.controls['cimcredit'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Sous Compte: </label>
+                        
+                        <div class="input-group input-group-sm">
+                            <input  class="form-control form-control-sm" type="text"   formControlName="scimcredit" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group col-2">
+                        <label class="form-group">Centre de Cout: </label>
+                        <div class="input-group input-group-sm">
+                            <input  class="form-control form-control-sm" type="text"   formControlName="ccimcredit" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div class="row">    
+                    <div class="form-group col-3">
+                        <label class="form-group">Gestion des Stock (Débit): </label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" formControlName="csdebit" (change)="changeAcct('csdebit')"
+                                [className]="entityForm.controls['csdebit'].errors && (entityForm.controls['csdebit'].dirty || entityForm.controls['csdebit'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open3(content3,'csdebit')">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                            <div *ngIf="entityForm.controls['csdebit'].errors && (entityForm.controls['csdebit'].dirty || entityForm.controls['csdebit'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Sous Compte: </label>
+                        
+                        <div class="input-group input-group-sm">
+                            <input  class="form-control form-control-sm" type="text"   formControlName="scsdebit" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group col-2">
+                        <label class="form-group">Centre de Cout: </label>
+                        <div class="input-group input-group-sm">
+                            <input  class="form-control form-control-sm" type="text"   formControlName="ccsdebit" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-3">
+                        <label class="form-group">Gestion des Stock (Crédit): </label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" formControlName="cscredit" (change)="changeAcct('cscredit')"
+                                [className]="entityForm.controls['cscredit'].errors && (entityForm.controls['cscredit'].dirty || entityForm.controls['cscredit'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" (click)="open3(content3,'cscredit')">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                            <div *ngIf="entityForm.controls['cscredit'].errors && (entityForm.controls['cscredit'].dirty || entityForm.controls['cscredit'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Sous Compte: </label>
+                        
+                        <div class="input-group input-group-sm">
+                            <input  class="form-control form-control-sm" type="text"   formControlName="scscredit" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group col-2">
+                        <label class="form-group">Centre de Cout: </label>
+                        <div class="input-group input-group-sm">
+                            <input  class="form-control form-control-sm" type="text"   formControlName="ccscredit" >
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div>
+            <ng-template #content let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir la Devise</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="gridpro"
+                            [columnDefinitions]="columnDefinitions2" (onAngularGridCreated)="angularGridReady2($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged2($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions2" [dataset]="devises">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+
+        <div>
+            <ng-template #content3 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir Compte </h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                            [columnDefinitions]="columnDefinitions3" (onAngularGridCreated)="angularGridReady3($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged3($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions3" [dataset]="data">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+
+    </kt-portlet-body>
+</kt-portlet>

@@ -1,0 +1,41 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="false" [title]="'Consultations des Commandes'" [class]="'card-head-lg'">
+        
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+            <form class="form" [formGroup]="soForm">
+                <div class="row col-6">
+                </div>   
+                <div class="row">
+                    <div class="form-group col-3">
+                       
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-sm form-control-solid"  formControlName="date" (change)="solist()"
+                                 placeholder="jj-mm-aaaa" name="date" ngbDatepicker f
+                                #date="ngbDatepicker"  (ngModelChange)= "solist()" >
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="date.toggle()"  type="button">
+                                    <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                </button>
+                            </div>
+                            
+                        </div>
+
+
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="1000" gridId="mGrid"
+                        [columnDefinitions]="columnDefinitions" [gridOptions]="gridOptions" [dataset]="dataset"
+                        (onAngularGridCreated)="gridReady($event)">
+                    </angular-slickgrid>
+                </div>
+            
+            </form>
+        </div>
+        
+    </kt-portlet-body>
+</kt-portlet>
+

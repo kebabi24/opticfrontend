@@ -1,0 +1,100 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Ajouter un Profil'" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+
+
+            <!-- <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-sm" id="dropdownBasic1" ngbDropdownToggle><i
+                        class="icon-2x text-dark-50 flaticon-more-v2"></i></button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item">Sauvgarder et quitter</button>
+
+                </div>
+            </div> -->
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="form" [formGroup]="profileForm">
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="form-group col-4">
+                                <label class="form-group">code profile: *</label>
+                                <input type="text" formControlName="usrg_code"
+                                    [className]="profileForm.controls['usrg_code'].errors && (profileForm.controls['usrg_code'].dirty || profileForm.controls['usrg_code'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                                <div *ngIf="profileForm.controls['usrg_code'].errors && (profileForm.controls['usrg_code'].dirty || profileForm.controls['usrg_code'].touched) "
+                                    class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                            </div>
+                            <div class="form-group col-8">
+                                <label class="form-group">Designation: *</label>
+                                <input type="text" formControlName="usrg_description"
+                                    [className]="profileForm.controls['usrg_description'].errors && (profileForm.controls['usrg_description'].dirty || profileForm.controls['usrg_description'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                                <div *ngIf="profileForm.controls['usrg_description'].errors && (profileForm.controls['usrg_description'].dirty || profileForm.controls['usrg_description'].touched) "
+                                    class="invalid-feedback">Ce Champs est obligatoire</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-4">
+                                <label class="form-group">Date début validité profil : </label>
+
+                                <div class="input-group input-group-sm">
+                                    <input class="form-control form-control-solid" placeholder="jj-mm-aaaa"
+                                        name="usrg_val_st_date" formControlName="usrg_val_st_date" ngbDatepicker
+                                        #usrg_val_st_date="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" (click)="usrg_val_st_date.toggle()" type="button">
+                                            <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="form-group col-4">
+                                <label class="form-group">Date fin validité profil: </label>
+
+                                <div class="input-group input-group-sm">
+                                    <input class="form-control form-control-solid" placeholder="jj-mm-aaaa"
+                                        name="usrg_val_en_date" ngbDatepicker formControlName="usrg_val_en_date"
+                                        #usrg_val_en_date="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" (click)="usrg_val_en_date.toggle()" type="button">
+                                            <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <span class="font-weight-bolder text-dark">LISTE DES MENUS ET ACTIONS ACCESSIBLE POUR LE
+                            PROFIL</span>
+                        <div class="row example-preview">
+                            <tree-root class="col-12" id="tree1" [nodes]="nodes" [options]="options" (select)="onSelect($event)" (deselect)="onDeselect($event)" (initialized)="onInitTree($event)">
+                            </tree-root>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+            </form>
+        </div>
+
+    </kt-portlet-body>
+</kt-portlet>

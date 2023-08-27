@@ -1,0 +1,52 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Saisie inventaire'" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+
+
+            <!-- <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-sm" id="dropdownBasic1" ngbDropdownToggle><i
+                        class="icon-2x text-dark-50 flaticon-more-v2"></i></button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item">Sauvgarder et quitter</button>
+
+                </div>
+
+            </div> -->
+
+
+        </ng-container>
+        
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="form" >
+
+                <div class="row">
+                    <div class="form-group col-4">
+                        <label class="form-group">Numero Inventaire:</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control form-control-solid" (change)="onChangeNbr($event)" 
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="1100" gridId="mGrid"
+                        [columnDefinitions]="columnDefinitions" [gridOptions]="gridOptions" [dataset]="dataset"
+                        (onAngularGridCreated)="gridReady($event)">
+                    </angular-slickgrid>
+                </div>
+            </form>
+        </div>
+
+    </kt-portlet-body>
+</kt-portlet>

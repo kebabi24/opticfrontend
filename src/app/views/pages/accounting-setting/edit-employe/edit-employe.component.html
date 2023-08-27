@@ -1,0 +1,469 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="title" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+            <div>
+                <ngb-tabset>
+                    <ngb-tab>
+                        <ng-template ngbTabTitle>
+                            Information basique
+                            <div style="width: 10px;"></div>
+                            <a *ngIf="hasFormErrors"
+                                class="btn btn-sm btn-icon btn-light-danger pulse pulse-danger mr-5">
+                                <i class="flaticon2-information"></i>
+                                <span class="pulse-ring"></span>
+                            </a>
+                        </ng-template>
+                        <ng-template ngbTabContent>
+                            <form [formGroup]="empForm" class="form">
+
+                                <kt-alert *ngIf="isExist" type="warn" [showCloseButton]="true" [duration]="10000"
+                                    (close)="onAlertClose($event)">
+                                    Ce Code existe deja
+                                </kt-alert>
+                                
+                        <div class="row"> 
+                            <div class="form-group col-2">
+                                <label class="form-group">Code: *</label>
+                                
+                                <input type="text" formControlName="emp_addr"  [(ngModel)]="employeEdit.emp_addr"
+                                    [className]="empForm.controls['emp_addr'].errors && (empForm.controls['emp_addr'].dirty || empForm.controls['emp_addr'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                                <div *ngIf="empForm.controls['emp_addr'].errors && (empForm.controls['emp_addr'].dirty || empForm.controls['emp_addr'].touched) "
+                                    class="invalid-feedback">Ce Champs est obligatoire</div>
+                            </div>
+                        </div>
+                        <div class="row"> 
+        
+                            <div class="form-group col-6">
+                                <label class="form-group">Nom: *</label>
+                                <input type="text" formControlName="emp_lname" 
+                                    [className]="empForm.controls['emp_lname'].errors && (empForm.controls['emp_lname'].dirty || empForm.controls['emp_lname'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                                <div *ngIf="empForm.controls['emp_lname'].errors && (empForm.controls['emp_lname'].dirty || empForm.controls['emp_lname'].touched) "
+                                    class="invalid-feedback">Ce Champs est obligatoire</div>
+                            </div>
+                        </div>
+                        <div class="row"> 
+        
+                            <div class="form-group col-4">
+                                <label class="form-group">Prénom: *</label>
+                                <input type="text" formControlName="emp_fname" 
+                                    [className]="empForm.controls['emp_fname'].errors && (empForm.controls['emp_fname'].dirty || empForm.controls['emp_fname'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                                <div *ngIf="empForm.controls['emp_fname'].errors && (empForm.controls['emp_fname'].dirty || empForm.controls['emp_fname'].touched) "
+                                    class="invalid-feedback">Ce Champs est obligatoire</div>
+                            </div>
+                            <div class="form-group col-2">
+                                <label class="form-group">DATE Naissance:</label>
+                                <div class="input-group input-group-sm">
+                                    <input
+                                        [className]="empForm.controls['emp_birth_date'].errors && (empForm.controls['emp_birth_date'].dirty || empForm.controls['emp_birth_date'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                        placeholder="jj-mm-aaaa" name="dp" ngbDatepicker formControlName="emp_birth_date"
+                                        #dd="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" (click)="dd.toggle()" type="button">
+                                            <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                        </button>
+                                    </div>
+                                    <div *ngIf="empForm.controls['emp_birth_date'].errors && (empForm.controls['emp_birth_date'].dirty || empForm.controls['emp_birth_date'].touched)"
+                                        class="invalid-feedback">Ce Champs est obligatoire</div>
+                                </div>
+        
+                            </div>
+                        </div>
+                        <div class="row"> 
+        
+                            <div class="form-group col-6">
+                                <label class="form-group">Adresse: *</label>
+                                <input type="text" formControlName="emp_line1" 
+                                    [className]="empForm.controls['emp_line1'].errors && (empForm.controls['emp_line1'].dirty || empForm.controls['emp_line1'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                                <div *ngIf="empForm.controls['emp_line1'].errors && (empForm.controls['emp_line1'].dirty || empForm.controls['emp_line1'].touched) "
+                                    class="invalid-feedback">Ce Champs est obligatoire</div>
+                            </div>
+                        </div>
+                        <div class="row"> 
+                            <div class="form-group col-6">
+                                <label class="form-group ">Adreese2:</label>
+                                
+                                    <input type="text" class="form-control form-control-sm form-control-solid"
+                                        formControlName="emp_line2">
+                            </div>
+                        </div>
+                        <div class="row"> 
+                            <div class="form-group col-6">
+                                <label class="form-group ">Adreese3:</label>
+                                
+                                    <input type="text" class="form-control form-control-sm form-control-solid"
+                                        formControlName="emp_line3">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-2">
+                                <label class="form-group ">Pays:</label>
+                                <select class="form-control form-control-sm form-control-solid"
+                                id="exampleSelects1" formControlName="emp_country">
+                                <option value=""></option>
+                                <option *ngFor="let elem of emp_country" [value]="elem.code_value">
+                                    {{elem.code_value}} {{elem.code_cmmt}}</option>
+                                   
+
+                            </select>
+                            </div>
+                       
+                            
+                            <div class="form-group col-2">
+                                <label class="form-group ">Wilaya:</label>
+                                    <select class="form-control form-control-sm form-control-solid"
+                                        id="exampleSelects2" formControlName="emp_state" (change)="onChangeState()">
+                                        <option value=""></option>
+                                        <option *ngFor="let elem of emp_state" [value]="elem.code_value">
+                                            {{elem.code_value}} {{elem.code_cmmt}}</option>
+
+                                    </select>
+                                
+                            </div>
+                            
+                            <div class="form-group col-2">
+                                <label class="form-group ">Commune:</label>
+                                    <select class="form-control form-control-sm form-control-solid"
+                                        id="exampleSelects1" formControlName="emp_city">
+                                        <option value=""></option>
+                                        <option *ngFor="let elem of emp_city" [value]="elem.code_value">
+                                            {{elem.code_value}} {{elem.code_cmmt}}</option>
+
+                                    </select>
+                            </div>
+                            <div class="form-group col-2">
+                                <label class="form-group ">Post:</label>
+                                
+                                    <input type="text" class="form-control form-control-sm form-control-solid"
+                                        formControlName="emp_zip">
+                            </div>
+                        </div>
+
+                        <div class="row"> 
+                            <div class="form-group col-2">
+                                <label class="form-group ">Téléphone:</label>
+                                
+                                    <input type="text" class="form-control form-control-sm form-control-solid"
+                                        formControlName="emp_phone">
+                            </div>
+                            <div class="form-group col-2">
+                                <label class="form-group ">Fax:</label>
+                                
+                                    <input type="text" class="form-control form-control-sm form-control-solid"
+                                        formControlName="emp_fax">
+                            </div>
+                            <div class="form-group col-2">
+                                <label class="form-group ">Email:</label>
+                                
+                                    <input type="text" class="form-control form-control-sm form-control-solid"
+                                        formControlName="emp_mail">
+                            </div>
+                        </div>
+        
+                        <div class="row"> 
+                            <div class="form-group col-2">
+                                <label class="form-group ">Sexe:</label>
+        
+                                <select
+                                    [className]="empForm.controls['emp_sex'].errors && (empForm.controls['emp_sex'].dirty || empForm.controls['emp_sex'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                    formControlName="emp_sex"  id="exampleSelects7">
+                                    <option value=""></option>
+                                    <option value="M">Masculin</option>
+                                    <option value="F">Feminin</option>
+                                
+                                </select>
+                                <div *ngIf="empForm.controls['emp_sex'].errors && (empForm.controls['emp_sex'].dirty || empForm.controls['emp_sex'].touched)"
+                                    class="invalid-feedback">Ce Champs est obligatoire</div>
+        
+                            </div>
+                            <div class="form-group col-2">
+                                <label class="form-group ">Situation Familliale:</label>
+        
+                                <select
+                                    [className]="empForm.controls['emp_familysit'].errors && (empForm.controls['emp_familysit'].dirty || empForm.controls['emp_familysit'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                    formControlName="emp_familysit"  id="exampleSelects7">
+                                    <option value=""></option>
+                                    <option value="C">Célébataire</option>
+                                    <option value="M">Marié</option>
+                                    <option value="A">Autre</option>
+                                    
+                                </select>
+                                <div *ngIf="empForm.controls['emp_familysit'].errors && (empForm.controls['emp_familysit'].dirty || empForm.controls['emp_familysit'].touched)"
+                                    class="invalid-feedback">Ce Champs est obligatoire</div>
+        
+
+                            </div>
+                            <div class="form-group col-2">
+                                <label class="form-group">N°Sécurité sociale: *</label>
+                                <input type="text" formControlName="emp_ss_id" 
+                                    [className]="empForm.controls['emp_ss_id'].errors && (empForm.controls['emp_ss_id'].dirty || empForm.controls['emp_ss_id'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                                <div *ngIf="empForm.controls['emp_ss_id'].errors && (empForm.controls['emp_ss_id'].dirty || empForm.controls['emp_ss_id'].touched) "
+                                    class="invalid-feedback">Ce Champs est obligatoire</div>
+                            </div>
+                        </div>    
+                       
+                       
+                                
+
+                            </form>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab>
+                        <ng-template ngbTabTitle>
+                        
+                            Données Employé
+                            <div style="width: 10px;"></div>
+                            <a *ngIf="hasEmployeFormErrors"
+                                class="btn btn-sm btn-icon btn-light-danger pulse pulse-danger mr-5">
+                                <i class="flaticon2-information"></i>
+                                <span class="pulse-ring"></span>
+                            </a>
+                        </ng-template>
+                        <ng-template ngbTabContent>
+                            <form [formGroup]="empForm" class="form">
+                                <div class="row"> 
+                                    <div class="form-group col-2">
+                                        <label class="form-group">Métier : *</label>
+                                        <div class="input-group input-group-sm">
+                
+                                            <input type="text" formControlName="emp_job" (change)="onChangeJob()" id="job"
+                                                [className]="empForm.controls['emp_job'].errors && (empForm.controls['emp_job'].dirty || empForm.controls['emp_job'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                                aria-describedby="basic-addon2">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" (click)="open2(content)">
+                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                            </div>
+                                            <div *ngIf="empForm.controls['emp_job'].errors && (empForm.controls['emp_job'].dirty || empForm.controls['emp_job'].touched)"
+                                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                                        </div>
+                
+                                        
+                                    </div>    
+                                    <div class="form-group col-2">
+                                        <label class="form-group">Niveau : *</label>
+                                        <div class="input-group input-group-sm">
+                
+                                            <input type="text" formControlName="emp_level" (change)="onChangelevel()" id="level"
+                                                [className]="empForm.controls['emp_level'].errors && (empForm.controls['emp_level'].dirty || empForm.controls['emp_level'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                                aria-describedby="basic-addon2">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" (click)="open3(content3)">
+                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                            </div>
+                                            <div *ngIf="empForm.controls['emp_level'].errors && (empForm.controls['emp_level'].dirty || empForm.controls['emp_level'].touched)"
+                                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                                        </div>
+                
+                                        
+                                    </div>    
+                                </div>
+
+                                <div class="row"> 
+                                    <div class="form-group col-2">
+                                       
+                                        <label class="form-group ">Equipe:</label>
+                                        
+                                        <div class="input-group input-group-sm">
+
+                                            <input type="text" class="form-control form-control-solid" 
+                                                aria-describedby="basic-addon2" formControlName="emp_shift" (change)="onChangeshift()" id="emp_shift">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" (click)="openshift(contentshift)">
+                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                            </div>
+                                        
+                                        </div>
+                                        
+                                    </div>    
+                                    <div class="form-group col-2">
+                                        <label class="form-group">Site : *</label>
+                                        <div class="input-group input-group-sm">
+    
+                                            <input type="text" class="form-control form-control-solid" 
+                                                aria-describedby="basic-addon2" formControlName="emp_site" (change)="onChangesite()" id="emp_site">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" (click)="opensite(contentsite)">
+                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                            </div>
+                                        
+                                        </div>
+                
+                                        
+                                    </div>    
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-2">
+                                        <label class="form-group">DATE d'Embauche:</label>
+                                        <div class="input-group input-group-sm">
+                                            <input
+                                                [className]="empForm.controls['emp_first_date'].errors && (empForm.controls['emp_first_date'].dirty || empForm.controls['emp_first_date'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                                placeholder="jj-mm-aaaa" name="emp_first_date" ngbDatepicker formControlName="emp_first_date"
+                                                #emp_first_date="ngbDatepicker">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" (click)="emp_first_date.toggle()" type="button">
+                                                    <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                                </button>
+                                            </div>
+                                            <div *ngIf="empForm.controls['emp_first_date'].errors && (empForm.controls['emp_first_date'].dirty || empForm.controls['emp_first_date'].touched)"
+                                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                                        </div>
+                
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label class="form-group">DATE Fin :</label>
+                                        <div class="input-group input-group-sm">
+                                            <input
+                                                [className]="empForm.controls['emp_last_date'].errors && (empForm.controls['emp_last_date'].dirty || empForm.controls['emp_last_date'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                                placeholder="jj-mm-aaaa" name="emp_last_date" ngbDatepicker formControlName="emp_last_date"
+                                                #emp_last_date="ngbDatepicker">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" (click)="emp_last_date.toggle()" type="button">
+                                                    <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                                </button>
+                                            </div>
+                                            <div *ngIf="empForm.controls['emp_last_date'].errors && (empForm.controls['emp_last_date'].dirty || empForm.controls['emp_last_date'].touched)"
+                                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                                        </div>
+                
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Taux:</label>
+                                        
+                                            <input type="number" class="form-control form-control-sm form-control-solid"
+                                                formControlName="emp_rate">
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Taux Multiple:</label>
+                                        
+                                            <input type="number" class="form-control form-control-sm form-control-solid"
+                                                formControlName="emp_mrate">
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Taux A:</label>
+                                        
+                                            <input type="number" class="form-control form-control-sm form-control-solid"
+                                                formControlName="emp_arate">
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-template>
+                    </ngb-tab>
+
+                    
+                </ngb-tabset>
+
+
+
+            </div>
+          
+        </div>
+
+        <div>
+            <ng-template #content let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir le Métier</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="gridpro"
+                            [columnDefinitions]="columnDefinitions2" (onAngularGridCreated)="angularGridReady2($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged2($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions2" [dataset]="jobs">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+
+        <div>
+            <ng-template #content3 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir Niveau </h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                            [columnDefinitions]="columnDefinitions3" (onAngularGridCreated)="angularGridReady3($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged3($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions3" [dataset]="data">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+        <div>
+            <ng-template #contentsite let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir Site </h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                            [columnDefinitions]="columnDefinitionssite" (onAngularGridCreated)="angularGridReadysite($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChangedsite($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptionssite" [dataset]="datasite">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+        <div>
+            <ng-template #contentshift let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir Equipe </h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                            [columnDefinitions]="columnDefinitionsshift" (onAngularGridCreated)="angularGridReadyshift($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChangedshift($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptionsshift" [dataset]="datashift">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+
+    </kt-portlet-body>
+</kt-portlet>
+
+

@@ -1,0 +1,305 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" title="Ajouter Une Gamme" [class]="'card-head-lg'"
+        [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        
+        <div class="example-preview">
+            <form class="form" [formGroup]="gammeForm">
+                <kt-alert *ngIf="isExist" type="warn" [showCloseButton]="true" [duration]="10000"
+                (close)="onAlertClose($event)">
+                Ce Code existe deja
+            </kt-alert>
+                            <div class="row"> 
+
+                                <div class="form-group col-2">
+                                    <label class="form-group">Code Gamme: *</label>
+                                    <div class="input-group input-group-sm">
+                                        <input  class='form-control form-control-sm form-control-solid' type="text" [className]="gammeForm.controls['ro_routing'].errors && (gammeForm.controls['ro_routing'].dirty || gammeForm.controls['ro_routing'].touched) ? 'form-control form-control-sm is-invalid' : 'form-control form-control-sm'" 
+                                        #ro_routing formControlName="ro_routing" required id="ro_routing" >
+                                        
+                                        <div *ngIf="gammeForm.controls['ro_routing'].errors && (gammeForm.controls['ro_routing'].dirty || gammeForm.controls['ro_routing'].touched)"
+                                        class="invalid-feedback">Ce Champs est obligatoire</div>
+                                    </div>
+                                    
+                                </div>
+                                
+
+                                <div class="form-group col-2">
+                                    <label class="form-group">Opération :  </label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="number" class='form-control form-control-sm form-control-solid'   formControlName="ro_op" (change)="onChangeCode()">
+                                        
+                                    </div>
+                                    
+                                </div>
+
+                            </div>
+                            <div class="row">    
+                                <div class="form-group col-2">
+                        
+                                    <label class="form-group">Démarage:  </label>
+                                    <div class="input-group input-group-sm">
+                                        
+                                            <select  class='form-control form-control-sm form-control-solid' id="exampleSelects" formControlName="ro_setup" >
+                                            
+                                            </select>
+        
+                                    </div>
+                                </div>
+                        
+                                
+
+                                <div class="form-group col-2">
+                                    <label class="form-group">Centre Charge: *</label>
+                                    <div class="input-group input-group-sm">
+                                        <input  class='form-control form-control-sm form-control-solid' type="text" [className]="gammeForm.controls['ro_wkctr'].errors && (gammeForm.controls['ro_wkctr'].dirty || gammeForm.controls['ro_wkctr'].touched) ? 'form-control form-control-sm is-invalid' : 'form-control form-control-sm'" 
+                                        #ro_wkctr formControlName="ro_wkctr" required id="ro_wkctr" >
+
+                                        <div *ngIf="gammeForm.controls['ro_wkctr'].errors && (gammeForm.controls['ro_wkctr'].dirty || gammeForm.controls['ro_wkctr'].touched)"
+                                        class="invalid-feedback">Ce Champs est obligatoire</div>
+                                       
+                                    </div>    
+                                        
+                                    
+                                    
+                                </div>
+                                <div class="form-group col-2">
+                                    <label class="form-group">Machine: *</label>
+                                    <div class="input-group input-group-sm">
+                                        <input  class='form-control form-control-sm form-control-solid' type="text" [className]="gammeForm.controls['ro_mch'].errors && (gammeForm.controls['ro_mch'].dirty || gammeForm.controls['ro_mch'].touched) ? 'form-control form-control-sm is-invalid' : 'form-control form-control-sm'" 
+                                        #ro_mch formControlName="ro_mch" required id="ro_mch" >
+                                        <div *ngIf="gammeForm.controls['ro_mch'].errors && (gammeForm.controls['ro_mch'].dirty || gammeForm.controls['ro_mch'].touched)"
+                                        class="invalid-feedback">Ce Champs est obligatoire</div>
+                                       
+                                    </div>    
+                                      
+                                </div> 
+                            </div>
+                            <div class="row">    
+                                <div class="form-group col-6">
+                                    <label class="form-group">Description: *</label>
+                                    <div class="input-group input-group-sm">
+                                        <input  class='form-control form-control-sm form-control-solid' type="text" [className]="gammeForm.controls['ro_desc'].errors && (gammeForm.controls['ro_desc'].dirty || gammeForm.controls['ro_desc'].touched) ? 'form-control form-control-sm is-invalid' : 'form-control form-control-sm'" 
+                                        #ro_desc formControlName="ro_desc" required id="ro_desc" >
+                                        <div *ngIf="gammeForm.controls['ro_desc'].errors && (gammeForm.controls['ro_desc'].dirty || gammeForm.controls['ro_desc'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                                    
+                                    </div>
+                                </div>    
+                            </div>
+                            
+                            <div class="row">    
+                           
+                                <div class="form-group col-2">
+                                    <label class="form-group">Machine par Opération :  </label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="number" class='form-control form-control-sm form-control-solid'   formControlName="ro_mch_op">
+                                        
+                                    </div>
+
+                                </div>
+            
+                                <div class="form-group col-2">
+                                    <label class="form-group">Unité Chevaugement :  </label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="number" class='form-control form-control-sm form-control-solid'   formControlName="ro_men_mch">
+                                        
+                                    </div>
+                                </div>
+                                <div class="form-group col-2">
+                                    
+                                    <label class="form-group">Délai ST :  </label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="number" class='form-control form-control-sm form-control-solid'   formControlName="ro_tran_qty">
+                                        
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-2">
+                                    <label class="form-group">Attente Amont:  </label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="number" class='form-control form-control-sm form-control-solid'   formControlName="ro_queue">
+                                        
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group col-2">
+                                
+                                    <label class="form-group">Exécution Réglage:  </label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="number" class='form-control form-control-sm form-control-solid'   formControlName="ro_run">
+                                        
+                                    </div>
+
+                                    
+                                </div>
+                                
+                                <div class="form-group col-2">
+
+                                    <label class="form-group"> Opération Jalon: *</label>
+                                        <span class="switch switch-icon ">
+                                            <label>
+                                                <input type="checkbox" name="Permanent" formControlName="ro_milestone" 
+                                                    class="form-control form-control-sm form-control-solid">
+                                                <span></span>
+                                            </label>
+                                        </span>
+                                </div>
+                            </div>
+                            <div class="row">
+            
+                                <div class="form-group col-2">
+                                    <label class="form-group">Attente Aval:  </label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="number" class='form-control form-control-sm form-control-solid'   formControlName="ro_wait">
+                                        
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group col-2">
+                                    
+                                    <label class="form-group">Exécution Equipe:  </label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="number" class='form-control form-control-sm form-control-solid'   formControlName="ro_setup_men">
+                                        
+                                    </div>
+                                </div>
+
+                            
+                                <div class="form-group col-2">
+                                    <label class="form-group">Temps Réglage:  </label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="number" class='form-control form-control-sm form-control-solid'   formControlName="ro_setup">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                                
+                            <div class="row">
+                                
+                                <div class="form-group col-2">
+                                    
+                                    <label class="form-group">Code Outil:  </label>
+                                    <div class="input-group input-group-sm">
+                                        
+                                            <select  class='form-control form-control-sm form-control-solid' id="exampleSelects" formControlName="ro_tool" >
+                                               
+                                            </select>
+        
+                                    </div> 
+                                    
+
+                                </div>
+
+                                <div class="form-group col-2">
+                                    <label class="form-group">Temps Production/heure:  </label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="number" class='form-control form-control-sm form-control-solid'   formControlName="ro_run">
+                                        
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group col-2">
+                                
+                                    <label class="form-group">Fournisseur:  </label>
+                                    <div class="input-group input-group-sm">
+                                        
+                                        <input type="text" class='form-control form-control-sm form-control-solid'   formControlName="ro_vend">
+                                        
+                                    </div> 
+                                </div>
+                            </div>
+                                
+                            <div class="row">
+            
+                                <div class="form-group col-2">
+                                    <label class="form-group">Transfert:  </label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="number" class='form-control form-control-sm form-control-solid'   formControlName="ro_move">
+                                        
+                                    </div>
+
+                                </div>
+                                
+                                <div class="form-group col-2">
+                                    
+                                    <label class="form-group">Valeur Stock:  </label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="number" class='form-control form-control-sm form-control-solid'   formControlName="ro_inv_value">
+                                        
+                                    </div>
+                                </div>
+                                <div class="form-group col-2">
+                               
+                                    <label class="form-group">Coût sous-traitance:  </label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="number" class='form-control form-control-sm form-control-solid'   formControlName="ro_sub_cost">
+                                        
+                                    </div>
+                                    
+
+                                </div>
+
+                            </div>
+                                
+                            <div class="row">
+                                
+                           
+                                <div class="form-group col-2">
+                                    <label class="form-group">Date de Démarage:</label>
+                                    <div class="input-group input-group-sm">
+                                        <input class="form-control form-control-sm form-control-solid"  formControlName="ro_start" 
+                                             placeholder="jj-mm-aaaa" name="ro_start" ngbDatepicker f
+                                            #ro_start="ngbDatepicker"  >
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" (click)="ro_start.toggle()"  type="button">
+                                                <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                            </button>
+                                        </div>
+                                        
+                                    </div>
+            
+            
+                                </div>
+                                <div class="form-group col-2">
+                                    <label class="form-group">Date de Fin:</label>
+                                    <div class="input-group input-group-sm">
+                                        <input class="form-control form-control-sm form-control-solid"  formControlName="ro_end" 
+                                             placeholder="jj-mm-aaaa" name="ro_end" ngbDatepicker f
+                                            #ro_end="ngbDatepicker"  >
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" (click)="ro_end.toggle()"  type="button">
+                                                <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                            </button>
+                                        </div>
+                                        
+                                    </div>
+            
+            
+                                </div>
+                                <div class="form-group col-2">
+                                    <label class="form-group">Pourcentage de Rendement:  </label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="number" class='form-control form-control-sm form-control-solid'   formControlName="ro_yield_pct">
+                                        
+                                    </div>
+                                    
+
+                                </div>
+
+                            </div>
+                           
+                        </form>
+            </div>    
+</kt-portlet-body>
+</kt-portlet>

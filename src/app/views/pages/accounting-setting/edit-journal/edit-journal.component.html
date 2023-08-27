@@ -1,0 +1,92 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="title" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+            <form class="form" [formGroup]="daybookForm">
+
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Code: *</label>
+                        <input type="text" formControlName="dy_dy_code"  [(ngModel)]="daybookEdit.dy_dy_code"
+                            [className]="daybookForm.controls['dy_dy_code'].errors && (daybookForm.controls['dy_dy_code'].dirty || daybookForm.controls['dy_dy_code'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                        <div *ngIf="daybookForm.controls['dy_dy_code'].errors && (daybookForm.controls['dy_dy_code'].dirty || daybookForm.controls['dy_dy_code'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label class="form-group">Description: *</label>
+                        <input type="text" formControlName="dy_desc" 
+                            [className]="daybookForm.controls['dy_desc'].errors && (daybookForm.controls['dy_desc'].dirty || daybookForm.controls['dy_desc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                        <div *ngIf="daybookForm.controls['dy_desc'].errors && (daybookForm.controls['dy_desc'].dirty || daybookForm.controls['dy_desc'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Type: * </label>
+                        <div class="input-group input-group-sm">
+                            <select class="form-control form-control-sm form-control-solid" id="exampleSelects2" formControlName="dy_type">
+                                                
+                                <option *ngFor="let elem of dy_type" [value]="elem.code_value">
+                                    {{elem.code_value}} {{elem.code_cmmt}}
+                                </option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Page suivante Journal: </label>
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-sm form-control-solid" type="text" formControlName="dy_next_pgdet"  >
+                        </div>
+                    </div>
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Page suivante centrale: </label>
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-sm form-control-solid" type="text" formControlName="dy_next_pgcen">
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Dernière entrée Journal: </label>
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-sm form-control-solid" type="text" formControlName="dy_last_entdet"> 
+                        </div>
+                    </div>
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Dernière entrée centrale: </label>
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-sm form-control-solid" type="text"  formControlName="dy_last_entcen">
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+
+            </form>
+        </div>
+
+    </kt-portlet-body>
+</kt-portlet>

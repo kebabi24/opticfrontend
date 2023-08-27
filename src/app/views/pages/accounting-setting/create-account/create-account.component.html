@@ -1,0 +1,115 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Ajouter un Compte'" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+
+
+            <!-- <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-sm" id="dropdownBasic1" ngbDropdownToggle><i
+                        class="icon-2x text-dark-50 flaticon-more-v2"></i></button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item">Sauvgarder et quitter</button>
+
+                </div>
+            </div> -->
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+            <form class="form" [formGroup]="accountForm">
+
+
+
+                <kt-alert *ngIf="isExist" type="warn" [showCloseButton]="true" [duration]="10000"
+                                    (close)="onAlertClose($event)">
+                                    Ce Code existe deja
+                </kt-alert>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Code: *</label>
+                        <input type="text" formControlName="ac_code"  (change)="onChangeCode()"
+                            [className]="accountForm.controls['ac_code'].errors && (accountForm.controls['ac_code'].dirty || accountForm.controls['ac_code'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                        <div *ngIf="accountForm.controls['ac_code'].errors && (accountForm.controls['ac_code'].dirty || accountForm.controls['ac_code'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label class="form-group">Description: *</label>
+                        <input type="text" formControlName="ac_desc" 
+                            [className]="accountForm.controls['ac_desc'].errors && (accountForm.controls['ac_desc'].dirty || accountForm.controls['ac_desc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                        <div *ngIf="accountForm.controls['ac_desc'].errors && (accountForm.controls['ac_desc'].dirty || accountForm.controls['ac_desc'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                
+                    <div class="form-group col-2">
+                        <label class="form-group">Type: *</label>
+                        <div class="col-lg-6">
+                            <select class="form-control form-control-sm form-control-solid" id="exampleSelects" formControlName="ac_type">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Devise: </label>
+                        <div class="col-8">
+                            <input class="form-control form-control-sm form-control-solid" type="text" formControlName="ac_curr">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Compte Statique: </label>
+                        <div class="col-8">
+                            <input class="form-control form-control-sm form-control-solid" type="text" formControlName="ac_stat_acc">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <!--div class="form-group col-2">
+                        <label class="form-group"> CG Interdite: </label>
+                        <div class="col-6">
+                            <span class="switch switch-icon ">
+                                <label>
+                                    <input type="checkbox" name="Permanent"
+                                        class="form-control form-control-sm form-control-solid">
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+                    </div-->
+
+                    <div class="form-group col-2">
+                        <label class="form-group"> Actif: </label>
+                        <div class="col-6">
+                            <span class="switch switch-icon ">
+                                <label>
+                                    <input type="checkbox" name="Permanent"
+                                        class="form-control form-control-sm form-control-solid" formControlName="ac_active">
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </kt-portlet-body>
+</kt-portlet>

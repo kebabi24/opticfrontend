@@ -1,0 +1,80 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Ajouter un code'" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+
+
+            <!-- <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-sm" id="dropdownBasic1" ngbDropdownToggle><i
+                        class="icon-2x text-dark-50 flaticon-more-v2"></i></button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item">Sauvgarder et quitter</button>
+
+                </div>
+            </div> -->
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="form" [formGroup]="doctorForm">
+
+                <kt-alert *ngIf="isExist" type="warn" [showCloseButton]="true" [duration]="10000"
+                                    (close)="onAlertClose($event)">
+                                    Ce Code existe deja
+                </kt-alert>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Code Docteur: *</label>
+                        <input type="text" formControlName="dr_addr"  (change)="onChangeCode()"
+                            [className]="doctorForm.controls['dr_addr'].errors && (doctorForm.controls['dr_addr'].dirty || doctorForm.controls['dr_addr'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                        <div *ngIf="doctorForm.controls['dr_addr'].errors && (doctorForm.controls['dr_addr'].dirty || doctorForm.controls['dr_addr'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label class="form-group">Nom: *</label>
+                        <input type="text" formControlName="dr_desc" 
+                            [className]="doctorForm.controls['dr_desc'].errors && (doctorForm.controls['dr_desc'].dirty || doctorForm.controls['dr_desc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                        <div *ngIf="doctorForm.controls['dr_desc'].errors && (doctorForm.controls['dr_desc'].dirty || doctorForm.controls['dr_desc'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+                </div>
+               
+               
+                
+
+
+                <div class="row">
+                    <div class="form-group col-3">
+                        <label class="form-group">Actif: </label>
+                        <div class="col-6">
+                            <span class="switch switch-icon">
+                                <label>
+                                    <input type="checkbox"
+                                        class="form-control form-control-sm form-control-solid"
+                                        formControlName="dr_active" name="select" />
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+     
+                    </div>
+                </div>
+                  
+
+
+
+
+            </form>
+        </div>
+
+    </kt-portlet-body>
+</kt-portlet>

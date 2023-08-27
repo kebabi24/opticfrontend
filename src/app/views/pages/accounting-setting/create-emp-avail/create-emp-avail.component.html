@@ -1,0 +1,122 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Ajouter un Congé'" [class]="'card-head-lg'">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+            <form class="kt-form" [formGroup]="empForm">
+                <kt-alert *ngIf="isExist" type="warn" [showCloseButton]="true" [duration]="10000"
+                (close)="onAlertClose($event)">
+                Ce Code existe deja
+            </kt-alert>
+
+                <div class="row">
+                    
+                        <div class="form-group col-3">
+                            <label class="form-group">Employé:</label>
+                            <div class="input-group input-group-sm">
+    
+                                <input type="text"   id="emp_addr"
+                                    [className]="empForm.controls['emp_addr'].errors && (empForm.controls['emp_addr'].dirty || empForm.controls['emp_addr'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                    formControlName="emp_addr" (change)="onChangeCode()" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" (click)=open(content)>
+                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                </div>
+    
+                                <div *ngIf="empForm.controls['emp_addr'].errors && (empForm.controls['emp_addr'].dirty || empForm.controls['emp_addr'].touched)"
+                                    class="invalid-feedback">Ce Champs est obligatoire</div>
+                            </div>
+    
+    
+                        </div>
+
+                    
+               
+                    <div class="form-group col-3">
+                        <label class="form-group ">Nom:</label>
+                        
+                            <input type="text" class="form-control form-control-sm form-control-solid"
+                                formControlName="emp_fname">
+                    </div>
+                
+                    <div class="form-group col-3">
+                        <label class="form-group ">Prénom:</label>
+                        
+                            <input type="text" class="form-control form-control-sm form-control-solid"
+                                formControlName="emp_lname">
+                    </div>
+                </div>
+                <div class="row"> 
+                    <div class="form-group col-3">
+                        <label class="form-group ">Adresse:</label>
+                        
+                            <input type="text" class="form-control form-control-sm form-control-solid"
+                                formControlName="emp_line1">
+                    </div>
+                
+                    <div class="form-group col-3">
+                        <label class="form-group ">Métier:</label>
+                        
+                            <input type="text" class="form-control form-control-sm form-control-solid"
+                                formControlName="emp_job">
+                    </div>
+                    <div class="form-group col-3">
+                        <label class="form-group ">Niveau:</label>
+                        
+                            <input type="text" class="form-control form-control-sm form-control-solid"
+                                formControlName="emp_level">
+                    </div>
+                </div>
+
+                
+                <div class="form-group col-12 row">
+                    <label class="col-2 col-form-label text-right"> Détail Congé: </label>
+                </div>
+
+
+                <div class="row col-lg-12">
+                    <button class="btn btn-primary btn-elevate col-lg-2" (click)="addNewItem()">Ajouter un
+                        Congé</button>
+                </div>
+                <br>
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="300" gridId="plagemvGrid" [columnDefinitions]="mvcolumnDefinitions"
+                    [gridOptions]="mvgridOptions" [dataset]="mvdataset" (onAngularGridCreated)="mvGridReady($event)">
+                </angular-slickgrid>
+                </div>
+
+            </form>
+        </div>
+
+        
+        <div>
+            <ng-template #content let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir Employé </h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                            [columnDefinitions]="columnDefinitions" (onAngularGridCreated)="angularGridReady($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions" [dataset]="dataset">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+
+    </kt-portlet-body>
+</kt-portlet>

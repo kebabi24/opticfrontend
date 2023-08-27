@@ -1,0 +1,125 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Ajouter un Status Stock'" [class]="'card-head-lg'">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="kt-form" [formGroup]="statusForm">
+                
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Status: *</label>
+                        <input type="text" formControlName="is_status"  [(ngModel)]="statusEdit.is_status" 
+                            [className]="statusForm.controls['is_status'].errors && (statusForm.controls['is_status'].dirty || statusForm.controls['is_status'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'" disabled>
+                        <div *ngIf="statusForm.controls['is_status'].errors && (statusForm.controls['is_status'].dirty || statusForm.controls['is_status'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                     </div>
+
+                    
+                </div>
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label class="form-group">Description: *</label>
+                        <input type="text" formControlName="is_desc"   
+                            [className]="statusForm.controls['is_desc'].errors && (statusForm.controls['is_desc'].dirty || statusForm.controls['is_desc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                        <div *ngIf="statusForm.controls['is_desc'].errors && (statusForm.controls['is_desc'].dirty || statusForm.controls['is_desc'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                     </div>
+
+                    
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group"> Disponible: </label>
+                        
+                        <span class="switch switch-icon ">
+                            <label>
+                                <input type="checkbox" name="Permanent" formControlName="is_avail"
+                                    class="form-control form-control-sm form-control-solid">
+                                <span></span>
+                            </label>
+                        </span>
+                    </div>
+                    
+                    <div class="form-group col-2">
+
+                        <label class="form-group"> Géré MRP: </label>
+                        
+                        <span class="switch switch-icon ">
+                            <label>
+                                <input type="checkbox" name="aaa" formControlName="is_nettable"
+                                    class="form-control form-control-sm form-control-solid">
+                                <span></span>
+                            </label>
+                        </span>
+                    </div>
+                    
+                    <div class="form-group col-2">
+                        <label class="form-group"> Sortie Excédent: </label>
+                        
+                        <span class="switch switch-icon ">
+                            <label>
+                                <input type="checkbox" name="bbb" formControlName="is_overissue"
+                                    class="form-control form-control-sm form-control-solid">
+                                <span></span>
+                            </label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group col-12 row">
+                    <label class="col-2 col-form-label text-right"> Mouvements Interdits: </label>
+                </div>
+
+
+                <div class="row col-lg-12">
+                    <button class="btn btn-primary btn-elevate col-lg-2" (click)="addNewItem()">Ajouter un
+                        mouvement</button>
+                </div>
+                <br>
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="300" gridId="plagemvGrid" [columnDefinitions]="mvcolumnDefinitions"
+                    [gridOptions]="mvgridOptions" [dataset]="mvdataset" (onAngularGridCreated)="mvGridReady($event)">
+                </angular-slickgrid>
+                </div>
+
+            </form>
+        </div>
+
+        <div>
+            <ng-template #content4 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir Transaction</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griditem"
+                            [columnDefinitions]="columnDefinitions4" (onAngularGridCreated)="angularGridReady4($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged4($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions4" [dataset]="transacts">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+            <button hidden id="openItemsGrid" class="btn btn-primary" (click)="open4(content4)">Launch demo
+                modal</button>
+
+        </div>
+
+    </kt-portlet-body>
+</kt-portlet>

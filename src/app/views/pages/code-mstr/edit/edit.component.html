@@ -1,0 +1,153 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="title" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+
+
+            <!-- <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-sm" id="dropdownBasic1" ngbDropdownToggle><i
+                        class="icon-2x text-dark-50 flaticon-more-v2"></i></button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item">Sauvgarder et quitter</button>
+
+                </div>
+            </div> -->
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="form" [formGroup]="codeForm">
+
+                <div class="row">
+                    <div class="form-group col-12 row">
+                        <label class="col-2 col-form-label">Champs: *</label>
+                        <div class="col-6">
+                            <input type="text" formControlName="code_fldname" [(ngModel)]="codeEdit.code_fldname"
+                                [className]="codeForm.controls['code_fldname'].errors && (codeForm.controls['code_fldname'].dirty || codeForm.controls['code_fldname'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'" disabled>
+                            <div *ngIf="codeForm.controls['code_fldname'].errors && (codeForm.controls['code_fldname'].dirty || codeForm.controls['code_fldname'].touched) "
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-12 row">
+                        <label class="col-2 col-form-label">Code: *</label>
+                        <div class="col-8">
+                            <input type="text" formControlName="code_value"
+                                [className]="codeForm.controls['code_value'].errors && (codeForm.controls['code_value'].dirty || codeForm.controls['code_value'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'" disabled>
+                            <div *ngIf="codeForm.controls['code_value'].errors && (codeForm.controls['code_value'].dirty || codeForm.controls['code_value'].touched) "
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+                    </div>
+                    <div class="form-group col-12 row">
+                        <label class="col-2 col-form-label">Description: *</label>
+                        <div class="col-8">
+                            <input type="text" formControlName="code_cmmt"
+                                [className]="codeForm.controls['code_cmmt'].errors && (codeForm.controls['code_cmmt'].dirty || codeForm.controls['code_cmmt'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                            <div *ngIf="codeForm.controls['code_cmmt'].errors && (codeForm.controls['code_cmmt'].dirty || codeForm.controls['code_cmmt'].touched) "
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-3">
+                        <label class="form-group">champ text: </label>
+                        <input type="text" formControlName="chr01" class='form-control form-control-sm form-control-solid' >
+                    </div>
+                    <div class="form-group col-3">
+                        <label class="form-group">champ text: </label>
+                        <input type="text" formControlName="chr02" class='form-control form-control-sm form-control-solid'>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="form-group col-3">
+                        <label class="form-group">champ dec: </label>
+                        <input type="number" formControlName="dec01" class='form-control form-control-sm form-control-solid' >
+                    </div>
+                    <div class="form-group col-3">
+                        <label class="form-group">champ dec: </label>
+                        <input type="number" formControlName="dec02" class='form-control form-control-sm form-control-solid'>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="form-group col-3">
+                            <label class="form-group">champ Date: </label>
+                        
+                            <div class="input-group input-group-sm">
+                                <input class="form-control form-control-solid" placeholder="jj-mm-aaaa"
+                                       name="date01"
+                                       formControlName="date01"
+                                       ngbDatepicker
+                                       #date01="ngbDatepicker">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" (click)="date01.toggle()" type="button">
+                                        <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                    </button>
+                                </div>
+                            </div>
+    
+                        
+                    </div>
+                    <div class="form-group col-3">
+                        <label class="form-group">champ Date: </label>
+                        
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-solid" placeholder="jj-mm-aaaa"
+                                   name="date02"
+                                   ngbDatepicker
+                                   formControlName="date02"
+                                   #date02="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="date02.toggle()" type="button">
+                                    <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                </div>
+
+
+
+                <div class="row">
+                    <div class="form-group col-3">
+                        <label class="form-group">champ logique: </label>
+                        <div class="col-6">
+                            <span class="switch switch-icon">
+                                <label>
+                                    <input type="checkbox"
+                                        class="form-control form-control-sm form-control-solid"
+                                        formControlName="bool01" name="select" />
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+     
+                    </div>
+                    <div class="form-group col-3">
+                        <label class="form-group">champ logique: </label>
+                        <div class="col-6">
+                            <span class="switch switch-icon">
+                                <label>
+                                    <input type="checkbox"
+                                        class="form-control form-control-sm form-control-solid"
+                                        formControlName="bool02" name="select" />
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+     
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+    </kt-portlet-body>
+</kt-portlet>

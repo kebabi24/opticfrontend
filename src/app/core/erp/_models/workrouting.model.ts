@@ -1,0 +1,80 @@
+import { BaseModel } from "./base.model"
+
+export class WorkRouting extends BaseModel {
+    id: Number
+    ro_routing: String
+ro_op: Number
+ro_desc: String
+ro_wkctr: String
+ro_setup: Number
+ro_run: Number
+ro_move: Number
+ro_yield_pct: Number
+ro_tool: String
+ro_vend: String
+ro_sub_cost: Number
+ro_start: String
+ro_end: String
+ro_tran_qty: Number
+ro_inv_value: Number
+ro_cmtindx: Number
+ro_mch: String
+ro_milestone: Boolean
+ro_batch: Number
+ro_user1: String
+ro_user2: String
+ro_std_op: String
+ro_setup_men: Number
+ro_men_mch: Number
+ro_mch_op: Number
+ro_lbr_ovhd: Number
+ro_queue: Number
+ro_wait: Number
+ro_sub_lead: Number
+ro_cyc_unit: Number
+ro_cyc_rate: Number
+ro__chr01: String
+ro__chr02: String
+ro__chr03: String
+ro__chr04: String
+ro__chr05: String
+ro__dte01: String
+ro__dte02: String
+ro__dec01: Number
+ro__dec02: Number
+ro__log01: Boolean
+ro_std_batch: Number
+ro_rollup: Boolean
+ro_rollup_id: String
+ro_elm_lbr: String
+ro_elm_bdn: String
+ro_elm_sub: String
+ro_start_ecn: String
+ro_end_ecn: String
+ro_po_nbr: String
+ro_po_line: Number
+ro_mv_nxt_op: Boolean
+ro_wipmtl_part: String
+ro_auto_lbr: Boolean
+ro_bom_code: String
+ro_cost: Number
+ro_fsm_type: String
+ro_price: Number
+ro_mod_date: String
+ro_mod_userid: String
+ro__qadc01: String
+ro__qadc02: String
+ro__qadc03: String
+ro__qade01: Number
+ro__qade02: Number
+ro__qadt01: String
+ro__qadt02: String
+ro__qadl01: Boolean
+ro__qadl02: Boolean
+ro_fsc_code: String
+ro_domain: String
+
+ 
+    oid_ro_det: Number
+   
+}

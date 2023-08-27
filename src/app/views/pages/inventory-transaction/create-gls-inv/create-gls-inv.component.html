@@ -1,0 +1,52 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Inventaire des Verress/lentilles'" [class]="'card-head-lg'">
+            
+        <ng-container ktPortletTools>
+          
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+            <div class="row">
+                <button class="btn btn-sm btn-primary btn-elevate col-lg-4" (click)="addNewItem()">Ajouter un
+                    Article</button>
+            </div>
+            <div class="row">
+                <angular-slickgrid class="col-12"  gridId="gridMesure" [columnDefinitions]="columnDefinitions"
+                   (onAngularGridCreated)="angularGridReady($event)"
+                    [gridOptions]="gridOptions" [dataset]="dataset">
+                </angular-slickgrid>
+            </div>
+            
+        </div>
+        <div>
+            <ng-template #content4 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir </h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                            [columnDefinitions]="columnDefinitions4" (onAngularGridCreated)="angularGridReady4($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged4($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions4" [dataset]="items">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+            <button hidden id="openItemsGrid" class="btn btn-primary" (click)="open4(content4)">Launch demo
+                modal</button>
+        </div>
+    </kt-portlet-body>
+    
+</kt-portlet>
+

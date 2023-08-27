@@ -1,0 +1,76 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="title" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+             <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+
+
+            <!-- <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-sm" id="dropdownBasic1" ngbDropdownToggle><i
+                        class="icon-2x text-dark-50 flaticon-more-v2"></i></button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item">Sauvgarder et quitter</button>
+
+                </div>
+            </div> -->
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="form" [formGroup]="mesureForm">
+
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Unité Principale: *</label>
+                        <input type="text" formControlName="um_um" [(ngModel)]="mesureEdit.um_um"
+                            [className]="mesureForm.controls['um_um'].errors && (mesureForm.controls['um_um'].dirty || mesureForm.controls['um_um'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'" disabled>
+                        <div *ngIf="mesureForm.controls['um_um'].errors && (mesureForm.controls['um_um'].dirty || mesureForm.controls['um_um'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                    </div>
+                </div>
+                <div class='row'>    
+                    <div class="form-group col-2">
+                        <label class="form-group">Unité Remplacement: *</label>
+                        <input type="text" formControlName="um_alt_um" 
+                            [className]="mesureForm.controls['um_alt_um'].errors && (mesureForm.controls['um_alt_um'].dirty || mesureForm.controls['um_alt_um'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'" disabled>
+                        <div *ngIf="mesureForm.controls['um_alt_um'].errors && (mesureForm.controls['um_alt_um'].dirty || mesureForm.controls['um_alt_um'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+
+                </div>
+                
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Article:</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" class="form-control form-control-solid" formControlName="um_part" aria-describedby="basic-addon2" disabled>
+                            <div class="input-group-append">
+                                <span class="input-group-text" >
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    
+                    
+                </div>
+                <div class="row">
+                    <div class="form-group col-3">
+                        <label class="form-group">Conversion: </label>
+                        <input type="number" formControlName="um_conv" class='form-control form-control-sm form-control-solid' >
+                    </div>
+              
+                </div>
+                
+            </form>
+        </div>
+
+       
+    </kt-portlet-body>
+</kt-portlet>

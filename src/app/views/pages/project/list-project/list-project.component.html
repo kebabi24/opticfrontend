@@ -1,0 +1,37 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Suivi IO'" [class]="'card-head-lg'">
+        <ng-container ktPortletTools>
+
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+            <div class="form-group col-12 row">
+                <label class="col-2 col-form-label text-right"> Offre </label>
+            </div>
+            <div class="row">
+                
+
+                <angular-slickgrid class="col-12" gridHeight="500" gridId="gridtask" [columnDefinitions]="columnDefinitions"
+                    [gridOptions]="gridOptions" [dataset]="dataset">
+                </angular-slickgrid>
+            </div>
+            
+    
+
+            <div class="form-group col-12 row">
+                <label class="col-2 col-form-label text-right"> Préstation </label>
+            </div>
+
+
+            
+            <div class="row">
+                <angular-slickgrid class="col-12" gridHeight="500" gridId="gridbom" [columnDefinitions]="columnDefinitions2"
+                    [gridOptions]="gridOptions2" [dataset]="dataset2">
+                </angular-slickgrid>
+            </div>
+    
+        </div>    
+    </kt-portlet-body>
+</kt-portlet>

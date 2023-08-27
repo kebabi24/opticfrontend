@@ -1,0 +1,57 @@
+<ng-container>
+	<!-- begin::Offcanvas Toolbar Quick Actions -->
+	<div ktOffcanvas [options]="offcanvasOptions" id="kt_quick_user" class="offcanvas offcanvas-right p-10"
+		[ngStyle]="{ overflow: 'hidden' }">
+		<div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
+			<h3 class="font-weight-bold m-0">
+				Profile utilisateurs
+				<!-- <small class="text-muted font-size-sm ml-2">12 messages</small> -->
+			</h3>
+			<a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="kt_quick_user_close">
+				<i class="ki ki-close icon-xs text-muted"></i>
+			</a>
+		</div>
+
+		<div class="offcanvas-content" [ngStyle]="{ 'height': '100vh', 'overflow': 'hidden' }">
+			<div [perfectScrollbar]="{ wheelPropagation: false }" class="scroll"
+				[ngStyle]="{ 'height': '600px', 'position': 'relative' }">
+				<div class="d-flex align-items-center mt-5">
+					<span class="symbol symbol-35 symbol-light-success">
+						<span class="symbol-label font-size-h5 font-weight-bold">
+							{{user$.usrd_name|firstLetter}}
+						</span>
+					</span>
+					<i class="symbol-badge bg-success"></i>
+				</div>
+				<div class="d-flex flex-column">
+					<a href="#" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">
+						{{user$.usrd_name}}
+					</a>
+					<!-- <div class="text-muted mt-1">Application Developer</div> -->
+					<div class="navi mt-2">
+						<a href="#" class="navi-item">
+							<span class="navi-link p-0 pb-2">
+								<span class="navi-icon mr-1">
+									<span class="svg-icon svg-icon-lg svg-icon-primary"
+										[inlineSVG]="'./assets/media/svg/icons/Communication/Mail-notification.svg'"></span>
+								</span>
+								<span class="navi-text text-muted text-hover-primary">
+									{{user$.usrd_email}}
+								</span>
+							</span>
+						</a>
+					</div>
+					<a (click)="logout()" class="btn btn-light-primary btn-bold">
+						Se deconecter
+					</a>
+					<div>
+						
+					</div>
+					<a (click)="changepassword()" class="btn btn-light-primary btn-bold">
+						Changer Mot Passe
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</ng-container>

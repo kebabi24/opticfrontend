@@ -1,0 +1,52 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="title" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="form" [formGroup]="penForm">
+
+                
+                
+                <div class="row">
+
+                    <div class="form-group col-2">
+                        <label class="form-group">N° Peniche: *</label>
+                        <input type="text" [(ngModel)]="penicheEdit.pen_pen" 
+                            [className]="penForm.controls['pen_pen'].errors && (penForm.controls['pen_pen'].dirty || penForm.controls['pen_pen'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="pen_pen">
+                                <div *ngIf="penForm.controls['pen_pen'].errors && (penForm.controls['pen_pen'].dirty || penForm.controls['pen_pen'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label class="form-group">Description: *</label>
+                        
+                        <input type="text"
+                        [className]="penForm.controls['pen_desc'].errors && (penForm.controls['pen_desc'].dirty || penForm.controls['pen_desc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                        formControlName="pen_desc">
+                    <div *ngIf="penForm.controls['pen_desc'].errors && (penForm.controls['pen_desc'].dirty || penForm.controls['pen_desc'].touched)"
+                        class="invalid-feedback">Ce Champs est obligatoire</div>
+
+
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+
+    </kt-portlet-body>
+
+
+</kt-portlet>

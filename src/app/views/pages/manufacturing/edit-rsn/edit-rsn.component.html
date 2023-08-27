@@ -1,0 +1,68 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="title" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="form" [formGroup]="reasonForm">
+                
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Code: *</label>
+                        <input type="text"  [(ngModel)]="reasonEdit.rsn_ref"
+                        [className]="reasonForm.controls['rsn_ref'].errors && (reasonForm.controls['rsn_ref'].dirty || reasonForm.controls['rsn_ref'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                        formControlName="rsn_ref">
+                            <div *ngIf="reasonForm.controls['rsn_ref'].errors && (reasonForm.controls['rsn_ref'].dirty || reasonForm.controls['rsn_ref'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                     </div>
+
+                </div>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group ">Type:</label>
+
+                        <select
+                            [className]="reasonForm.controls['rsn_type'].errors && (reasonForm.controls['rsn_type'].dirty || reasonForm.controls['rsn_type'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="rsn_type"  id="exampleSelects7">
+                            <option value=""></option>
+                            <option value="Reject">Reject</option>
+                            <option value="Down">Down</option>
+                            
+
+
+                        </select>
+                        <div *ngIf="reasonForm.controls['rsn_type'].errors && (reasonForm.controls['rsn_type'].dirty || reasonForm.controls['rsn_type'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                    </div>
+                </div> 
+                
+                <div class="row">
+                
+                    <div class="form-group col-6">
+                        <label class="form-group">Description: *</label>
+                        <input type="text"
+                        [className]="reasonForm.controls['rsn_desc'].errors && (reasonForm.controls['rsn_desc'].dirty || reasonForm.controls['rsn_desc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                        formControlName="rsn_desc">
+                    <div *ngIf="reasonForm.controls['rsn_desc'].errors && (reasonForm.controls['rsn_desc'].dirty || reasonForm.controls['rsn_desc'].touched)"
+                        class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+                </div>
+
+                   
+                
+             </form>
+        </div>
+
+
+        
+    
+    </kt-portlet-body>
+</kt-portlet>

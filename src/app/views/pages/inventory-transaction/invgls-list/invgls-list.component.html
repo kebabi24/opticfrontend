@@ -1,0 +1,19 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Consultations des Stocks Verres Et Lentilles'" [class]="'card-head-lg'">
+        <ng-container ktPortletTools>
+            
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+            <div class="row">
+                <angular-slickgrid class="col-12" gridHeight="1100" gridId="gridMesure" [columnDefinitions]="columnDefinitions"
+                    [gridOptions]="gridOptions" [dataset]="dataset">
+                </angular-slickgrid>
+            </div>
+            
+        </div>
+
+    </kt-portlet-body>
+</kt-portlet>

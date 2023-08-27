@@ -1,0 +1,194 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" title="Ajouter centre de charge" [class]="'card-head-lg'"
+        [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        
+        <div class="example-preview">
+
+            <form class="form" [formGroup]="wcForm">
+                <kt-alert *ngIf="isExist" type="warn" [showCloseButton]="true" [duration]="10000"
+                (close)="onAlertClose($event)">
+                Ce Code existe deja
+            </kt-alert>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Centre de Charge: *</label>
+                    
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" formControlName="wc_wkctr"
+                                [className]="wcForm.controls['wc_wkctr'].errors && (wcForm.controls['wc_wkctr'].dirty || wcForm.controls['wc_wkctr'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                aria-describedby="basic-addon2">
+                            <div *ngIf="wcForm.controls['wc_wkctr'].errors && (wcForm.controls['wc_wkctr'].dirty || wcForm.controls['wc_wkctr'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Machine: *</label>
+                    
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" formControlName="wc_mch" (change)="onChangeCode()"
+                                [className]="wcForm.controls['wc_mch'].errors && (wcForm.controls['wc_mch'].dirty || wcForm.controls['wc_mch'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                aria-describedby="basic-addon2">
+                            
+                            <div *ngIf="wcForm.controls['wc_mch'].errors && (wcForm.controls['wc_mch'].dirty || wcForm.controls['wc_mch'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+               
+                <div class="row">    
+                    
+                        <div class="form-group col-5">
+                            <label class="form-group">Description: *</label>
+                            
+                            <input type="text"
+                            [className]="wcForm.controls['wc_desc'].errors && (wcForm.controls['wc_desc'].dirty || wcForm.controls['wc_desc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="wc_desc">
+                        <div *ngIf="wcForm.controls['wc_desc'].errors && (wcForm.controls['wc_desc'].dirty || wcForm.controls['wc_desc'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+    
+    
+                        </div>
+    
+                        <div class="form-group col-2">
+                            <label class="form-group">Département: *</label>
+                            <div class="input-group input-group-sm">
+                                <input type="text" id="dept"
+                                [className]="wcForm.controls['wc_dept'].errors && (wcForm.controls['wc_dept'].dirty || wcForm.controls['wc_dept'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                formControlName="wc_dept" (change)="changeCode('wc_dept')">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" (click)="open3(content,'wc_dept')">
+                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                </div>
+                                <div *ngIf="wcForm.controls['wc_dept'].errors && (wcForm.controls['wc_dept'].dirty || wcForm.controls['wc_dept'].touched)"
+                                class="invalid-feedback">Ce Champs est obligatoire</div>
+    
+                             </div>
+                        </div>
+
+
+                        
+                </div>
+                <div class="row">    
+                
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Attente Amont: </label>
+                        <div class="input-group input-group-sm">
+                            <input type="number" formControlName="wc_queue" class='form-control form-control-sm form-control-solid' >
+                        </div>    
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Attente Aval: </label>
+                        <div class="input-group input-group-sm">
+                            <input type="number" formControlName="wc_wait" class='form-control form-control-sm form-control-solid' >
+                        </div>    
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Mach/op: </label>
+                        <div class="input-group input-group-sm"> 
+                            <input type="number" formControlName="wc_mch_op" class='form-control form-control-sm form-control-solid' >
+                        </div>    
+                    </div>
+
+                </div>
+                <div class="row">    
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Equipe réglage </label>
+                        <div class="input-group input-group-sm">
+                            <input type="number" formControlName="wc_setup_men" class='form-control form-control-sm form-control-solid' >
+                        </div>    
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Taux réglage: </label>
+                        <div class="input-group input-group-sm">
+                            <input type="number" formControlName="wc_setup_rte" class='form-control form-control-sm form-control-solid' >
+                        </div>    
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Equipe éxecution: </label>
+                        <div class="input-group input-group-sm">
+                            <input type="number" formControlName="wc_men_mch" class='form-control form-control-sm form-control-solid' >
+                        </div>    
+                    </div>
+                </div>
+                <div class="row">    
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Taux éxecution: </label>
+                        <div class="input-group input-group-sm">
+                            <input type="number" formControlName="wc_lbr_rate" class='form-control form-control-sm form-control-solid' >
+                        </div>    
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">wc_mch: </label>
+                        <div class="input-group input-group-sm">
+                            <input type="number" formControlName="wc_mch_wkctr" class='form-control form-control-sm form-control-solid' >
+                        </div>    
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Taux FGV MO: </label>
+                        <div class="input-group input-group-sm">
+                            <input type="number" formControlName="wc_bdn_rate" class='form-control form-control-sm form-control-solid' >
+                        </div>    
+                    </div>    
+
+                </div>
+                <div class="row">    
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Taux mach FGV: </label>
+                        <div class="input-group input-group-sm">
+                            <input type="number" formControlName="wc_mch_bdn" class='form-control form-control-sm form-control-solid' >
+                        </div>    
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">% MO FGV: </label>
+                        <div class="input-group input-group-sm">
+                            <input type="number" formControlName="wc_bdn_pct" class='form-control form-control-sm form-control-solid' >
+                        </div>    
+                    </div>    
+                
+                </div>
+            </form>
+        </div>
+    </kt-portlet-body>
+    <div>
+        <ng-template #content let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <h4 class="modal-title">Choissir </h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                        [columnDefinitions]="columnDefinitions3" (onAngularGridCreated)="angularGridReady3($event)"
+                        (sgOnSelectedRowsChanged)="handleSelectedRowsChanged3($event.detail.eventData, $event.detail.args)"
+                        [gridOptions]="gridOptions3" [dataset]="data">
+                    </angular-slickgrid>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+            </div>
+        </ng-template>
+    </div>
+</kt-portlet>

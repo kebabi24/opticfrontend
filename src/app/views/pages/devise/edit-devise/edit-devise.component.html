@@ -1,0 +1,79 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="title" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="form" [formGroup]="deviseForm">
+
+                
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">Devise: *</label>
+                        <input type="text" formControlName="cu_curr"  [(ngModel)]="deviseEdit.cu_curr"
+                            [className]="deviseForm.controls['cu_curr'].errors && (deviseForm.controls['cu_curr'].dirty || deviseForm.controls['cu_curr'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'" disabled>
+                        <div *ngIf="deviseForm.controls['cu_curr'].errors && (deviseForm.controls['cu_curr'].dirty || deviseForm.controls['cu_curr'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label class="form-group">Description: *</label>
+                        <input type="text" formControlName="cu_desc" 
+                            [className]="deviseForm.controls['cu_desc'].errors && (deviseForm.controls['cu_desc'].dirty || deviseForm.controls['cu_desc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                        <div *ngIf="deviseForm.controls['cu_desc'].errors && (deviseForm.controls['cu_desc'].dirty || deviseForm.controls['cu_desc'].touched) "
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+                </div>
+               
+                <div class="row">
+                    <div class="form-group col-3">
+                        <label class="form-group">Methode Arrondi: </label>
+                        <input type="number" formControlName="cu_rnd_mthd" class='form-control form-control-sm form-control-solid' >
+                    </div>
+                    
+                </div>
+                
+
+
+                <div class="row">
+                    <div class="form-group col-3">
+                        <label class="form-group">Actif: </label>
+                        <div class="col-6">
+                            <span class="switch switch-icon">
+                                <label>
+                                    <input type="checkbox"
+                                        class="form-control form-control-sm form-control-solid"
+                                        formControlName="cu_active" name="select" />
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+     
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-3">
+                        <label class="form-group">Devise Iso: </label>
+                        <input type="text" formControlName="cu_iso_curr" class='form-control form-control-sm form-control-solid' >
+                    </div>
+                </div>    
+
+
+
+
+            </form>
+        </div>
+
+    </kt-portlet-body>
+</kt-portlet>
+

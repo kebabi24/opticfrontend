@@ -1,0 +1,391 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="title" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+            <div>
+                    <form [formGroup]="form4" class="form">
+
+                        <kt-alert *ngIf="isExist" type="warn" [showCloseButton]="true" [duration]="10000"
+                                    (close)="onAlertClose($event)">
+                                    Ce Code n existe pas
+                                </kt-alert>
+
+                        <div class="row">
+                            <div class="form-group col-2">
+                                <label class="form-group ">Article:</label>
+
+                                <div class="input-group input-group-sm">
+
+                                    <input type="text" formControlName="pt_part"
+                                        [className]="form4.controls['pt_part'].errors && (form4.controls['pt_part'].dirty || form4.controls['pt_part'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                        (change)="onChangePart()" aria-describedby="basic-addon2">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" (click)="openpart(contentpart)">
+                                            <i class="text-dark-50 flaticon2-search"></i> </span>
+                                    </div>
+                                    <div *ngIf="form4.controls['pt_part'].errors && (form4.controls['pt_part'].dirty || form4.controls['pt_part'].touched)"
+                                        class="invalid-feedback">Ce Champs est obligatoire</div>
+                                </div>
+
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="form-group col-6">
+                                <label class="form-group">Description:</label>
+                                <input type="text" class="form-control form-control-sm form-control-solid"   formControlName="pt_desc1" disabled>
+
+                            </div>
+                            <div class="form-group col-2">
+                                <label class="form-group ">Unite de mesure:</label>
+
+                                <div class="input-group input-group-sm">
+
+                                    <input type="text" formControlName="pt_um" disabled
+                                    class="form-control form-control-sm form-control-solid">
+                                    
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-2">
+                                <label class="form-group ">Site :</label>
+
+                                <div class="input-group input-group-sm">
+
+                                    <input type="text" formControlName="site"
+                                        [className]="form4.controls['site'].errors && (form4.controls['site'].dirty || form4.controls['site'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                        (change)="onChangeCode()" aria-describedby="basic-addon2">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" (click)="opensite(contentsite,'site')">
+                                            <i class="text-dark-50 flaticon2-search"></i> </span>
+                                    </div>
+                                    <div *ngIf="form4.controls['site'].errors && (form4.controls['site'].dirty || form4.controls['site'].touched)"
+                                        class="invalid-feedback">Ce Champs est obligatoire</div>
+                                </div>
+
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <div class="form-group col-2">
+                                <label class="form-group ">Prix:</label>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control form-control-sm form-control-solid"
+                                        formControlName="pt_price">
+                                </div>
+                            </div>
+                            <div class="form-group col-2">
+                                <label class="form-group">Taxe:</label>
+                                <div class="col-6">
+                                    <span class="switch switch-icon">
+                                        <label>
+                                            <input type="checkbox"
+                                                class="form-control form-control-sm form-control-solid"
+                                                formControlName="pt_taxable" name="select" />
+                                            <span></span>
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-2">
+                                <label class="form-group "> Taux taxe:</label>
+
+                                <div class="input-group input-group-sm">
+
+                                    <input type="text" class="form-control form-control-solid" (change)="changeTax()"
+                                        formControlName="pt_taxc" aria-describedby="basic-addon2">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" (click)=opentax(contenttax)>
+                                            <i class="text-dark-50 flaticon2-search"></i> </span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                        <!-- <h3>Données Cout Actuel </h3>
+                        <div class="row">
+                            <angular-slickgrid class="col-12" gridHeight="300" gridId="gridCA"
+                                [columnDefinitions]="columnDefinitions2" [gridOptions]="gridOptions2"
+                                [dataset]="dataset2">
+                            </angular-slickgrid>
+                        </div> -->
+                    </form>
+
+                    <form [formGroup]="sctForm" class="form">
+                        <div class="separator separator-solid"></div>
+                        <h3>Données CG </h3>
+                        <div class="row">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Element</th>
+                                        <th scope="col">Ce Niveau</th>
+                                        <th scope="col">Niveau INf</th>
+                                        <th scope="col">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Matiere</th>
+                                        <td>
+                                            <input type="number" formControlName="sct_mtl_tl"
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="sct_mtl_ll" disabled
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number"   formControlName="mtl_tot"  disabled
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Main d'œuvre</th>
+                                        <td>
+                                            <input type="number" formControlName="sct_lbr_tl"
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="sct_lbr_ll" disabled
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number" form formControlName="lbr_tot" disabled
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">FG variable</th>
+                                        <td>
+                                            <input type="number" formControlName="sct_bdn_tl"
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="sct_bdn_ll" disabled
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="bdn_tot" disabled
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">FG Fixes</th>
+                                        <td>
+                                            <input type="number" formControlName="sct_ovh_tl"
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="sct_ovh_ll" disabled
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="ovh_tot" disabled
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">SS-trai</th>
+                                        <td>
+                                            <input type="number" formControlName="sct_sub_tl"
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="sct_sub_ll" disabled
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="sub_tot" disabled
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </form>
+
+                    <form [formGroup]="sctForm1" class="form">
+                        <div class="separator separator-solid"></div>
+                        <h3>Données Cout Actuel </h3>
+                        <div class="row">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Element</th>
+                                        <th scope="col">Ce Niveau</th>
+                                        <th scope="col">Niveau INf</th>
+                                        <th scope="col">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Matiere</th>
+                                        <td>
+                                            <input type="number" formControlName="sct_mtl_tl"
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="sct_mtl_ll" disabled
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="mtl_tot2"  disabled
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Main d'œuvre</th>
+                                        <td>
+                                            <input type="number" formControlName="sct_lbr_tl"
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="sct_lbr_ll" disabled
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="lbr_tot2"  disabled 
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">FG variable</th>
+                                        <td>
+                                            <input type="number" formControlName="sct_bdn_tl"
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="sct_bdn_ll" disabled
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="bdn_tot2"  disabled
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">FG Fixes</th>
+                                        <td>
+                                            <input type="number" formControlName="sct_ovh_tl"
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="sct_ovh_ll" disabled
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="ovh_tot2"  disabled
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">SS-trai</th>
+                                        <td>
+                                            <input type="number" formControlName="sct_sub_tl"
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="sct_sub_ll" disabled
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="sub_tot2"  disabled
+                                                class="form-control form-control-sm form-control-solid">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </form>
+
+            </div>
+        </div>
+
+    </kt-portlet-body>
+    <div>
+        <ng-template #contenttax let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <h4 class="modal-title">Choissir </h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                        [columnDefinitions]="columnDefinitionstax" (onAngularGridCreated)="angularGridReadytax($event)"
+                        (sgOnSelectedRowsChanged)="handleSelectedRowsChangedtax($event.detail.eventData, $event.detail.args)"
+                        [gridOptions]="gridOptionstax" [dataset]="datatax">
+                    </angular-slickgrid>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+            </div>
+        </ng-template>
+    </div>
+    <div>
+        <ng-template #contentpart let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <h4 class="modal-title">Choissir l'article</h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="300" gridId="griditem" [columnDefinitions]="columnDefinitions4" (onAngularGridCreated)="angularGridReady4($event)" (sgOnSelectedRowsChanged)="handleSelectedRowsChanged4($event.detail.eventData, $event.detail.args)"
+                        [gridOptions]="gridOptions4" [dataset]="items">
+                    </angular-slickgrid>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+            </div>
+        </ng-template>
+        <button hidden id="openItemsGrid" class="btn btn-primary" (click)="openpart(contentpart)">Launch demo modal</button>
+
+    </div>
+    <div>
+        <ng-template #contentsite let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <h4 class="modal-title">Choissir Site </h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                        [columnDefinitions]="columnDefinitionssite"
+                        (onAngularGridCreated)="angularGridReadysite($event)"
+                        (sgOnSelectedRowsChanged)="handleSelectedRowsChangedsite($event.detail.eventData, $event.detail.args)"
+                        [gridOptions]="gridOptionssite" [dataset]="datasite">
+                    </angular-slickgrid>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+            </div>
+        </ng-template>
+    </div>
+</kt-portlet>
+

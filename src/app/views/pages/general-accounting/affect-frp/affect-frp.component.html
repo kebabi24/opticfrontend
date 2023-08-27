@@ -1,0 +1,184 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" title="Affectation des Frais d'Approche" [class]="'card-head-lg'"
+        [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="form" [formGroup]="frpForm">
+                <kt-alert *ngIf="hasFormErrors" type="warn" [showCloseButton]="true" [duration]="10000"
+                    (close)="onAlertClose($event)">
+                    {{message}}
+                </kt-alert>
+                <div class="row">
+                   
+                    
+                    <div class="form-group col-2">
+                        <label class="form-group">Facture N° :</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" class="form-control form-control-solid" formControlName="frp_inv_nbr" id="frp_inv_nbr"  
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"  (click)="open4(content4)">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Montant :</label>
+                        <div class="input-group input-group-sm">
+                            <input type="number" class="form-control form-control-solid" formControlName="amt"  
+                            aria-describedby="basic-addon2">
+                        </div>
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group">Date de Validité:</label>
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-sm form-control-solid"  formControlName="frp_effdate" 
+                                 placeholder="jj-mm-aaaa" name="frp_effdate" ngbDatepicker f
+                                #frp_effdate="ngbDatepicker"  >
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="frp_effdate.toggle()"  type="button">
+                                    <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                </button>
+                            </div>
+                            
+                        </div>
+
+
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group ">Type:</label>
+
+                        <select
+                            [className]="frpForm.controls['frp_type_affect'].errors && (frpForm.controls['frp_type_affect'].dirty || frpForm.controls['frp_type_affect'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                            formControlName="frp_type_affect"  id="exampleSelects7">
+                            <option value=""></option>
+                            <option value="Quantite">Quantite</option>
+                            <option value="Valeur">Valeur</option>
+                            <option value="Manuel">Manuel</option>
+                            
+
+
+                        </select>
+                
+                    </div>    
+                </div>
+                
+                
+
+                <div class="row">
+                
+                    <div class="form-group col-4">
+                        <label class="form-group">Observation:</label>
+                        <textarea class="form-control form-control-sm form-control-solid" formControlName="frp_rmks"
+                            rows="2"></textarea>
+                    </div>
+                    
+                  
+                   
+                </div>
+                
+                <div class="row">
+                    <div class="form-group col-9">
+                        <button class="btn btn-sm btn-primary btn-elevate col-lg-2" (click)="addNewItem()">Ajouter Une Ligne
+                        </button>
+                    </div>
+                    <!--div class="form-group col-2">
+                        <button type="button" (click)="oncreateCF()" class="btn btn-success btn-sm mr-2">Valider Detail </button>
+                    </div-->    
+                </div>
+               
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="200" gridId="mGrid2"
+                        [columnDefinitions]="columnDefinitions" [gridOptions]="gridOptions" [dataset]="dataset"
+                        (onAngularGridCreated)="gridReady($event)">
+                    </angular-slickgrid>
+                </div>
+                
+
+                <button type="button"  class="btn btn-success btn-sm mr-2" (click)="oncreateFRP()" >Valider </button>
+
+                <div class="row">
+                    <angular-slickgrid class="col-12" gridHeight="200" gridId="mGrid3"
+                        [columnDefinitions]="columnDefinitionsfrp" [gridOptions]="gridOptionsfrp" [dataset]="frpdataset"
+                        (onAngularGridCreated)="gridReadyfrp($event)">
+                    </angular-slickgrid>
+                </div>
+            </form>
+
+           
+        </div>
+
+       
+
+      
+
+        
+
+        
+        <div>
+            <ng-template #content4 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir les Factures</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griditem"
+                            [columnDefinitions]="columnDefinitions4" (onAngularGridCreated)="angularGridReady4($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged4($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions4" [dataset]="vhs">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+            <button hidden id="openItemsGrid" class="btn btn-primary" (click)="open4(content4)">Launch demo
+                modal</button>
+
+        </div>
+      
+        <div>
+            <ng-template #contentprh let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir Cause</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="RsnGrid"
+                            [columnDefinitions]="columnDefinitionsprh" (onAngularGridCreated)="angularGridReadyprh($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChangedprh($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptionsprh" [dataset]="dataprh">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+            <button hidden id="openPrhsGrid" class="btn btn-primary" (click)="openprh(contentprh)">Launch demo
+                modal</button>
+
+        </div>
+    </kt-portlet-body>
+</kt-portlet>
+
+

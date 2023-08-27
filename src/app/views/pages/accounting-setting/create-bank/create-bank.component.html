@@ -1,0 +1,823 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Ajouter une Banque'" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+
+
+           
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+            <div>
+                <ngb-tabset>
+                    <ngb-tab>
+                        <ng-template ngbTabTitle>
+                            Information basique
+                            <div style="width: 10px;"></div>
+                            <a *ngIf="hasFormErrors"
+                                class="btn btn-sm btn-icon btn-light-danger pulse pulse-danger mr-5">
+                                <i class="flaticon2-information"></i>
+                                <span class="pulse-ring"></span>
+                            </a>
+                        </ng-template>
+                        <ng-template ngbTabContent>
+                            <form [formGroup]="addressForm" class="form">
+
+                                <kt-alert *ngIf="isExist" type="warn" [showCloseButton]="true" [duration]="10000"
+                                    (close)="onAlertClose($event)">
+                                    Ce Code existe deja
+                                </kt-alert>
+
+                                <div class="row">
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Code:</label>
+                                        <input type="text"   (change)="onChangeCode()"
+                                            [className]="addressForm.controls['ad_addr'].errors && (addressForm.controls['ad_addr'].dirty || addressForm.controls['ad_addr'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                            formControlName="ad_addr">
+                                        <div *ngIf="addressForm.controls['ad_addr'].errors && (addressForm.controls['ad_addr'].dirty || addressForm.controls['ad_addr'].touched)"
+                                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-4">
+                                        <label class="form-group ">Description:</label>
+                                            <input type="text"
+                                                [className]="addressForm.controls['ad_name'].errors && (addressForm.controls['ad_name'].dirty || addressForm.controls['ad_name'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                                formControlName="ad_name">
+                                            <div *ngIf="addressForm.controls['ad_name'].errors && (addressForm.controls['ad_name'].dirty || addressForm.controls['ad_name'].touched)"
+                                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-6">
+                                        <label class="form-group">Addresse:</label>
+                                        
+                                            <input type="text"
+                                                [className]="addressForm.controls['ad_line1'].errors && (addressForm.controls['ad_line1'].dirty || addressForm.controls['ad_line1'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                                formControlName="ad_line1">
+                                            <div *ngIf="addressForm.controls['ad_line1'].errors && (addressForm.controls['ad_line1'].dirty || addressForm.controls['ad_line1'].touched)"
+                                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                                        
+                                    </div>
+                                   
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Pays:</label>
+                                        <select class="form-control form-control-sm form-control-solid"
+                                        id="exampleSelects1" formControlName="ad_country">
+                                        
+                                        <option *ngFor="let elem of ad_country" [value]="elem.code_value">
+                                            {{elem.code_value}} {{elem.code_cmmt}}</option>
+                                           
+
+                                    </select>
+                                    </div>
+                               
+                                    
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Wilaya:</label>
+                                            <select class="form-control form-control-sm form-control-solid"
+                                                id="exampleSelects2" formControlName="ad_state" (change)="onChangeState()">
+                                                
+                                                <option *ngFor="let elem of ad_state" [value]="elem.code_value">
+                                                    {{elem.code_value}} {{elem.code_cmmt}}</option>
+
+                                            </select>
+                                        
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Commune:</label>
+                                            <select class="form-control form-control-sm form-control-solid"
+                                                id="exampleSelects1" formControlName="ad_city">
+                                                
+                                                <option *ngFor="let elem of ad_city" [value]="elem.code_value">
+                                                    {{elem.code_value}} {{elem.code_cmmt}}</option>
+
+                                            </select>
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Post:</label>
+                                        
+                                            <input type="text" class="form-control form-control-sm form-control-solid"
+                                                formControlName="ad_zip">
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Contact:</label>
+                                       
+                                            <input type="text" class="form-control form-control-sm form-control-solid"
+                                                formControlName="ad_attn">
+                                    </div>
+                                    
+
+
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Telephone:</label>
+                                        
+                                            <input type="text"
+                                                [className]="addressForm.controls['ad_phone'].errors && (addressForm.controls['ad_phone'].dirty || addressForm.controls['ad_phone'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                                formControlName="ad_phone">
+                                            <div *ngIf="addressForm.controls['ad_phone'].errors && (addressForm.controls['ad_phone'].dirty || addressForm.controls['ad_phone'].touched)"
+                                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                                        
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Pst:</label>
+                                    
+                                            <input type="text" class="form-control form-control-sm form-control-solid"
+                                                formControlName="ad_ext">
+                                        
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Fax:</label>
+                                        
+                                            <input type="text" class="form-control form-control-sm form-control-solid"
+                                                formControlName="ad_fax">
+                                        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Contact 2:</label>
+                                       
+                                            <input type="text" class="form-control form-control-sm form-control-solid"
+                                                formControlName="ad_attn2">
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Tel 2:</label>
+                                        
+                                            <input type="text" class="form-control form-control-sm form-control-solid"
+                                                formControlName="ad_phone2">
+                                        
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Pst:</label>
+                                            <input type="text" class="form-control form-control-sm form-control-solid"
+                                                formControlName="ad_ext2">
+                                    </div>
+
+                                    
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Fax 2</label>
+                                        
+                                            <input type="text" class="form-control form-control-sm form-control-solid" formControlName="ad_fax2">
+                                        
+                                    </div>
+
+
+                                </div>
+                            </form>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab>
+                        <ng-template ngbTabTitle>
+                            Données Banque
+                            <div style="width: 10px;"></div>
+                            <a *ngIf="hasbankFormErrors"
+                                class="btn btn-sm btn-icon btn-light-danger pulse pulse-danger mr-5">
+                                <i class="flaticon2-information"></i>
+                                <span class="pulse-ring"></span>
+                            </a>
+                        </ng-template>
+                        <ng-template ngbTabContent>
+                            <form [formGroup]="bankForm" class="form">
+
+                                <kt-alert *ngIf="hascustomerFormErrors" type="warn" [showCloseButton]="true"
+                                    [duration]="10000" (close)="onAlertClose($event)">
+                                    Modifiez quelques éléments et réessayez de soumettre.
+                                </kt-alert>
+
+                                <div class="row">
+                                    
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Cheque Suivant:</label>
+                                       
+                                        <input type="number" class="form-control form-control-sm form-control-solid"
+                                        formControlName="bk_check">
+                                             
+                                    </div>
+                                
+                                    <div class="form-group col-2">
+                                       
+                                        <label class="form-group "> Devise:</label>
+                                        
+                                        <div class="input-group input-group-sm">
+
+                                            <input type="text" class="form-control form-control-solid"
+                                                aria-describedby="basic-addon2" formControlName="bk_curr">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" (click)="open2(content2)">
+                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="form-group col-2">
+                                       
+                                        <label class="form-group "> Entité:</label>
+                                        
+                                        <div class="input-group input-group-sm">
+
+                                            <input type="text" class="form-control form-control-solid"
+                                                aria-describedby="basic-addon2" formControlName="bk_entity">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" (click)="openentity(contententity)">
+                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-2">
+                                        <label class="form-group">Compte1:</label>
+                                        
+                                        <div class="input-group input-group-sm">
+
+                                            <input type="text" class="form-control form-control-solid" 
+                                                aria-describedby="basic-addon2" formControlName="bk_bk_acct1">
+                                            
+                                        </div>
+                                    </div>
+                                   
+                                    <div class="form-group col-2">
+                                        <label class="form-group">Compte2:</label>
+                                        
+                                        <div class="input-group input-group-sm">
+
+                                            <input type="text" class="form-control form-control-solid" 
+                                                aria-describedby="basic-addon2" formControlName="bk_bk_acct2">
+                                            
+                                        </div>
+                                        
+                                    </div>
+                                   
+                                </div>
+                                
+                               
+                                <div class="row">
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Compte Treso:</label>
+                                       
+                                        <div class="input-group input-group-sm">
+
+                                            <input type="text" class="form-control form-control-solid" (change)="changeAcct('bk_acct')"
+                                                aria-describedby="basic-addon2" formControlName="bk_acct">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" (click)="open3(content3,'bk_acct')">
+                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label class="form-group">Sous Compte</label>
+                                     
+                                           <div class="input-group input-group-sm">
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_sub">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="form-group col-2 ">
+                                        <label class="form-group">centre de cout</label>
+                                            <div class="input-group input-group-sm">
+
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_cc">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Compte Paiement cours:</label>
+                                       
+                                        <div class="input-group input-group-sm">
+
+                                            <input type="text" class="form-control form-control-solid" (change)="changeAcct('bk_pip_acct')"
+                                                aria-describedby="basic-addon2" formControlName="bk_pip_acct">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" (click)="open3(content3,'bk_pip_acct')">
+                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label class="form-group">Sous Compte</label>
+                                     
+                                           <div class="input-group input-group-sm">
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_pip_sub">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="form-group col-2 ">
+                                        <label class="form-group">centre de cout</label>
+                                            <div class="input-group input-group-sm">
+
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_pip_cc">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Compte Effet a rec:</label>
+                                       
+                                        <div class="input-group input-group-sm">
+
+                                            <input type="text" class="form-control form-control-solid" (change)="changeAcct('bk_dftar_acct')"
+                                                aria-describedby="basic-addon2" formControlName="bk_dftar_acct">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" (click)="open3(content3,'bk_dftar_acct')">
+                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label class="form-group">Sous Compte</label>
+                                     
+                                           <div class="input-group input-group-sm">
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_dftar_sub">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="form-group col-2 ">
+                                        <label class="form-group">centre de cout</label>
+                                            <div class="input-group input-group-sm">
+
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_dftar_cc">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Compte Frais Banque:</label>
+                                       
+                                        <div class="input-group input-group-sm">
+
+                                            <input type="text" class="form-control form-control-solid" (change)="changeAcct('bk_bkchg_acct')"
+                                                aria-describedby="basic-addon2" formControlName="bk_bkchg_acct">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" (click)="open3(content3,'bk_bkchg_acct')">
+                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label class="form-group">Sous Compte</label>
+                                     
+                                           <div class="input-group input-group-sm">
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_bkchg_sub">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="form-group col-2 ">
+                                        <label class="form-group">centre de cout</label>
+                                            <div class="input-group input-group-sm">
+
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_bkchg_cc">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Compte de Frais escompte:</label>
+                                       
+                                        <div class="input-group input-group-sm">
+
+                                            <input type="text" class="form-control form-control-solid" (change)="changeAcct('bk_disc_acct')"
+                                                aria-describedby="basic-addon2" formControlName="bk_disc_acct">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" (click)="open3(content3,'bk_disc_acct')">
+                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label class="form-group">Sous Compte</label>
+                                     
+                                           <div class="input-group input-group-sm">
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_disc_sub">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="form-group col-2 ">
+                                        <label class="form-group">centre de cout</label>
+                                            <div class="input-group input-group-sm">
+
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_disc_cc">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Compte Effet escompte:</label>
+                                       
+                                        <div class="input-group input-group-sm">
+
+                                            <input type="text" class="form-control form-control-solid" (change)="changeAcct('bk_ddft_acct')"
+                                                aria-describedby="basic-addon2" formControlName="bk_ddft_acct">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" (click)="open3(content3,'bk_ddft_acct')">
+                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label class="form-group">Sous Compte</label>
+                                     
+                                           <div class="input-group input-group-sm">
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_ddft_sub">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="form-group col-2 ">
+                                        <label class="form-group">centre de cout</label>
+                                            <div class="input-group input-group-sm">
+
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_ddft_cc">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Compte Effet a Payer:</label>
+                                       
+                                        <div class="input-group input-group-sm">
+
+                                            <input type="text" class="form-control form-control-solid" (change)="changeAcct('bk_dftap_acct')"
+                                                aria-describedby="basic-addon2" formControlName="bk_dftap_acct">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" (click)="open3(content3,'bk_dftap_acct')">
+                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label class="form-group">Sous Compte</label>
+                                     
+                                           <div class="input-group input-group-sm">
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_dftap_sub">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="form-group col-2 ">
+                                        <label class="form-group">centre de cout</label>
+                                            <div class="input-group input-group-sm">
+
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_dftap_cc">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Compte Taxe Banque:</label>
+                                       
+                                        <div class="input-group input-group-sm">
+
+                                            <input type="text" class="form-control form-control-solid" (change)="changeAcct('bk_bktx_acct')"
+                                                aria-describedby="basic-addon2" formControlName="bk_bktx_acct">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" (click)="open3(content3,'bk_bktx_acct')">
+                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label class="form-group">Sous Compte</label>
+                                     
+                                           <div class="input-group input-group-sm">
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_bktx_sub">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="form-group col-2 ">
+                                        <label class="form-group">centre de cout</label>
+                                            <div class="input-group input-group-sm">
+
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_bktx_cc">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Compte Effet encaissé:</label>
+                                       
+                                        <div class="input-group input-group-sm">
+
+                                            <input type="text" class="form-control form-control-solid" (change)="changeAcct('bk_cdft_acct')"
+                                                aria-describedby="basic-addon2" formControlName="bk_cdft_acct">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" (click)="open3(content3,'bk_cdft_acct')">
+                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label class="form-group">Sous Compte</label>
+                                     
+                                           <div class="input-group input-group-sm">
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_cdft_sub">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="form-group col-2 ">
+                                        <label class="form-group">centre de cout</label>
+                                            <div class="input-group input-group-sm">
+
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_cdft_cc">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-2">
+                                        <label class="form-group ">Compte Effet endossé:</label>
+                                       
+                                        <div class="input-group input-group-sm">
+
+                                            <input type="text" class="form-control form-control-solid" (change)="changeAcct('bk_edft_acct')"
+                                                aria-describedby="basic-addon2" formControlName="bk_edft_acct">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" (click)="open3(content3,'bk_edft_acct')">
+                                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-2">
+                                        <label class="form-group">Sous Compte</label>
+                                     
+                                           <div class="input-group input-group-sm">
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_edft_sub">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="form-group col-2 ">
+                                        <label class="form-group">centre de cout</label>
+                                            <div class="input-group input-group-sm">
+
+                                                <input type="text" class="form-control form-control-solid"
+                                                    aria-describedby="basic-addon2" formControlName="bk_edft_cc">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                                </div>
+                                            </div>
+                                    </div>
+
+                                </div>
+                                
+
+                            </form>
+                        </ng-template>
+                    </ngb-tab>
+
+                    <ngb-tab>
+                        <ng-template ngbTabTitle>
+                            Données Paiement
+                            <div style="width: 10px;"></div>
+                            <a *ngIf="hasFormErrors"
+                                class="btn btn-sm btn-icon btn-light-danger pulse pulse-danger mr-5">
+                                <i class="flaticon2-information"></i>
+                                <span class="pulse-ring"></span>
+                            </a>
+                        </ng-template>
+                        <ng-template ngbTabContent>
+                            <form [formGroup]="addressForm" class="form">
+
+                                <kt-alert *ngIf="hasFormErrors" type="warn" [showCloseButton]="true" [duration]="10000"
+                                    (close)="onAlertClose($event)">
+                                    Modifiez quelques éléments et réessayez de soumettre.
+                                </kt-alert>
+                                <div class="row col-lg-12">
+                                    <button class="btn btn-primary btn-elevate col-lg-2" (click)="addNewItem()">Ajouter
+                                        </button>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <angular-slickgrid class="col-12" gridHeight="300" gridId="plagemvGrid" [columnDefinitions]="mvcolumnDefinitions"
+                                    [gridOptions]="mvgridOptions" [dataset]="mvdataset" (onAngularGridCreated)="mvGridReady($event)">
+                                </angular-slickgrid>
+                                </div>
+                         
+                               
+                
+
+                            </form>
+                        </ng-template>
+                    </ngb-tab>
+
+                   
+                </ngb-tabset>
+                
+               
+''                
+            </div>
+        </div>
+
+        <div>
+            <ng-template #content2 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir la Devise</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="gridpro"
+                            [columnDefinitions]="columnDefinitions2" (onAngularGridCreated)="angularGridReady2($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged2($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions2" [dataset]="devises">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+        <div>
+            <ng-template #content3 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir Compte </h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                            [columnDefinitions]="columnDefinitions3" (onAngularGridCreated)="angularGridReady3($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged3($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions3" [dataset]="data">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+        <div>
+            <ng-template #contententity let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir l'entittée</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                            [columnDefinitions]="columnDefinitionsentity" (onAngularGridCreated)="angularGridReadyentity($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChangedentity($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptionsentity" [dataset]="dataentity">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+        <div>
+            <ng-template #content4 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choissir </h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <angular-slickgrid class="col-12" gridHeight="300" gridId="griduser"
+                            [columnDefinitions]="columnDefinitions4" (onAngularGridCreated)="angularGridReady4($event)"
+                            (sgOnSelectedRowsChanged)="handleSelectedRowsChanged4($event.detail.eventData, $event.detail.args)"
+                            [gridOptions]="gridOptions4" [dataset]="datacode">
+                        </angular-slickgrid>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Annuller</button>
+                    <button type="button" class="btn btn-primary" (click)="c('Close click')">Ok</button>
+                </div>
+            </ng-template>
+        </div>
+    </kt-portlet-body>
+</kt-portlet>

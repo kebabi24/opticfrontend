@@ -1,0 +1,356 @@
+<<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Ajouter un code'" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+
+            <form class="form" [formGroup]="bomForm">
+
+                <kt-alert *ngIf="isExist" type="warn" [showCloseButton]="true" [duration]="10000"
+                                    (close)="onAlertClose($event)">
+                                    Ce Code existe deja
+                </kt-alert>
+
+
+                                    <div class="row">
+                                        <div class="form-group col-2">
+                                            <label class="form-group">Code: *</label>
+                                            <input type="text" formControlName="bom_parent"  (change)="onChangeCode()"
+                                                [className]="bomForm.controls['bom_parent'].errors && (bomForm.controls['bom_parent'].dirty || bomForm.controls['bom_parent'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                                            <div *ngIf="bomForm.controls['bom_parent'].errors && (bomForm.controls['bom_parent'].dirty || bomForm.controls['bom_parent'].touched) "
+                                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                    
+                                        </div>
+                                    </div>
+                                
+                                    <div class="row">
+                                        <div class="form-group col-6">
+                                            <label class="form-group">Description: *</label>
+                                            <input type="text" formControlName="bom_desc" 
+                                                [className]="bomForm.controls['bom_desc'].errors && (bomForm.controls['bom_desc'].dirty || bomForm.controls['bom_desc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                                            <div *ngIf="bomForm.controls['bom_desc'].errors && (bomForm.controls['bom_desc'].dirty || bomForm.controls['bom_desc'].touched) "
+                                                class="invalid-feedback">Ce Champs est obligatoire</div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-2">
+                                            <label class="form-group">Taille Lot: </label>
+                                            <input type="number" formControlName="bom_batch" class='form-control form-control-sm form-control-solid' >
+                                        </div>
+                                        
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group col-2">
+                                            <label class="form-group"> UM: </label>
+                                                <input  class="form-control form-control-sm" type="text"   formControlName="bom_batch_um" placeholder = "UN" >
+                                        
+                                        </div>
+
+
+                                     </div>
+                                <div class="row">
+                                    <div class="form-group col-2">
+                                        <label class="form-group">Formule:</label>
+                                        <div class="input-group input-group-sm">
+                
+                                            <span class="switch switch-icon">
+                                                <label>
+                                                    <input type="checkbox" class="form-control form-control-sm form-control-solid" formControlName="bom_formula" />
+                                                    <span></span>
+                                                </label>
+                                            </span>
+                                        </div>
+                
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    
+                                    <div class="form-group col-7">
+                                    
+                                            <label class="form-group">Commentaire:</label>
+                                            <textarea class="form-control form-control-sm form-control-solid" formControlName="bom_rmks"
+                                                rows="2"></textarea>
+                                       
+                                    </div>    
+
+
+                                </div>
+                            </form>
+
+                               
+                        </div>
+
+
+                    </kt-portlet-body>
+                </kt-portlet>
+                
+                    <!--kt-portlet-body>
+
+                    
+                        <form class="kt-form" [formGroup]="prodForm">
+                        
+                            <div class="row"> 
+
+
+                                <div class="form-group col-12 row">
+                                    <label class="form-group">Composé: *</label>
+                                    <div class="input-group input-group-sm col-2">
+                                        <input  class="form-control form-control-sm" type="text" [className]="prodForm.controls['compose'].errors && (prodForm.controls['compose'].dirty || prodForm.controls['compose'].touched) ? 'form-control form-control-sm is-invalid' : 'form-control form-control-sm'" placeholder="compose "
+                                        #compose formControlName="compose" required id="compose" >
+                                        <div class="form-control-feedback" *ngIf="prodForm.controls['compose'].errors && (prodForm.controls['compose'].dirty || prodForm.controls['compose'].touched)">
+                                            
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span (click)="selectComment(content)" class="input-group-text">
+                                                <i class="la la-search"></i>
+                                            </span>
+                                        </div>
+                                       
+                                        <div *ngIf="prodForm.controls['compose'].errors.required" class="invalid-feedback">La compose  est obligatoire</div>
+                                    </div> 
+                                    
+                                    <label class="form-group">bom_desc: *</label>
+                                    <div class="col-4">
+                                        <input  class="form-control form-control-sm" type="text" [className]="prodForm.controls['compodesc'].errors && (prodForm.controls['compodesc'].dirty || prodForm.controls['compodesc'].touched) ? 'form-control form-control-sm is-invalid' : 'form-control form-control-sm'" placeholder="compodesc"
+                                        #compodesc formControlName="compodesc" required id="compodesc" >
+                                        <div class="form-control-feedback" *ngIf="prodForm.controls['compodesc'].errors && (prodForm.controls['compodesc'].dirty || prodForm.controls['compodesc'].touched)">
+                                            
+                                        </div>
+                                        <div *ngIf="prodForm.controls['compodesc'].errors.required" class="invalid-feedback">La bom_desc est obligatoire</div>
+                                    
+                                    
+                                    </div>
+                                </div>    
+                            
+
+                            </div>
+                        </form>
+
+                            
+
+
+                            
+                    
+                        <form class="kt-form" [formGroup]="compForm">
+                        
+                            <div class="row"> 
+
+
+                                <div class="form-group col-12 row">
+                                    <label class="form-group">Composant: *</label>
+                                    <div class="input-group input-group-sm col-2">
+                                        <input  class="form-control form-control-sm" type="text" [className]="compForm.controls['composant'].errors && (compForm.controls['composant'].dirty || compForm.controls['composant'].touched) ? 'form-control form-control-sm is-invalid' : 'form-control form-control-sm'" placeholder="composant "
+                                        #composant formControlName="composant" required id="composant" >
+                                        <div class="form-control-feedback" *ngIf="compForm.controls['composant'].errors && (compForm.controls['composant'].dirty || compForm.controls['composant'].touched)">
+                                            
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span (click)="selectComment(content)" class="input-group-text">
+                                                <i class="la la-search"></i>
+                                            </span>
+                                        </div>
+
+                                        
+                                        <div *ngIf="compForm.controls['composant'].errors.required" class="invalid-feedback">La composant  est obligatoire</div>
+                                    </div>
+                                    
+                                    
+                                   
+                                    <label class="form-group"> </label>
+                                    <div class="col-3">
+                                        <input  class="form-control form-control-sm" type="text"   formControlName="desccomposant" placeholder = "" disabled>
+                                    </div>
+                                </div>    
+
+                                <div class="form-group col-12 row">
+
+                                    <label class="form-group">Rev: </label>
+                                    <div class="col-1">
+                               
+                                        <input  class="form-control form-control-sm" type="number"   formControlName="rev" placeholder = "0" >
+                                    </div>
+                                    <label class="col-4 control-label text-right">Réference: </label>
+                                    <div class="col-2">
+                               
+                                        <input  class="form-control form-control-sm" type="text"   formControlName="ref" placeholder = "Réference" >
+                                    </div>
+
+
+                                </div>
+                                <div class="form-group col-12 row">
+
+                                    
+                                    <label class="form-group">Date Validité: </label>
+                                    <div class="col-2">
+                                        <div class="input-group input-group-sm">
+                                            <input class="form-control form-control-sm" placeholder="jj-mm-aaa" name="dp"  ngbDatepicker #d="ngbDatepicker">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary btn-icon" (click)="d.toggle()" type="button">
+                                                    <i class="la la-calendar"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                            
+                                    </div>
+                                    <label class="col-3 control-label text-right">A: </label>
+                                    <div class="col-2">
+                                        <div class="input-group input-group-sm">
+                                            <input class="form-control form-control-sm" placeholder="jj-mm-aaa" name="dp"  ngbDatepicker #d="ngbDatepicker">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary btn-icon" (click)="d.toggle()" type="button">
+                                                    <i class="la la-calendar"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                            
+                                    </div>
+                                </div>    
+                                <div class="form-group col-12 row">    
+                                    
+                                    <label class="form-group"> Quantité par Lot: </label>
+                                    <div class="col-2">
+                                        <input  class="form-control form-control-sm" type="decimal"   formControlName="qty" placeholder = "0" >
+                                    </div>
+
+                                    <label class="col-3 control-label text-right"> Rejet: </label>
+                                    <div class="col-2">
+                                        <input  class="form-control form-control-sm" type="decimal"   formControlName="rejet" placeholder = "0.00%" >
+                                    </div>
+
+
+                                </div>
+                                <div class="form-group col-12 row">    
+                                    
+                                    <label class="form-group"> Type Quantité: </label>
+                                    <div class="col-2">
+                                        <select  class="form-control form-control-sm" type="text"   formControlName="typeqty" placeholder = "0" >
+                                        </select>    
+                                    </div>
+
+                                    <label class="col-3 control-label text-right"> Decalage: </label>
+                                    <div class="col-2">
+                                        <input  class="form-control form-control-sm" type="decimal"   formControlName="decalage" placeholder = "" >
+                                    </div>
+
+
+                                </div>
+                                <div class="form-group col-12 row">    
+                                    
+                                    <label class="form-group"> Pourcentage Lot: </label>
+                                    <div class="col-2">
+                                        <input  class="form-control form-control-sm" type="decimal"   formControlName="pourcentage" placeholder = "0.00%" >
+                                    </div>
+
+                                    <label class="col-3 control-label text-right"> Opération: </label>
+                                    <div class="col-1">
+                                        <input  class="form-control form-control-sm" type="decimal"   formControlName="op" placeholder = "" >
+                                    </div>
+
+
+                                </div>
+                                <div> </div>
+                                <div class="form-group col-12 row">    
+                                    
+                                    <label class="form-group"> Type Nomenclature: </label>
+                                    <div class="col-2">
+                                        <input  class="form-control form-control-sm" type="text"   formControlName="pourcentage" placeholder = "type" >
+                                    </div>
+
+                                    <label class="col-3 control-label text-right"> Numero Sequence: </label>
+                                    <div class="col-1">
+                                        <input  class="form-control form-control-sm" type="decimal"   formControlName="numseq" placeholder = "" >
+                                    </div>
+
+
+                                </div>
+
+                                <div class="form-group col-12 row">
+
+                                
+                                    <label class="form-group">Début Validité: </label>
+                                    <div class="col-2">
+                                        <div class="input-group input-group-sm">
+                                            <input class="form-control form-control-sm" placeholder="jj-mm-aaa" name="dp"  ngbDatepicker #d="ngbDatepicker">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary btn-icon" (click)="d.toggle()" type="button">
+                                                    <i class="la la-calendar"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                            
+                                    </div>
+                                
+                                    <label class="col-3 control-label text-right"> Pourcent Prévision: </label>
+                                    <div class="col-1">
+                                        <input  class="form-control form-control-sm" type="decimal"   formControlName="pourprev" placeholder = "100.00%" >
+                                    </div>
+                                </div>    
+                                <div class="form-group col-12 row">
+
+                                
+                                    <label class="form-group">Fin Validité: </label>
+                                    <div class="col-2">
+                                        <div class="input-group input-group-sm">
+                                            <input class="form-control form-control-sm" placeholder="jj-mm-aaa" name="dp"  ngbDatepicker #d="ngbDatepicker">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary btn-icon" (click)="d.toggle()" type="button">
+                                                    <i class="la la-calendar"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                            
+                                    </div>
+                                
+                                    <label class="col-3 control-label text-right"> Groupe Option: </label>
+                                    <div class="col-1">
+                                        <select  class="form-control form-control-sm" type="text"   formControlName="groupopt" placeholder = "" >
+                                        </select>    
+                                    </div>
+                                </div>    
+                                <div class="form-group col-12 row">
+
+                                
+                                    <label class="form-group">Remarque </label>
+                                    <div class="col-3">
+                                        <input  class="form-control form-control-sm" type="text"   formControlName="remarque" placeholder = "Remarque" >
+                                            
+                                    </div>
+                                
+                                    <label class="col-3 control-label text-right"> Traitement: </label>
+                                    <div class="col-1">
+                                        <select  class="form-control form-control-sm" type="text"   formControlName="traitement" placeholder = "" >
+                                        </select>    
+                                    </div>
+                                </div>    
+
+
+
+
+
+                                
+
+                            </div>
+                        </form>
+
+
+
+                        
+                        
+                
+                
+                
+                </kt-portlet-body-->
+
+
+
+
+               

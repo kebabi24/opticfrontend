@@ -1,0 +1,172 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Historique Clients'" [class]="'card-head-lg'">
+        
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+            <form class="form" [formGroup]="soForm">
+            <div class="row">
+                <angular-slickgrid class="col-12" gridHeight="250" gridId="gridpro"
+                    [columnDefinitions]="columnDefinitions" (onAngularGridCreated)="angularGridReady($event)"
+                    (sgOnSelectedRowsChanged)="handleSelectedRowsChanged($event.detail.eventData, $event.detail.args)"
+                    [gridOptions]="gridOptions" [dataset]="dataset">
+                </angular-slickgrid>
+            </div>
+            
+           
+                <div class="separator separator-solid"></div>
+                                <div class="row">
+                                    <div class="form-group col-2"></div>
+                                </div>
+                                <h6>Œil Droit (OD) 
+            
+                                </h6>
+                <div class="row">
+                    
+                        <div class="form-group col-1">
+                            <label class="form-group ">Sphere </label>
+            
+                            <input type="number"  step="0.01" class="form-control form-control-sm form-control-solid"
+                                formControlName="vis_rsph">
+            
+                        </div>
+                       
+                        <div class="form-group col-1">
+                            <label class="form-group ">Cylindre </label>
+            
+                            <input type="number"  step="0.01" class="form-control form-control-sm form-control-solid"
+                                formControlName="vis_rcyl">
+            
+                        </div>
+                        <div class="form-group col-1">
+                            <label class="form-group ">Axe</label>
+            
+                            <input type="number" step="0.01" class="form-control form-control-sm form-control-solid"
+                                formControlName="vis_raxe">
+            
+                        </div>
+                        <div class="form-group col-1">
+                            <label class="form-group ">Addition</label>
+            
+                            <input type="number" step="0.01" class="form-control form-control-sm form-control-solid"
+                                formControlName="vis_radd">
+            
+                        </div>
+                        <div class="form-group col-1">
+                            <label class="form-group ">Prisme</label>
+            
+                            <input type="number" step="0.01" class="form-control form-control-sm form-control-solid"
+                                formControlName="vis_rprisme">
+            
+                        </div>
+                        <div class="form-group col-1">
+                            <label class="form-group ">Base</label>
+            
+                            <input type="number" step="0.01" class="form-control form-control-sm form-control-solid"
+                                formControlName="vis_rbase">
+            
+                        </div>
+            
+                       
+                        <div class="form-group col-1">
+                            <label class="form-group ">Ecart</label>
+            
+                            <input type="number" step="0.01" class="form-control form-control-sm form-control-solid"
+                                formControlName="vis_recart">
+            
+                        </div>
+                        <div class="form-group col-1">
+                            <label class="form-group ">Hauteur</label>
+            
+                            <input type="number" step="0.01" class="form-control form-control-sm form-control-solid"
+                                formControlName="vis_rhauteur">
+            
+                        </div>
+                    </div>
+                    <h6>Œil Droit (OG) 
+            
+                    </h6>
+            
+                    <div class="row">    
+               
+                        <div class="form-group col-1">
+                            <label class="form-group ">Sphere </label>
+            
+                            <input type="number"  step="0.01" class="form-control form-control-sm form-control-solid"
+                                formControlName="vis_lsph">
+            
+                        </div>
+                       
+                        <div class="form-group col-1">
+                            <label class="form-group ">Cylindre </label>
+            
+                            <input type="number"  step="0.01" class="form-control form-control-sm form-control-solid"
+                                formControlName="vis_lcyl">
+            
+                        </div>
+                        <div class="form-group col-1">
+                            <label class="form-group ">Axe</label>
+            
+                            <input type="number" step="0.01" class="form-control form-control-sm form-control-solid"
+                                formControlName="vis_laxe">
+            
+                        </div>
+                        <div class="form-group col-1">
+                            <label class="form-group ">Addition</label>
+            
+                            <input type="number" step="0.01" class="form-control form-control-sm form-control-solid"
+                                formControlName="vis_ladd">
+            
+                        </div>
+                        <div class="form-group col-1">
+                            <label class="form-group ">Prisme</label>
+            
+                            <input type="number" step="0.01" class="form-control form-control-sm form-control-solid"
+                                formControlName="vis_lprisme">
+            
+                        </div>
+                        <div class="form-group col-1">
+                            <label class="form-group ">Base</label>
+            
+                            <input type="number" step="0.01" class="form-control form-control-sm form-control-solid"
+                                formControlName="vis_lbase">
+            
+                        </div>
+                        
+                        <div class="form-group col-1">
+                            <label class="form-group ">Ecart</label>
+            
+                            <input type="number" step="0.01" class="form-control form-control-sm form-control-solid"
+                                formControlName="vis_lecart">
+            
+                        </div>
+                        <div class="form-group col-1">
+                            <label class="form-group ">Hauteur</label>
+            
+                            <input type="number" step="0.01" class="form-control form-control-sm form-control-solid"
+                                formControlName="vis_lhauteur">
+            
+                        </div>
+            
+                </div>
+                
+               
+           
+            
+
+            <div class="row">
+                <angular-slickgrid class="col-6" gridHeight="250" gridId="gridprovis"
+                    [columnDefinitions]="columnDefinitionsvis" (onAngularGridCreated)="angularGridReadyvis($event)"
+                    (sgOnSelectedRowsChanged)="handleSelectedRowsChangedvis($event.detail.eventData, $event.detail.args)"
+                    [gridOptions]="gridOptionsvis" [dataset]="visdataset">
+                </angular-slickgrid>
+                <angular-slickgrid class="col-6" gridHeight="250" gridId="grids"
+                 [columnDefinitions]="columnDefinitionssod" (onAngularGridCreated)="angularGridReadysod($event)"
+                    [gridOptions]="gridOptionssod" [dataset]="soddataset" >
+                </angular-slickgrid>
+            </div>
+        </form>
+        </div>
+
+    </kt-portlet-body>
+</kt-portlet>

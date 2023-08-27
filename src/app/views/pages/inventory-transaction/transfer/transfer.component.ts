@@ -1,0 +1,2001 @@
+import { Component, OnInit } from "@angular/core";
+import { NgbDropdownConfig, NgbTabsetConfig } from "@ng-bootstrap/ng-bootstrap";
+
+// Angular slickgrid
+import {
+  Column,
+  GridOption,
+  Formatter,
+  Editor,
+  Editors,
+  AngularGridInstance,
+  EditorValidator,
+  EditorArgs,
+  GridService,
+  Formatters,
+  FieldType,
+  OnEventArgs,
+} from "angular-slickgrid";
+import { FormGroup, FormBuilder, Validators, NgControlStatus } from "@angular/forms";
+import { Observable, BehaviorSubject, Subscription, of } from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
+// Layout
+import {
+  SubheaderService,
+  LayoutConfigService,
+} from "../../../../core/_base/layout";
+// CRUD
+import {
+  LayoutUtilsService,
+  TypesUtilsService,
+  MessageType,
+} from "../../../../core/_base/crud";
+import { MatDialog } from "@angular/material/dialog";
+import {
+  NgbModal,
+  NgbActiveModal,
+  ModalDismissReasons,
+  NgbModalOptions,
+} from "@ng-bootstrap/ng-bootstrap";
+import {
+  ItemService,
+  AddressService,
+  InventoryTransaction,
+  InventoryTransactionService,
+  LocationService,
+  SiteService,
+  RequisitionService,
+  CostSimulationService,
+  LocationDetailService,
+  InventoryStatusService,
+  CodeService,
+  SequenceService,
+  printBc,
+  MesureService,
+  printTR,
+} from "../../../../core/erp";
+
+const statusValidator: EditorValidator = (value: any, args: EditorArgs) => {
+  // you can get the Editor Args which can be helpful, e.g. we can get the Translate Service from it
+  const grid = args && args.grid;
+  const gridOptions = (grid && grid.getOptions) ? grid.getOptions() : {};
+  const translate = gridOptions.i18n;
+
+  // to get the editor object, you'll need to use "internalColumnEditor"
+  // don't use "editor" property since that one is what SlickGrid uses internally by it's editor factory
+  const columnEditor = args && args.column && args.column.internalColumnEditor;
+
+  if (value == null || value == undefined || !value.length) {
+    return { valid: false, msg: 'This is a required field' };
+  } 
+  return { valid: true, msg: '' };
+};
+
+
+@Component({
+  selector: 'kt-transfer',
+  templateUrl: './transfer.component.html',
+  styleUrls: ['./transfer.component.scss']
+})
+export class TransferComponent implements OnInit {
+    inventoryTransaction: InventoryTransaction;
+    trForm: FormGroup;
+    hasFormErrors = false;
+    loadingSubject = new BehaviorSubject<boolean>(true);
+    loading$: Observable<boolean>;
+    error = false;
+    angularGrid: AngularGridInstance;
+    grid: any;
+    gridService: GridService;
+    dataView: any;
+    columnDefinitions: Column[];
+    gridOptions: GridOption;
+    dataset: any[];
+    user
+    
+    alertWarning: any;
+   
+    adresses: [];
+    columnDefinitions2: Column[] = [];
+    gridOptions2: GridOption = {};
+    gridObj2: any;
+    angularGrid2: AngularGridInstance;
+
+    items: [];
+    columnDefinitions4: Column[] = [];
+    gridOptions4: GridOption = {};
+    gridObj4: any;
+    angularGrid4: AngularGridInstance;
+  
+    datasite: [];
+    columnDefinitionssite: Column[] = [];
+    gridOptionssite: GridOption = {};
+    gridObjsite: any;
+    angularGridsite: AngularGridInstance;
+  
+    dataloc: [];
+    columnDefinitionsloc: Column[] = [];
+    gridOptionsloc: GridOption = {};
+    gridObjloc: any;
+    angularGridloc: AngularGridInstance;
+  
+    datalocdet: [];
+    columnDefinitionslocdet: Column[] = [];
+    gridOptionslocdet: GridOption = {};
+    gridObjlocdet: any;
+    angularGridlocdet: AngularGridInstance;
+    ums: [];
+    columnDefinitionsum: Column[] = [];
+    gridOptionsum: GridOption = {};
+    gridObjum: any;
+    angularGridum: AngularGridInstance;
+  
+    statuss: [];
+    columnDefinitionsstatus: Column[] = [];
+    gridOptionsstatus: GridOption = {};
+    gridObjstatus: any;
+    angularGridstatus: AngularGridInstance;
+  
+    selectedField = "";
+    fieldcode = "";
+    sit : string ;
+    stat : String;
+    expire;
+    row_number;
+    message = "";
+    site: any;
+    location: any;
+    sct: any;
+    seq : any;
+    trServer;
+    trlot: string;
+    datasetPrint = [];
+    lddet: any;
+    rqm: boolean;
+    constructor(
+      config: NgbDropdownConfig,
+      private trFB: FormBuilder,
+      private activatedRoute: ActivatedRoute,
+      private router: Router,
+      public  dialog: MatDialog,
+      private modalService: NgbModal,
+      private layoutUtilsService: LayoutUtilsService,
+      private inventoryTransactionService: InventoryTransactionService,
+      private sctService: CostSimulationService,  
+      private itemsService: ItemService,
+      private locationService: LocationService,
+      private siteService: SiteService,
+      private inventoryStatusService: InventoryStatusService,
+      private mesureService: MesureService,
+      private codeService: CodeService,
+      private requisitionService: RequisitionService,
+      private sequenceService: SequenceService,
+      private locationDetailService: LocationDetailService
+    ) {
+      config.autoClose = true;
+      this.initGrid();
+    }
+    GridReady(angularGrid: AngularGridInstance) {
+        this.angularGrid = angularGrid
+        this.dataView = angularGrid.dataView
+        this.grid = angularGrid.slickGrid
+        this.gridService = angularGrid.gridService
+    }
+    ngOnInit(): void {
+      
+      this.loading$ = this.loadingSubject.asObservable()
+      this.loadingSubject.next(true)
+        this.user =  JSON.parse(localStorage.getItem('user'))       
+        
+           this.createForm()
+           this.loadingSubject.next(false)
+        
+    }
+    
+
+    createForm() {
+      this.loadingSubject.next(false);
+      this.inventoryTransaction = new InventoryTransaction();
+    
+     // console.log(this.site)  
+      const date = new Date()
+
+      this.trForm = this.trFB.group({
+        tr_so_job: [this.inventoryTransaction.tr_so_job],
+        tr_effdate: [{
+          year:date.getFullYear(),
+          month: date.getMonth()+1,
+          day: date.getDate()
+        }],
+        tr_rmks: [this.inventoryTransaction.tr_rmks],    
+        tr_site:  [this.inventoryTransaction.tr_site],
+        tr_loc: [this.inventoryTransaction.tr_loc],
+        tr_ref_site: [this.inventoryTransaction.tr_ref_site],
+        tr_ref_loc: [this.inventoryTransaction.tr_ref_loc],
+        print:[true],
+       
+      
+    })  
+      const controls = this.trForm.controls;
+      this.siteService.getByOne({ si_default: true  }).subscribe(
+        (res: any) => {
+        this.site = res.data.si_site
+        
+        controls.tr_site.setValue(this.site );
+        controls.tr_ref_site.setValue(this.site );
+    
+      })
+    
+      
+        
+      }
+      //reste form
+      reset() {
+        this.inventoryTransaction = new InventoryTransaction();
+        this.createForm();
+        this.hasFormErrors = false;
+      }
+      // save data
+      onSubmit() {
+        this.hasFormErrors = false;
+        const controls = this.trForm.controls;
+        /** check form */
+        if (this.trForm.invalid) {
+          Object.keys(controls).forEach((controlName) =>
+            controls[controlName].markAsTouched()
+          );
+          this.message = "Modifiez quelques éléments et réessayez de soumettre.";
+          this.hasFormErrors = true;
+    
+          return;
+        }
+    
+        if (!this.dataset.length) {
+          this.message = "La liste des article ne peut pas etre vide";
+          this.hasFormErrors = true;
+    
+          return;
+        }
+
+
+        for (var i = 0; i < this.dataset.length; i++) {
+          console.log(this.dataset[i]  )
+         if (this.dataset[i].tr_part == "" || this.dataset[i].tr_part == null  ) {
+          this.message = "L' article ne peut pas etre vide";
+          this.hasFormErrors = true;
+          return;
+     
+         }
+         
+         if (this.dataset[i].tr_um == "" || this.dataset[i].tr_um == null  ) {
+          this.message = "L' UM ne peut pas etre vide";
+          this.hasFormErrors = true;
+          return;
+     
+         }
+         if (this.dataset[i].tr_status == "" || this.dataset[i].tr_status == null  ) {
+          this.message = "Le Status ne peut pas etre vide";
+          this.hasFormErrors = true;
+          return;
+     
+         }
+         if (this.dataset[i].tr_qty_loc == 0 ) {
+          this.message = "La Quantite ne peut pas etre 0";
+          this.hasFormErrors = true;
+          return;
+     
+         }
+  
+        }
+
+
+
+        this.sequenceService.getByOne({ seq_type: "TR", seq_profile: this.user.usrd_profile }).subscribe(
+          (response: any) => {
+        this.seq = response.data 
+            
+            if (this.seq) {
+             this.trlot = `${this.seq.seq_prefix}-${Number(this.seq.seq_curr_val)+1}`
+  
+             this.sequenceService.update(this.seq.id,{ seq_curr_val: Number(this.seq.seq_curr_val )+1 }).subscribe(
+              (reponse) => console.log("response", Response),
+              (error) => {
+                this.message = "Erreur modification Sequence";
+                this.hasFormErrors = true;
+                return;
+           
+              
+              },
+              )
+              let tr = this.prepare()
+              this.addIt( this.dataset,tr, this.trlot);
+            }else {
+              this.message = "Parametrage Monquant pour la sequence";
+              this.hasFormErrors = true;
+              return;
+         
+             }
+  
+  
+          })
+  
+          
+  
+
+        // tslint:disable-next-line:prefer-const
+       
+      }
+    
+      prepare(){
+        const controls = this.trForm.controls;
+        const _tr = new InventoryTransaction();
+        _tr.tr_so_job = controls.tr_so_job.value
+        _tr.tr_effdate = controls.tr_effdate.value
+        ? `${controls.tr_effdate.value.year}/${controls.tr_effdate.value.month}/${controls.tr_effdate.value.day}`
+        : null
+        
+       // _tr.tr_ex_rate = controls.tr_ex_rate.value
+        
+        _tr.tr_rmks = controls.tr_rmks.value
+        _tr.tr_site = controls.tr_site.value
+        _tr.tr_loc = controls.tr_loc.value
+        _tr.tr_ref_site = controls.tr_ref_site.value
+        _tr.tr_ref_loc = controls.tr_ref_loc.value
+        return _tr
+      }
+      /**
+       *
+       * Returns object for saving
+       */
+      /**
+       * Add po
+       *
+       * @param _it: it
+       */
+      addIt( detail: any, it, nlot) {
+        for (let data of detail) {
+          delete data.id;
+          delete data.cmvid;
+        }
+        this.loadingSubject.next(true);
+        const controls = this.trForm.controls;
+
+    
+        this.inventoryTransactionService
+          .addTr({detail, it,nlot})
+          .subscribe(
+           (reponse: any) => console.log(reponse),
+            (error) => {
+              this.layoutUtilsService.showActionNotification(
+                "Erreur verifier les informations",
+                MessageType.Create,
+                10000,
+                true,
+                true
+              );
+              this.loadingSubject.next(false);
+            },
+            () => {
+              this.layoutUtilsService.showActionNotification(
+                "Ajout avec succès",
+                MessageType.Create,
+                10000,
+                true,
+                true
+              );
+              this.loadingSubject.next(false);
+          //    console.log(this.provider, po, this.dataset);
+          //    if(controls.print.value == true) printBc(this.provider, this.datasetPrint, po);
+              
+          if(controls.print.value == true) printTR(it, this.dataset, nlot)
+            this.router.navigateByUrl("/");
+            }
+          );
+      }
+      
+      /**
+       * Go back to the list
+       *
+       */
+      goBack() {
+        this.loadingSubject.next(false);
+        const url = `/`;
+        this.router.navigateByUrl(url, { relativeTo: this.activatedRoute });
+      }
+    
+
+
+
+      
+      // add new Item to Datatable
+      addNewItem() {
+        this.gridService.addItem(
+          {
+            id: this.dataset.length + 1,
+            tr_line: this.dataset.length + 1,
+            tr_part: "",
+            cmvid: "",
+            desc: "",
+            tr_qty_loc: 0,
+            tr_um: "",
+            tr_trice: 0,
+            cmvids: "",
+            tr_serial: null,
+            tr_status: null,
+            tr_expire: null,
+          },
+          { position: "bottom" }
+        );
+      }
+      onChangeLoc() {
+        const controls = this.trForm.controls;
+        const loc_loc = controls.tr_loc.value;
+        const loc_site = controls.tr_site.value;
+       
+        
+            this.locationService.getByOne({ loc_site, loc_loc }).subscribe(
+              (res: any) => {
+                console.log(res)
+               this.location = res.data
+                if (this.location != null) {
+                
+                  if (this.rqm == true){
+
+                    for (var i = 0; i < this.dataset.length; i++) {
+                      console.log(this.dataset[i].tr_part  )
+                      let updateItem = this.gridService.getDataItemByRowIndex(i);
+                      this.sctService.getByOne({ sct_site: loc_site, sct_part: this.dataset[i].tr_part, sct_sim: 'STDCG' }).subscribe(
+                        (response: any) => {
+                          this.sct = response.data
+                         console.log(this.sct.sct_cst_tot)
+                         let scttot = this.sct.sct_cst_tot
+                         console.log(scttot)
+                         updateItem.tr_price = scttot
+                          this.locationDetailService.getBy({ ld_site: loc_site, ld_loc: loc_loc, ld_part: this.sct.sct_part, ld_lot: null }).subscribe(
+                            (respo: any) => {
+                              this.lddet = respo.data
+                              console.log(this.lddet[0].ld_qty_oh)
+        
+                              
+
+                              this.inventoryStatusService.getAllDetails({isd_status: this.location.loc_status, isd_tr_type: "RCT-TR" }).subscribe((resstat:any)=>{
+                                console.log(resstat)
+                                const { data } = resstat;
+        
+                                if (data) {
+                                  this.stat = null
+                                  this.expire = null
+                                } else {
+                                  this.stat = this.lddet[0].ld_status
+                                  this.expire = this.lddet[0].ld_expire
+                                }
+                                
+                                updateItem.qty_oh = this.lddet[0].ld_qty_oh
+                                updateItem.tr_status = this.stat
+                                updateItem.tr_expire = this.expire
+                                this.gridService.updateItem(updateItem);
+                                 });     
+                            });     
+           
+                               
+                      });
+
+
+
+
+                     }
+
+                  }
+              
+                
+                }else {
+                  alert("Emplacement n'existe pas ")
+                  controls.tr_loc.setValue("")
+                  //console.log(response.data.length)
+                  document.getElementById("tr_loc").focus();
+                }
+          })    
+        
+              
+      }
+    
+      onChangeCC() {
+        const controls = this.trForm.controls;
+        const rqm_nbr = controls.tr_so_job.value;
+       
+        this.dataset = [];
+            this.requisitionService.getBy({ rqm_nbr }).subscribe(
+              (res: any) => {
+                console.log(res)
+                const { requisition, details } = res.data;
+               if (requisition != null) {
+                const det1 = details;
+                this.rqm = true;
+                
+              
+                for (var object = 0; object < det1.length; object++) {
+                  const detail = details[object];
+                 console.log(detail)
+
+
+
+
+                      this.gridService.addItem(
+                        {
+                          id: detail.rqd_line, //this.dataset.length + 1,
+                          tr_line: detail.rqd_line,   //this.dataset.length + 1,
+                          tr_nbr: detail.rqd_nbr,
+                         
+                          tr_part: detail.rqd_part,
+                          desc: detail.item.pt_desc1,
+                          tr_qty_loc: detail.rqd_qty_ord ,
+                          tr_um: detail.rqd_um,
+                          tr_price: detail.rqd_price,
+
+
+
+          //                tr_site: detail.rqd_site,
+            //              tr_loc: detail.rqd_loc,
+              //            tr_serial: detail.rqd_serial,
+                //          tr_status: detail.rqd_status,
+                  //        tr_expire: detail.rqd_expire,
+                        },
+                        { position: "bottom" }
+                      );
+              
+            }
+    
+          }else {
+            alert("Demande n'existe pas ")
+            controls.tr_so_job.setValue("")
+            //console.log(response.data.length)
+            document.getElementById("tr_so_job").focus();
+          }
+          })    
+        
+              
+      }
+
+
+
+    initGrid() {
+        this.columnDefinitions = [
+          {
+            id: "id",
+            field: "id",
+            excludeFromHeaderMenu: true,
+            formatter: Formatters.deleteIcon,
+            minWidth: 30,
+            maxWidth: 30,
+            onCellClick: (e: Event, args: OnEventArgs) => {
+              if (confirm("Êtes-vous sûr de supprimer cette ligne?")) {
+                this.angularGrid.gridService.deleteItem(args.dataContext);
+              }
+            },
+          },
+    
+          {
+            id: "tr_line",
+            name: "Ligne",
+            field: "tr_line",
+            minWidth: 50,
+            maxWidth: 50,
+            selectable: true,
+          },
+          {
+            id: "tr_part",
+            name: "Article",
+            field: "tr_part",
+            sortable: true,
+            width: 50,
+            filterable: false,
+            editor: {
+              model: Editors.text,
+            },
+
+            onCellChange: (e: Event, args: OnEventArgs) => {
+              const controls = this.trForm.controls;
+              console.log(args.dataContext.tr_part)
+              this.itemsService.getByOne({pt_part: args.dataContext.tr_part }).subscribe((resp:any)=>{
+  
+                console.log(resp.data)
+                if (resp.data) {
+  
+               // this.locationService.getByOne({ loc_loc: controls.tr_ref_loc.value, loc_site: controls.tr_ref_site.value }).subscribe(
+                  //(response: any) => {
+                    //this.location = response.data
+                
+                    this.sctService.getByOne({ sct_site: resp.data.pt_site, sct_part: resp.data.pt_part, sct_sim: 'STDCG' }).subscribe(
+                      (response: any) => {
+                        this.sct = response.data
+               
+                        this.locationDetailService.getByOne({ ld_site: controls.tr_site.value, ld_loc: controls.tr_loc.value, ld_part: args.dataContext.tr_part, ld_lot: null }).subscribe(
+                          (response: any) => {
+                            this.lddet = response.data
+                            //console.log(this.lddet.ld_qty_oh)
+      if (this.lddet != null)
+{                            this.inventoryStatusService.getAllDetails({isd_status: this.lddet.ld_status, isd_tr_type: "RCT-TR" }).subscribe((resstat:any)=>{
+                              console.log(resstat)
+                              const { data } = resstat;
+      
+                              if (data) {
+                                this.stat = null
+                              } else {
+                                this.stat = this.lddet.ld_status
+                              }
+                        this.gridService.updateItemById(args.dataContext.id,{...args.dataContext , desc: resp.data.pt_desc1 , qty_oh: this.lddet.ld_qty_oh,
+                          tr_um:resp.data.pt_um, tr_um_conv: 1,  tr_status: this.stat, tr_price: this.sct.sct_cst_tot, tr_expire: this.lddet.ld_expire})
+                            });     
+                          }
+                          else {
+                            this.gridService.updateItemById(args.dataContext.id,{...args.dataContext , desc: resp.data.pt_desc1 , qty_oh: 0,
+                              tr_um:resp.data.pt_um, tr_um_conv: 1,  tr_status: null, tr_price: this.sct.sct_cst_tot, tr_expire: null})
+
+
+                          }
+                          });     
+         
+                             
+                    });  
+               // });
+              }
+  
+  
+  
+        
+  
+  
+              else {
+                alert("Article Nexiste pas")
+                this.gridService.updateItemById(args.dataContext.id,{...args.dataContext , tr_part: null })
+              }
+              
+              });
+  
+               
+             
+             
+            }
+
+
+
+
+          },
+
+          {
+            id: "mvid",
+            field: "cmvid",
+            excludeFromHeaderMenu: true,
+            formatter: Formatters.infoIcon,
+            minWidth: 30,
+            maxWidth: 30,
+            onCellClick: (e: Event, args: OnEventArgs) => {
+                this.row_number = args.row;
+                let element: HTMLElement = document.getElementById(
+                "openItemsGrid"
+                ) as HTMLElement;
+                element.click();
+          },
+        },
+          {
+            id: "desc",
+            name: "Description",
+            field: "desc",
+            sortable: true,
+            width: 180,
+            filterable: false,
+          },
+          
+          
+          {
+            id: "tr_serial",
+            name: "Lot/Serie",
+            field: "tr_serial",
+            sortable: true,
+            width: 80,
+            filterable: false,
+            editor: {
+              model: Editors.text,
+            },
+            onCellChange: (e: Event, args: OnEventArgs) => {
+              const controls = this.trForm.controls;
+              this.locationDetailService.getBy({ ld_site: controls.tr_site.value, ld_loc: controls.tr_loc.value, ld_part: args.dataContext.tr_part, ld_lot: args.dataContext.tr_serial }).subscribe(
+                (response: any) => {
+                  this.lddet = response.data
+                  
+                  console.log(response.data.length)
+                    if (response.data.length != 0) {
+                     
+                      this.inventoryStatusService.getAllDetails({isd_status: this.lddet[0].ld_status, isd_tr_type: "ISS-TR" }).subscribe((resstat:any)=>{
+                        console.log(resstat)
+                        const { data } = resstat;
+          
+                        if (data) {
+                          alert("Status Interdit pour ce lot")
+                          this.gridService.updateItemById(args.dataContext.id,{...args.dataContext  , tr_serial: null, qty_0h: 0, tr_expire: null});
+                        } 
+                          else {
+                            this.gridService.updateItemById(args.dataContext.id,{...args.dataContext ,   qty_oh: this.lddet[0].ld_qty_oh, tr_expire: this.lddet[0].ld_expire})
+                   
+                      
+                          }
+                      
+                      })
+
+                     
+                    }
+                    else {
+                          this.gridService.updateItemById(args.dataContext.id,{...args.dataContext  , tr_serial: null, qty_0h: 0});
+        
+                          alert("Lot N' existe pas")
+                    }
+              });     
+          }
+
+          },
+          
+          {
+              id: "mvidlot",
+              field: "cmvidlot",
+              excludeFromHeaderMenu: true,
+              formatter: Formatters.infoIcon,
+              minWidth: 30,
+              maxWidth: 30,
+              onCellClick: (e: Event, args: OnEventArgs) => {
+                  this.row_number = args.row;
+                  let element: HTMLElement = document.getElementById(
+                  "openLocdetsGrid"
+                  ) as HTMLElement;
+                  element.click();
+              },
+          },
+          {
+              id: "qty_oh",
+              name: "QTE Stock",
+              field: "qty_oh",
+              sortable: true,
+              width: 80,
+              filterable: false,
+              type: FieldType.float,
+              
+          },
+          {
+              id: "tr_qty_loc",
+              name: "QTE",
+              field: "tr_qty_loc",
+              sortable: true,
+              width: 80,
+              filterable: false,
+              type: FieldType.float,
+              editor: {
+                  model: Editors.float,
+                  params: { decimalPlaces: 2 },
+                  required: true,
+                  
+                  
+              },
+          
+              onCellChange: (e: Event, args: OnEventArgs) => {
+                console.log(args.dataContext.tr_qty_loc)
+                console.log(args.dataContext.tr_um_conv)
+                const controls = this.trForm.controls
+                if (args.dataContext.tr_qty_loc * args.dataContext.tr_um_conv   > args.dataContext.qty_oh) {
+                    console.log('here')
+                 alert ("Qte monquante")
+                 this.gridService.updateItemById(args.dataContext.id,{...args.dataContext , tr_qty_loc: null })
+              //  this.alertWarning = `Updated Title: ${args.dataView.tr_qty_loc}`;
+             
+               
+            
+               // meta.cssClasses = (meta.cssClasses || '') + ' ' + newCssClass;
+              } else {
+                if (this.rqm) {
+                this.sctService.getByOne({ sct_site: controls.tr_site.value, sct_part: args.dataContext.tr_part, sct_sim: 'STDCG' }).subscribe(
+                  (response: any) => {
+                    this.sct = response.data
+                    this.gridService.updateItemById(args.dataContext.id,{...args.dataContext , tr_price: this.sct.sct_cst_tot  })
+              
+                  })
+                }
+              }
+
+            }
+
+              
+          },
+          {
+            id: "tr_um",
+            name: "UM",
+            field: "tr_um",
+            sortable: true,
+            width: 80,
+            filterable: false,
+            editor: {
+                model: Editors.text,
+                required: true,
+                validator: statusValidator,
+
+            },
+            onCellChange: (e: Event, args: OnEventArgs) => {
+              console.log(args.dataContext.tr_um)
+              this.itemsService.getBy({pt_part: args.dataContext.tr_part }).subscribe((resp:any)=>{
+                
+              if   (args.dataContext.tr_um == resp.data.pt_um )  {
+                
+                this.gridService.updateItemById(args.dataContext.id,{...args.dataContext , tr_um_conv: 1 })
+              } else { 
+                //console.log(resp.data.pt_um)
+
+
+
+                  this.mesureService.getBy({um_um: args.dataContext.tr_um, um_alt_um: resp.data.pt_um, um_part: args.dataContext.tr_part  }).subscribe((res:any)=>{
+                  console.log(res)
+                  const { data } = res;
+        
+                if (data) {
+                  //alert ("Mouvement Interdit Pour ce Status")
+                  this.gridService.updateItemById(args.dataContext.id,{...args.dataContext , tr_um_conv: res.data.um_conv })
+                  this.angularGrid.gridService.highlightRow(1, 1500);
+
+                  if (args.dataContext.tr_qty_loc * Number(res.data.um_conv) >  args.dataContext.qty_oh) {
+                    console.log('here')
+                    alert ("Qte monquante")
+                    this.gridService.updateItemById(args.dataContext.id,{...args.dataContext , tr_um_conv: "1" , tr_um: null});
+                   
+               
+                  } else {
+                
+                    this.gridService.updateItemById(args.dataContext.id,{...args.dataContext , tr_um: null })
+  
+                  }
+  
+
+
+
+                } else {
+                  this.mesureService.getBy({um_um: resp.data.pt_um, um_alt_um: args.dataContext.tr_um, um_part: args.dataContext.tr_part  }).subscribe((res:any)=>{
+                    console.log(res)
+                    const { data } = res;
+                    if (data) {
+                      if (args.dataContext.tr_qty_loc * Number(res.data.um_conv) >  args.dataContext.qty_oh) {
+                        console.log('here')
+                        alert ("Qte monquante")
+                        this.gridService.updateItemById(args.dataContext.id,{...args.dataContext , tr_um_conv: "1" , tr_um: null});
+                       
+                   
+                      } else {
+                    
+                        this.gridService.updateItemById(args.dataContext.id,{...args.dataContext , tr_um: null })
+      
+                      }
+           
+                    } else {
+                      this.gridService.updateItemById(args.dataContext.id,{...args.dataContext , tr_um_conv: "1" , tr_um: null});
+               
+                      alert("UM conversion manquante")
+                      
+                    }  
+                  })
+
+                }
+                  })
+  
+                }
+                })
+      
+              }
+             
+          },
+        
+       
+        {
+          id: "mvidlot",
+          field: "cmvidlot",
+          excludeFromHeaderMenu: true,
+          formatter: Formatters.infoIcon,
+          minWidth: 30,
+          maxWidth: 30,
+          onCellClick: (e: Event, args: OnEventArgs) => {
+              this.row_number = args.row;
+              let element: HTMLElement = document.getElementById(
+              "openUmsGrid"
+              ) as HTMLElement;
+              element.click();
+          },
+        },
+        {
+          id: "tr_um_conv",
+          name: "Conv UM",
+          field: "tr_um_conv",
+          sortable: true,
+          width: 80,
+          filterable: false,
+         // editor: {
+         //     model: Editors.float,
+          //},
+          
+        },
+        
+          {
+              id: "tr_price",
+              name: "Prix unitaire",
+              field: "tr_price",
+              sortable: true,
+              width: 80,
+              filterable: false,
+              //type: FieldType.float,
+              formatter: Formatters.decimal,
+              
+          },
+                  
+          {
+            id: "tr_status",
+            name: "Status",
+            field: "tr_status",
+            sortable: true,
+            width: 80,
+            filterable: false,
+            editor: {
+              model: Editors.text,
+            },
+            onCellChange: (e: Event, args: OnEventArgs) => {
+              const controls = this.trForm.controls;
+              console.log(args.dataContext.tr_status)
+             
+              this.inventoryStatusService.getBy({is_status: args.dataContext.tr_status }).subscribe((ress:any)=>{
+                console.log(ress.data.inventoryStatus) 
+        if (ress.data.inventoryStatus) {
+  
+  
+              this.inventoryStatusService.getAllDetails({isd_status: args.dataContext.tr_status, isd_tr_type: "RCT-TR" }).subscribe((res:any)=>{
+              console.log(res)
+              const { data } = res;
+    
+            if (data) {
+              alert ("Mouvement Interdit Pour ce Status")
+              this.gridService.updateItemById(args.dataContext.id,{...args.dataContext , tr_status: null })
+              
+             } else {
+  
+         console.log(args.dataContext.tr_part)
+              let obj = {}
+              obj = {
+                 ld_site: controls.tr_ref_site.value, 
+                 ld_loc: controls.tr_ref_loc.value, 
+                 ld_part: args.dataContext.tr_part, 
+                 ld_lot: args.dataContext.tr_serial
+                }
+                console.log(obj)
+                status = args.dataContext.tr_status
+              console.log(args.dataContext.tr_part) 
+              console.log(status)
+              this.locationDetailService.getByStatus({obj, status} ).subscribe(
+                (response: any) => {
+                 console.log(response.data.length != 0   )
+                  if (response.data.length != 0) {
+                    this.gridService.updateItemById(args.dataContext.id,{...args.dataContext , tr_status: null })
+                      alert("lot existe avec un autre status")
+   
+                  }  
+  
+  
+  
+            
+          })
+            }
+          
+              })
+            } else {
+      
+              this.gridService.updateItemById(args.dataContext.id,{...args.dataContext , tr_status: null })
+              alert("Status N' existe pas")
+      
+      
+            }
+          })
+          }
+  
+
+
+
+
+
+          },
+          {
+            id: "mvidlot",
+            field: "cmvidlot",
+            excludeFromHeaderMenu: true,
+            formatter: Formatters.infoIcon,
+            minWidth: 30,
+            maxWidth: 30,
+            onCellClick: (e: Event, args: OnEventArgs) => {
+                this.row_number = args.row;
+                let element: HTMLElement = document.getElementById(
+                "openStatussGrid"
+                ) as HTMLElement;
+                element.click();
+            },
+          },
+          {
+            id: "tr_expire",
+            name: "Expire",
+            field: "tr_expire",
+            sortable: true,
+            width: 80,
+            filterable: false,
+            type: FieldType.dateIso,
+           
+            
+          },
+        ];
+    
+        this.gridOptions = {
+          asyncEditorLoading: false,
+          editable: true,
+          enableColumnPicker: true,
+          enableCellNavigation: true,
+          enableRowSelection: true,
+          formatterOptions: {
+            
+            
+            // Defaults to false, option to display negative numbers wrapped in parentheses, example: -$12.50 becomes ($12.50)
+            displayNegativeNumberWithParentheses: true,
+      
+            // Defaults to undefined, minimum number of decimals
+            minDecimal: 2,
+      
+            // Defaults to empty string, thousand separator on a number. Example: 12345678 becomes 12,345,678
+            thousandSeparator: ' ', // can be any of ',' | '_' | ' ' | ''
+          },
+        };
+    
+        this.dataset = [];
+     
+    }
+
+
+    handleSelectedRowsChangedsite(e, args) {
+        const controls = this.trForm.controls;
+       
+        if (Array.isArray(args.rows) && this.gridObjsite) {
+          args.rows.map((idx) => {
+            const item = this.gridObjsite.getDataItem(idx);
+            // TODO : HERE itterate on selected field and change the value of the selected field
+            switch (this.selectedField) {
+              case "tr_site": {
+                controls.tr_site.setValue(item.si_site || "");
+                break;
+              }
+              case "tr_ref_site": {
+                controls.tr_ref_site.setValue(item.si_site || "");
+                break;
+              }
+              default:
+                break;
+            }
+          });
+        }
+    }
+
+
+    angularGridReadysite(angularGrid: AngularGridInstance) {
+        this.angularGridsite = angularGrid;
+        this.gridObjsite = (angularGrid && angularGrid.slickGrid) || {};
+      }
+    
+      prepareGridsite() {
+        this.columnDefinitionssite = [
+          {
+            id: "id",
+            field: "id",
+            excludeFromColumnPicker: true,
+            excludeFromGridMenu: true,
+            excludeFromHeaderMenu: true,
+    
+            minWidth: 50,
+            maxWidth: 50,
+          },
+          {
+            id: "id",
+            name: "id",
+            field: "id",
+            sortable: true,
+            minWidth: 80,
+            maxWidth: 80,
+          },
+          {
+            id: "si_site",
+            name: "Site",
+            field: "si_site",
+            sortable: true,
+            filterable: true,
+            type: FieldType.string,
+          },
+          {
+            id: "si_desc",
+            name: "Designation",
+            field: "si_desc",
+            sortable: true,
+            filterable: true,
+            type: FieldType.string,
+          },
+        ];
+    
+        this.gridOptionssite = {
+          enableSorting: true,
+          enableCellNavigation: true,
+          enableExcelCopyBuffer: true,
+          enableFiltering: true,
+          autoEdit: false,
+          autoHeight: false,
+          frozenColumn: 0,
+          frozenBottom: true,
+          enableRowSelection: true,
+          enableCheckboxSelector: true,
+          checkboxSelector: {},
+          multiSelect: false,
+          rowSelectionOptions: {
+            selectActiveRow: true,
+          },
+        };
+    
+        // fill the dataset with your data
+        this.siteService
+          .getAll()
+          .subscribe((response: any) => (this.datasite = response.data));
+      }
+      opensite(contentsite, field) {
+        this.selectedField = field;
+        this.prepareGridsite();
+        this.modalService.open(contentsite, { size: "lg" });
+      }
+      
+
+    handleSelectedRowsChangedloc(e, args) {
+        const controls = this.trForm.controls;
+    
+        if (Array.isArray(args.rows) && this.gridObjloc) {
+          args.rows.map((idx) => {
+            const item = this.gridObjloc.getDataItem(idx);
+            // TODO : HERE itterate on selected field and change the value of the selected field
+            switch (this.selectedField) {
+              case "tr_loc": {
+                controls.tr_loc.setValue(item.loc_loc || "");
+                break;
+              }
+              case "tr_ref_loc": {
+                controls.tr_ref_loc.setValue(item.loc_loc || "");
+                break;
+              }
+              default:
+                break;
+            }
+          });
+        }
+    }
+    angularGridReadyloc(angularGrid: AngularGridInstance) {
+        this.angularGridloc = angularGrid;
+        this.gridObjloc = (angularGrid && angularGrid.slickGrid) || {};
+      }
+    
+      prepareGridloc() {
+        const controls = this.trForm.controls;
+         
+        switch (this.selectedField) {
+            case "tr_loc": {
+            this.sit =  controls.tr_site.value;
+              break;
+            }
+            case "tr_ref_loc": {
+             this.sit = controls.tr_ref_site.value;
+              break;
+            }
+            default:
+              break;
+          }
+        this.columnDefinitionsloc = [
+          {
+            id: "id",
+            field: "id",
+            excludeFromColumnPicker: true,
+            excludeFromGridMenu: true,
+            excludeFromHeaderMenu: true,
+    
+            minWidth: 50,
+            maxWidth: 50,
+          },
+          {
+            id: "id",
+            name: "id",
+            field: "id",
+            sortable: true,
+            minWidth: 80,
+            maxWidth: 80,
+          },
+    
+          {
+            id: "loc_loc",
+            name: "loc",
+            field: "loc_loc",
+            sortable: true,
+            filterable: true,
+            type: FieldType.string,
+          },
+          {
+            id: "loc_desc",
+            name: "Designation",
+            field: "loc_desc",
+            sortable: true,
+            filterable: true,
+            type: FieldType.string,
+          },
+        ];
+    
+        this.gridOptionsloc = {
+          enableSorting: true,
+          enableCellNavigation: true,
+          enableExcelCopyBuffer: true,
+          enableFiltering: true,
+          autoEdit: false,
+          autoHeight: false,
+          frozenColumn: 0,
+          frozenBottom: true,
+          enableRowSelection: true,
+          enableCheckboxSelector: true,
+          checkboxSelector: {},
+          multiSelect: false,
+          rowSelectionOptions: {
+            selectActiveRow: true,
+          },
+        };
+    
+        // fill the dataset with your data
+        this.locationService
+          .getBy({ loc_site: this.sit })
+          .subscribe((response: any) => (this.dataloc = response.data));
+      }
+      openloc(contentloc, field) {
+        this.selectedField = field;
+        this.prepareGridloc();
+        this.modalService.open(contentloc, { size: "lg" });
+      }
+      changeSite() {
+        const controls = this.trForm.controls; // chof le champs hada wesh men form rah
+        const si_site = controls.tr_site.value;
+        this.siteService.getByOne({ si_site }).subscribe(
+          (res: any) => {
+              console.log(res)
+            const { data } = res;
+    
+            if (!data) {
+              this.layoutUtilsService.showActionNotification(
+                "ce Site n'existe pas!",
+                MessageType.Create,
+                10000,
+                true,
+                true
+              );
+              this.error = true;
+            } else {
+              this.error = false;
+            }
+          },
+          (error) => console.log(error)
+        );
+      }
+      changeSiteRef() {
+        const controls = this.trForm.controls; // chof le champs hada wesh men form rah
+        const si_site = controls.tr_ref_site.value;
+        this.siteService.getByOne({ si_site }).subscribe(
+          (res: any) => {
+            const { data } = res;
+    
+            if (!data) {
+              this.layoutUtilsService.showActionNotification(
+                "ce Site n'existe pas!",
+                MessageType.Create,
+                10000,
+                true,
+                true
+              );
+              this.error = true;
+            } else {
+              this.error = false;
+            }
+          },
+          (error) => console.log(error)
+        );
+      }
+    
+      changeLoc() {
+        const controls = this.trForm.controls; // chof le champs hada wesh men form rah
+        const loc_loc = controls.tr_loc.value;
+        const loc_site = controls.tr_site.value;
+    
+        this.locationService.getByOne({ loc_loc, loc_site }).subscribe(
+          (res: any) => {
+            const { data } = res;
+    
+            if (!data) {
+              this.layoutUtilsService.showActionNotification(
+                "cet Emplacement n'existe pas!",
+                MessageType.Create,
+                10000,
+                true,
+                true
+              );
+              this.error = true;
+            } else {
+              this.error = false;
+            }
+          },
+          (error) => console.log(error)
+        );
+      }
+      changeLocRef() {
+        const controls = this.trForm.controls; // chof le champs hada wesh men form rah
+        const loc_loc = controls.tr_ref_loc.value;
+        const loc_site = controls.tr_ref_site.value;
+    
+        this.locationService.getByOne({ loc_loc, loc_site }).subscribe(
+          (res: any) => {
+            const { data } = res;
+    
+            if (!data) {
+              this.layoutUtilsService.showActionNotification(
+                "cet Emplacement n'existe pas!",
+                MessageType.Create,
+                10000,
+                true,
+                true
+              );
+              this.error = true;
+            } else {
+              this.error = false;
+            }
+          },
+          (error) => console.log(error)
+        );
+      }
+   
+      
+      handleSelectedRowsChanged4(e, args) {
+       const controls = this.trForm.controls;
+        let updateItem = this.gridService.getDataItemByRowIndex(this.row_number);
+        if (Array.isArray(args.rows) && this.gridObj4) {
+          args.rows.map((idx) => {
+            const item = this.gridObj4.getDataItem(idx);
+            console.log(item);
+    
+            //this.locationService.getByOne({ loc_loc: controls.tr_ref_loc.value, loc_site: controls.tr_ref_site.value }).subscribe(
+             // (response: any) => {
+              //  this.location = response.data
+            
+              this.sctService.getByOne({ sct_site: controls.tr_site.value, sct_part: item.pt_part, sct_sim: 'STDCG' }).subscribe(
+                (response: any) => {
+                  this.sct = response.data
+              
+
+                  this.locationDetailService.getByOne({ ld_site: controls.tr_site.value, ld_loc: controls.tr_loc.value, ld_part: item.pt_part, ld_lot: null }).subscribe(
+                    (response: any) => {
+                      this.lddet = response.data
+                      //console.log(this.lddet.ld_qty_oh)
+
+if (this.lddet != null)
+{                  this.inventoryStatusService.getAllDetails({isd_status: this.lddet.ld_status, isd_tr_type: "RCT-TR" }).subscribe((resstat:any)=>{
+                    console.log(resstat)
+                    const { data } = resstat;
+  
+                    if (data) {
+                      this.stat = null
+                    } else {
+                      this.stat = this.lddet.ld_status
+                    }
+  
+                    updateItem.tr_part = item.pt_part;
+                    updateItem.desc = item.pt_desc1;
+                    updateItem.tr_um = item.pt_um;
+                    updateItem.tr_um_conv = 1;
+                    updateItem.qty_oh =  this.lddet.ld_qty_oh;
+                    updateItem.tr_price = this.sct.sct_mtl_tl;
+                    
+                    updateItem.tr_status =  this.stat;
+                    updateItem.tr_expire =  this.lddet.ld_expire;
+                          
+                    
+                    this.gridService.updateItem(updateItem);
+                  });
+                  } 
+                  else {
+                    updateItem.tr_part = item.pt_part;
+                    updateItem.desc = item.pt_desc1;
+                    updateItem.tr_um = item.pt_um;
+                    updateItem.tr_um_conv = 1;
+                    updateItem.qty_oh =  0;
+                    updateItem.tr_price = this.sct.sct_mtl_tl;
+                    
+                    updateItem.tr_status =  null;
+                    updateItem.tr_expire =  null;
+                          
+                    
+                    this.gridService.updateItem(updateItem);
+                 
+
+                  }
+                  
+                });       
+              });   
+           // });
+          });
+   
+        }
+      }
+      angularGridReady4(angularGrid: AngularGridInstance) {
+        this.angularGrid4 = angularGrid;
+        this.gridObj4 = (angularGrid && angularGrid.slickGrid) || {};
+      }
+    
+      prepareGrid4() {
+        this.columnDefinitions4 = [
+          {
+            id: "id",
+            name: "id",
+            field: "id",
+            sortable: true,
+            minWidth: 80,
+            maxWidth: 80,
+          },
+          {
+            id: "pt_part",
+            name: "code ",
+            field: "pt_part",
+            sortable: true,
+            filterable: true,
+            type: FieldType.string,
+          },
+          {
+            id: "pt_desc1",
+            name: "desc",
+            field: "pt_desc1",
+            sortable: true,
+            filterable: true,
+            type: FieldType.string,
+          },
+          {
+            id: "pt_um",
+            name: "desc",
+            field: "pt_um",
+            sortable: true,
+            filterable: true,
+            type: FieldType.string,
+          },
+        ];
+    
+        this.gridOptions4 = {
+          enableSorting: true,
+          enableCellNavigation: true,
+          enableExcelCopyBuffer: true,
+          enableFiltering: true,
+          autoEdit: false,
+          autoHeight: false,
+          frozenColumn: 0,
+          frozenBottom: true,
+          enableRowSelection: true,
+          enableCheckboxSelector: true,
+          checkboxSelector: {
+            // optionally change the column index position of the icon (defaults to 0)
+            // columnIndexPosition: 1,
+    
+            // remove the unnecessary "Select All" checkbox in header when in single selection mode
+            hideSelectAllCheckbox: true,
+    
+            // you can override the logic for showing (or not) the expand icon
+            // for example, display the expand icon only on every 2nd row
+            // selectableOverride: (row: number, dataContext: any, grid: any) => (dataContext.id % 2 === 1)
+          },
+          multiSelect: false,
+          rowSelectionOptions: {
+            // True (Single Selection), False (Multiple Selections)
+            selectActiveRow: true,
+          },
+        };
+    
+        // fill the dataset with your data
+        this.itemsService
+          .getAll()
+          .subscribe((response: any) => (this.items = response.data));
+      }
+      open4(content) {
+        this.prepareGrid4();
+        this.modalService.open(content, { size: "lg" });
+      }
+      
+
+      handleSelectedRowsChangedlocdet(e, args) {
+        const controls = this.trForm.controls;
+        let updateItem = this.gridService.getDataItemByRowIndex(this.row_number);
+        if (Array.isArray(args.rows) && this.gridObjlocdet) {
+          args.rows.map((idx) => {
+            const item = this.gridObjlocdet.getDataItem(idx);
+            console.log(item);
+    
+            this.inventoryStatusService.getAllDetails({isd_status: item.ld_status, isd_tr_type: "ISS-TR" }).subscribe((resstat:any)=>{
+              console.log(resstat)
+              const { data } = resstat;
+
+              if (data) {
+                alert("Status Interdit pour ce lot")
+                updateItem.tr_serial = null;
+               
+              } 
+                else { 
+            updateItem.tr_serial = item.ld_lot;
+            updateItem.tr_expire = item.ld_expire;
+            updateItem.qty_oh = item.ld_qty_oh;
+            
+                }
+            this.gridService.updateItem(updateItem);
+            
+            })
+          
+          });
+        }
+      }
+      angularGridReadylocdet(angularGrid: AngularGridInstance) {
+        this.angularGridlocdet = angularGrid;
+        this.gridObjlocdet = (angularGrid && angularGrid.slickGrid) || {};
+      }
+    
+      prepareGridlocdet() {
+        const controls = this.trForm.controls; 
+
+        this.columnDefinitionslocdet = [
+          {
+            id: "id",
+            field: "id",
+            excludeFromColumnPicker: true,
+            excludeFromGridMenu: true,
+            excludeFromHeaderMenu: true,
+    
+            minWidth: 50,
+            maxWidth: 50,
+          },
+          {
+            id: "id",
+            name: "id",
+            field: "id",
+            sortable: true,
+            minWidth: 80,
+            maxWidth: 80,
+          },
+          {
+            id: "ld_site",
+            name: "Site",
+            field: "ld_site",
+            sortable: true,
+            filterable: true,
+            type: FieldType.string,
+          },
+          {
+            id: "ld_loc",
+            name: "Emplacement",
+            field: "ld_loc",
+            sortable: true,
+            filterable: true,
+            type: FieldType.string,
+          },
+          {
+            id: "ld_part",
+            name: "Article",
+            field: "ld_part",
+            sortable: true,
+            filterable: true,
+            type: FieldType.string,
+          },
+          {
+            id: "ld_lot",
+            name: "Lot",
+            field: "ld_lot",
+            sortable: true,
+            filterable: true,
+            type: FieldType.string,
+          },
+          {
+            id: "ld_status",
+            name: "Status",
+            field: "ld_status",
+            sortable: true,
+            filterable: true,
+            type: FieldType.string,
+          },
+          {
+            id: "ld_qty_oh",
+            name: "Qte",
+            field: "ld_qty_oh",
+            sortable: true,
+            filterable: true,
+            type: FieldType.float,
+          },
+          {
+            id: "ld_expire",
+            name: "Expire",
+            field: "ld_expire",
+            sortable: true,
+            filterable: true,
+            type: FieldType.dateIso,
+          },
+        ];
+    
+        this.gridOptionslocdet = {
+            enableSorting: true,
+            enableCellNavigation: true,
+            enableExcelCopyBuffer: true,
+            enableFiltering: true,
+            autoEdit: false,
+            autoHeight: false,
+            frozenColumn: 0,
+            frozenBottom: true,
+            enableRowSelection: true,
+            enableCheckboxSelector: true,
+            checkboxSelector: {
+              // optionally change the column index position of the icon (defaults to 0)
+              // columnIndexPosition: 1,
+      
+              // remove the unnecessary "Select All" checkbox in header when in single selection mode
+              hideSelectAllCheckbox: true,
+      
+              // you can override the logic for showing (or not) the expand icon
+              // for example, display the expand icon only on every 2nd row
+              // selectableOverride: (row: number, dataContext: any, grid: any) => (dataContext.id % 2 === 1)
+            },
+            multiSelect: false,
+            rowSelectionOptions: {
+              // True (Single Selection), False (Multiple Selections)
+              selectActiveRow: true,
+            },
+          };
+          let updateItem = this.gridService.getDataItemByRowIndex(this.row_number);
+        
+        // fill the dataset with your data
+        this.locationDetailService
+          .getBy({ ld_site:  controls.tr_site.value , ld_loc: controls.tr_loc.value  , ld_part:  updateItem.tr_part })
+          .subscribe((response: any) => (this.datalocdet = response.data));
+      }
+      openlocdet(contentlocdet) {
+        this.prepareGridlocdet();
+        this.modalService.open(contentlocdet, { size: "lg" });
+      }
+      handleSelectedRowsChangedum(e, args) {
+        let updateItem = this.gridService.getDataItemByRowIndex(this.row_number);
+        if (Array.isArray(args.rows) && this.gridObjum) {
+          args.rows.map((idx) => {
+            const item = this.gridObjum.getDataItem(idx);
+            updateItem.tr_um = item.code_value;
+         
+            this.gridService.updateItem(updateItem);
+
+
+          this.itemsService.getBy({pt_part: updateItem.tr_part }).subscribe((resp:any)=>{
+                          
+            if   (updateItem.tr_um == resp.data.pt_um )  {
+              
+              updateItem.tr_um_conv = 1
+            } else { 
+              //console.log(resp.data.pt_um)
+
+
+
+                this.mesureService.getBy({um_um: updateItem.tr_um, um_alt_um: resp.data.pt_um, um_part: updateItem.tr_part  }).subscribe((res:any)=>{
+                console.log(res)
+                const { data } = res;
+
+              if (data) {
+               // alert ("Mouvement Interdit Pour ce Status")
+                updateItem.tr_um_conv = res.data.um_conv 
+         
+         
+                if (updateItem.tr_qty_loc * Number(res.data.um_conv) >  updateItem.qty_oh) {
+                  console.log('here')
+                  alert ("Qte monquante")
+                   updateItem.tr_qty_loc = null 
+           
+             
+                } else {
+              
+                  updateItem.tr_um_conv = res.data.um_conv
+
+
+                }
+
+
+              } else {
+                this.mesureService.getBy({um_um: resp.data.pt_um, um_alt_um: updateItem.tr_um, um_part: updateItem.tr_part  }).subscribe((res:any)=>{
+                  console.log(res)
+                  const { data } = res;
+                  if (data) {
+                    //alert ("Mouvement Interdit Pour ce Status")
+                     
+
+                    if (updateItem.tr_qty_loc * Number(res.data.um_conv) >  updateItem.qty_oh) {
+                      console.log('here')
+                      alert ("Qte monquante")
+                      updateItem.tr_qty_loc = null 
+                 
+                    } else {
+                  
+    
+                      updateItem.tr_um_conv = res.data.um_conv
+
+                    }
+    
+    
+
+
+                    
+                    
+                  } else {
+                    updateItem.tr_um_conv = 1
+                    updateItem.tr_um = null
+            
+                    alert("UM conversion manquante")
+                    
+                  }  
+                })
+
+              }
+                })
+
+              }
+              })
+
+
+/***********/
+
+
+
+
+
+
+
+
+          });
+        }
+      }
+    angularGridReadyum(angularGrid: AngularGridInstance) {
+        this.angularGridum = angularGrid
+        this.gridObjum = (angularGrid && angularGrid.slickGrid) || {}
+    }
+    
+    prepareGridum() {
+        this.columnDefinitionsum = [
+            {
+                id: "id",
+                field: "id",
+                excludeFromColumnPicker: true,
+                excludeFromGridMenu: true,
+                excludeFromHeaderMenu: true,
+    
+                minWidth: 50,
+                maxWidth: 50,
+            },
+            {
+                id: "id",
+                name: "id",
+                field: "id",
+                sortable: true,
+                minWidth: 80,
+                maxWidth: 80,
+            },
+            {
+                id: "code_fldname",
+                name: "Champs",
+                field: "code_fldname",
+                sortable: true,
+                filterable: true,
+                type: FieldType.string,
+            },
+            {
+                id: "code_value",
+                name: "Code",
+                field: "code_value",
+                sortable: true,
+                filterable: true,
+                type: FieldType.string,
+            },
+            {
+                id: "code_cmmt",
+                name: "Description",
+                field: "code_cmmt",
+                sortable: true,
+                width: 200,
+                filterable: true,
+                type: FieldType.string,
+            },
+        ]
+    
+        this.gridOptionsum = {
+            enableSorting: true,
+            enableCellNavigation: true,
+            enableExcelCopyBuffer: true,
+            enableFiltering: true,
+            autoEdit: false,
+            autoHeight: false,
+            frozenColumn: 0,
+            frozenBottom: true,
+            enableRowSelection: true,
+            enableCheckboxSelector: true,
+            checkboxSelector: {
+            },
+            multiSelect: false,
+            rowSelectionOptions: {
+                selectActiveRow: true,
+            },
+        }
+    
+        // fill the dataset with your data
+        this.codeService
+            .getBy({ code_fldname: "pt_um" })
+            .subscribe((response: any) => (this.ums = response.data))
+    }
+    openum(content) {
+        this.prepareGridum()
+        this.modalService.open(content, { size: "lg" })
+    }
+    handleSelectedRowsChangedstatus(e, args) {
+      const controls = this.trForm.controls;
+      let updateItem = this.gridService.getDataItemByRowIndex(this.row_number);
+      if (Array.isArray(args.rows) && this.gridObjstatus) {
+        args.rows.map((idx) => {
+          const item = this.gridObjstatus.getDataItem(idx);
+
+          this.inventoryStatusService.getAllDetails({isd_status: item.is_status, isd_tr_type: "RCT-TR" }).subscribe((res:any)=>{
+            console.log(res)
+            const { data } = res;
+  
+          if (data) {
+            alert ("Mouvement Interdit Pour ce Status")
+            updateItem.tr_status = null;
+       
+            this.gridService.updateItem(updateItem);
+          }else {
+            console.log("hhhhhhhhhhhhhhhhhhhhhhhhh")
+            let obj = {}
+            obj = {
+               ld_site: controls.tr_ref_site.value, 
+               ld_loc: controls.tr_ref_loc.value, 
+               ld_part: updateItem.tr_part,
+               ld_lot: updateItem.tr_lot,
+              }
+              console.log(obj)
+              status = item.is_status
+            console.log(status)
+            this.locationDetailService.getByStatus({obj, status} ).subscribe(
+              (response: any) => {
+               console.log(response.data.length != 0   )
+                if (response.data.length != 0) {
+                  
+                    alert("lot existe avec un autre status")
+ 
+                    updateItem.tr_status = null;
+       
+                }  else { 
+
+
+                  updateItem.tr_status = item.is_status;
+       
+                } 
+
+                this.gridService.updateItem(updateItem);
+
+          
+            })
+          }
+
+  
+          })
+
+                  });
+      }
+    }
+  
+
+  angularGridReadystatus(angularGrid: AngularGridInstance) {
+      this.angularGridstatus = angularGrid
+      this.gridObjstatus = (angularGrid && angularGrid.slickGrid) || {}
+  }
+
+  prepareGridstatus() {
+      this.columnDefinitionsstatus = [
+      {
+          id: "id",
+          field: "id",
+          excludeFromColumnPicker: true,
+          excludeFromGridMenu: true,
+          excludeFromHeaderMenu: true,
+    
+          minWidth: 50,
+          maxWidth: 50,
+        },
+        {
+          id: "id",
+          name: "id",
+          field: "id",
+          sortable: true,
+          minWidth: 80,
+          maxWidth: 80,
+        },
+        {
+          id: "is_status",
+          name: "Status",
+          field: "is_status",
+          sortable: true,
+          filterable: true,
+          type: FieldType.string,
+        },
+        {
+          id: "is_desc",
+          name: "Designation",
+          field: "is_desc",
+          sortable: true,
+          filterable: true,
+          type: FieldType.string,
+        },
+        {
+          id: "is_avail",
+          name: "Disponible",
+          field: "is_avail",
+          sortable: true,
+          filterable: true,
+          type: FieldType.string,
+        },
+        {
+          id: "is_nettable",
+          name: "Gerer MRP",
+          field: "is_nettable",
+          sortable: true,
+          filterable: true,
+          type: FieldType.string,
+        },
+        {
+          id: "is_overissue",
+          name: "Sortie Excedent",
+          field: "is_overissue",
+          sortable: true,
+          filterable: true,
+          type: FieldType.string,
+        },
+    
+    
+      ];
+    
+      this.gridOptionsstatus = {
+        enableSorting: true,
+        enableCellNavigation: true,
+        enableExcelCopyBuffer: true,
+        enableFiltering: true,
+        autoEdit: false,
+        autoHeight: false,
+        frozenColumn: 0,
+        frozenBottom: true,
+        enableRowSelection: true,
+        enableCheckboxSelector: true,
+        checkboxSelector: {},
+        multiSelect: false,
+        rowSelectionOptions: {
+          selectActiveRow: true,
+        },
+      };
+    
+      // fill the dataset with your data
+      this.inventoryStatusService
+        .getAll()
+        .subscribe((response: any) => (this.statuss = response.data));
+       
+  }
+  openstatus(content) {
+      this.prepareGridstatus()
+      this.modalService.open(content, { size: "lg" })
+  }
+
+  
+}

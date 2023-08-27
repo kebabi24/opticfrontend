@@ -1,0 +1,134 @@
+<kt-portlet>
+    <kt-portlet-header [sticky]="true" [title]="'Ajouter une Ligne De Produit'" [class]="'card-head-lg'" [viewLoading$]="loading$">
+        <ng-container ktPortletTools>
+            <button type="button" (click)="goBack()" class="btn btn-secondary btn-sm mr-2">Annuller</button>
+            <button type="button" (click)="reset()" class="btn btn-secondary btn-sm mr-2">Réinitialiser</button>
+            <button type="button" (click)="onSubmit()" class="btn btn-success btn-sm mr-2">Sauvgarder </button>
+
+
+
+            <!-- <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-sm" id="dropdownBasic1" ngbDropdownToggle><i
+                        class="icon-2x text-dark-50 flaticon-more-v2"></i></button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item">Sauvgarder et quitter</button>
+
+                </div>
+            </div> -->
+
+        </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+        <div class="example-preview">
+            <form class="form" [formGroup]="productligneForm">
+                <kt-alert *ngIf="isExist" type="warn" [showCloseButton]="true" [duration]="10000"
+                    (close)="onAlertClose($event)">
+                    Ce Code existe deja
+                </kt-alert>     
+                <div class="row">
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Ligne Produit: *</label>
+                        
+                            <div class="input-group input-group-sm">
+
+                                <input type="text" formControlName="pl_prod_line"  (change)="onChangeCode()"
+                                [className]="productligneForm.controls['pl_prod_line'].errors && (productligneForm.controls['pl_prod_line'].dirty || productligneForm.controls['pl_prod_line'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                                <div *ngIf="productligneForm.controls['pl_prod_line'].errors && (productligneForm.controls['pl_prod_line'].dirty || productligneForm.controls['pl_prod_line'].touched)"
+                                    class="invalid-feedback">Ce Champs est obligatoire</div>
+                            </div>
+                        
+
+                    </div>
+
+                    <div class="form-group col-6">
+                        <label class="form-group">Description: *</label>
+                        <input type="text" formControlName="pl_desc"
+                        [className]="productligneForm.controls['pl_desc'].errors && (productligneForm.controls['pl_desc'].dirty || productligneForm.controls['pl_desc'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'">
+                        <div *ngIf="productligneForm.controls['pl_desc'].errors && (productligneForm.controls['pl_desc'].dirty || productligneForm.controls['pl_desc'].touched)"
+                            class="invalid-feedback">Ce Champs est obligatoire</div>
+                    </div>
+                </div>
+                <div class="row">    
+
+                    <div class="form-group col-2">
+                        <label class="form-group"> a Taxer: </label>
+                            <span class="switch switch-icon ">
+                                <label>
+                                    <input type="checkbox" formControlName="pl_taxable" name="Permanent"
+                                        class="form-control form-control-sm form-control-solid">
+                                    <span></span>
+                                </label>
+                            </span>
+                    </div>
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Taux Taxe: *</label>
+                            <div class="input-group input-group-sm">
+
+                                <input type="text" formControlName="pl_taxc" class="form-control form-control-solid"
+                                    aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" >
+                                        <i class="text-dark-50 flaticon2-search"></i> </span>
+                                </div>
+                            </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-2">
+                        <label class="form-group">ss compte par defaut: *</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" class="form-control form-control-solid"
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group col-2">
+                        <label class="form-group"> Remplacer: </label>
+                        <span class="switch switch-icon ">
+                            <label>
+                                <input type="checkbox" name="Permanent"
+                                    class="form-control form-control-sm form-control-solid">
+                                <span></span>
+                            </label>
+                        </span>
+
+                    </div>
+
+                    <div class="form-group col-2">
+                        <label class="form-group">Centre de cout par defaut:</label>
+                        <div class="input-group input-group-sm">
+
+                            <input type="text" class="form-control form-control-solid"
+                                aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="text-dark-50 flaticon2-search"></i> </span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-2">
+                        <label class="form-group"> Remplacer: </label>
+                        <span class="switch switch-icon ">
+                            <label>
+                                <input type="checkbox" name="Permanent"
+                                    class="form-control form-control-sm form-control-solid">
+                                <span></span>
+                            </label>
+                        </span>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </kt-portlet-body>
+</kt-portlet>
