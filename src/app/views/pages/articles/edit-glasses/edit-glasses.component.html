@@ -78,6 +78,24 @@
                                     class="invalid-feedback">Ce Champs est obligatoire</div>
                             </div>
                             <div class="form-group col-2">
+                                <label class="form-group ">RC</label>
+                                <div class="input-group input-group-sm">
+                                <select
+                                    [className]="form1.controls['gls_batch'].errors && (form1.controls['gls_batch'].dirty || form1.controls['gls_batch'].touched) ? 'form-control form-control-sm form-control-solid is-invalid' : 'form-control form-control-sm form-control-solid'"
+                                    formControlName="gls_batch" id="batch">
+                                    <option value=""></option>
+                                    <option *ngFor="let elem of gls_batch" [value]="elem.code_value">
+                                       {{elem.code_cmmt}}</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" (click)="opencode(contentcode,'gls_batch')">
+                                        <i class="text-dark-50 flaticon2-add"></i> </span>
+                                </div>  
+                                <div *ngIf="form1.controls['gls_batch'].errors && (form1.controls['gls_batch'].dirty || form1.controls['gls_batch'].touched)"
+                                    class="invalid-feedback">Ce Champs est obligatoire</div>
+                                </div>
+                            </div>
+                            <div class="form-group col-2">
                                 <label class="form-group ">Famille</label>
                                 <div class="input-group input-group-sm">
                                 <select

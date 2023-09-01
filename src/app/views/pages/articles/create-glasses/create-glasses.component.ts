@@ -170,6 +170,7 @@ export class CreateGlassesComponent implements OnInit {
   gls_run_seq2: any[] = [];
   gls_promo: any[] = [];
   gls_rev: any[] = [];
+  gls_batch : any[] = [];
   ad_city: any[] = []
   ad_state: any[] = []
   ad_county: any[] = []
@@ -360,7 +361,9 @@ export class CreateGlassesComponent implements OnInit {
       .getBy({ code_fldname: "gls_promo" })
       .subscribe((response: any) => (this.gls_promo = response.data));
 
-
+    this.codeService
+      .getBy({ code_fldname: "gls_batch" })
+       .subscribe((response: any) => (this.gls_batch = response.data));    
       /***************************************************** */
       this.codeService
       .getBy({ code_fldname: "ad_state" })
@@ -722,6 +725,7 @@ export class CreateGlassesComponent implements OnInit {
       gls_group: [ this.glasses.gls_group ],
       gls_rev: [ this.glasses.gls_rev,Validators.required ],
       gls_promo: [ this.glasses.gls_promo,Validators.required ],
+      gls_batch: [ this.glasses.gls_batch ],
 
       // gls_status: [ this.glasses.gls_status },Validators.required],
     
@@ -892,7 +896,7 @@ export class CreateGlassesComponent implements OnInit {
               controls1.gls_group.enable()
               controls1.gls_vend.enable()
               //controls1.gls_drwg_size.enable()
-              //controls1.gls_promo.enable()
+              controls1.gls_batch.enable()
               //controls1.gls_break_cat.enable()
               controls1.gls_abc.enable()
               controls1.gls_avg_int.enable()
@@ -1110,6 +1114,7 @@ var ind = ""
     _glasses.gls_draw = controls1.gls_draw.value;
     _glasses.gls_status = "pf-actif";
     _glasses.gls_promo = controls1.gls_promo.value;
+    _glasses.gls_batch = controls1.gls_batch.value;
     _glasses.gls_upc = controls1.gls_upc.value;
     _glasses.gls_vend = controls1.gls_vend.value;
     _glasses.gls_dsgn_grp = controls1.gls_dsgn_grp.value;
@@ -2495,6 +2500,10 @@ onChangeCodemstr() {
         controls1.gls_promo.setValue(cvalue);
         break;
       }
+      case "gls_batch": {
+        controls1.gls_batch.setValue(cvalue);
+        break;
+      }
       case "gls_dsgn_grp": {
         controls1.gls_dsgn_grp.setValue(cvalue);
         break;
@@ -2703,6 +2712,9 @@ this.codeService
 this.codeService
   .getBy({ code_fldname: "gls_promo" })
   .subscribe((response: any) => (this.gls_promo = response.data));
+  this.codeService
+  .getBy({ code_fldname: "gls_batch" })
+  .subscribe((response: any) => (this.gls_batch = response.data));  
 
 }
 

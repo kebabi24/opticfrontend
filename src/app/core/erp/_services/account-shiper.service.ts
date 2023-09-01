@@ -49,6 +49,10 @@ export class AccountShiperService {
         const httpHeaders = this.httpUtils.getHTTPHeaders()
         return this.http.post(API_URL+`/findwithadress`, data, { headers: httpHeaders })
     }
+    public getByWithAdressP(data: any) {
+        const httpHeaders = this.httpUtils.getHTTPHeaders()
+        return this.http.post(API_URL+`/findwithadressp`, data, { headers: httpHeaders })
+    }
     // UPDATE
     public update(data: any, id:any) {
         const httpHeaders = this.httpUtils.getHTTPHeaders()

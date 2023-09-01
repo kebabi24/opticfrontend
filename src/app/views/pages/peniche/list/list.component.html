@@ -8,7 +8,8 @@
     <kt-portlet-body>
         <div class="example-preview">
             <div class="row">
-                <angular-slickgrid class="col-12" gridHeight="1100" gridId="gridjob" [columnDefinitions]="columnDefinitions"
+                <angular-slickgrid class="col-12"  gridId="gridjob" [columnDefinitions]="columnDefinitions"
+                (onAngularGridCreated)="angularGridReady($event)"
                     [gridOptions]="gridOptions" [dataset]="dataset">
                 </angular-slickgrid>
             </div>

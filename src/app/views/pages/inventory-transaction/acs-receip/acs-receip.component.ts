@@ -4396,7 +4396,7 @@ this.codeService
 /******************************************************************* */
 openvendor(content) {
 this.createAddressForm()
-this.modalService.open(content, { size: "lg" });
+this.modalService.open(content, { size: "xl" });
 }
 
 
@@ -4724,7 +4724,7 @@ this.modalService.open(contenttax, { size: "lg" })
 
 newAcs(content) {
 this.createACSForm()
-this.modalService.open(content, { size: "lg" });
+this.modalService.open(content, { size: "xl" });
 }
 
 

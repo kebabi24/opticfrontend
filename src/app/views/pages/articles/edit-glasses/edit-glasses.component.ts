@@ -179,6 +179,7 @@ export class EditGlassesComponent implements OnInit {
   gls_run_seq2: any[] = [];
   gls_promo: any[] = [];
   gls_rev: any[] = [];
+  gls_batch: any[] = [];
 
   taux_taxe = 0;
   mvangularGrid: AngularGridInstance;
@@ -332,8 +333,8 @@ export class EditGlassesComponent implements OnInit {
         .getBy({ code_fldname: "gls_run_seq2" })
         .subscribe((response: any) => (this.gls_run_seq2 = response.data));
       this.codeService
-        .getBy({ code_fldname: "gls_promo" })
-        .subscribe((response: any) => (this.gls_promo = response.data));
+        .getBy({ code_fldname: "gls_batch" })
+        .subscribe((response: any) => (this.gls_batch = response.data));
         this.codeService
             .getBy({ code_fldname: "ad_state" })
             .subscribe((response: any) => (this.ad_state = response.data))
@@ -405,6 +406,7 @@ export class EditGlassesComponent implements OnInit {
          gls_part_type: [this.glassesEdit.gls_part_type,Validators.required],
          gls_upc: [this.glassesEdit.gls_upc],
          gls_promo: [this.glassesEdit.gls_promo],
+         gls_batch: [this.glassesEdit.gls_batch],
          
          gls_draw: [this.glassesEdit.gls_draw,Validators.required],
          gls_vend: [this.glassesEdit.gls_vend],
@@ -855,6 +857,7 @@ export class EditGlassesComponent implements OnInit {
     _glasses.gls_group = controls1.gls_group.value;
     _glasses.gls_rev = controls1.gls_rev.value;
     _glasses.gls_promo = controls1.gls_promo.value;
+    _glasses.gls_batch = controls1.gls_batch.value;
     _glasses.gls_upc = controls1.gls_upc.value;
     _glasses.gls_abc = controls1.gls_abc.value;
     
@@ -1581,6 +1584,9 @@ this.codeService
 this.codeService
   .getBy({ code_fldname: "gls_promo" })
   .subscribe((response: any) => (this.gls_promo = response.data));
+  this.codeService
+  .getBy({ code_fldname: "gls_batch" })
+  .subscribe((response: any) => (this.gls_batch = response.data));
 
 }
 

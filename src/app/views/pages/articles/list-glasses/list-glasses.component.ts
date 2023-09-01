@@ -171,6 +171,14 @@ export class ListGlassesComponent implements OnInit {
             type: FieldType.string,
           },
           {
+            id: "gls_batch",
+            name: "RC",
+            field: "gls_batch",
+            sortable: true,
+            filterable: true,
+            type: FieldType.string,
+          },
+          {
             id: "gls_rev",
             name: "Traitement",
             field: "gls_rev",

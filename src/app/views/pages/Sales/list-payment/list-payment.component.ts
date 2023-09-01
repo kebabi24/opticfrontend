@@ -59,6 +59,9 @@ const myCustomCheckboxFormatter: Formatter = (row: number, cell: number, value: 
 export class ListPaymentComponent implements OnInit {
 
  
+  loadingSubject = new BehaviorSubject<boolean>(true);
+  soForm: FormGroup;
+// slick grid
   angularGrid: AngularGridInstance;
   grid: any;
   gridService: GridService;
@@ -69,8 +72,13 @@ export class ListPaymentComponent implements OnInit {
   draggableGroupingPlugin: any;
   selectedGroupingFields: Array<string | GroupingGetterFunction> = ['', '', ''];
   gridObj: any;
+  hasFormErrors = false;
+  loading$: Observable<boolean>;
+  error = false;
+  message = "";
   constructor(
       private activatedRoute: ActivatedRoute,
+      private soFB: FormBuilder,
       private router: Router,
       public dialog: MatDialog,
       private layoutUtilsService: LayoutUtilsService,
@@ -81,8 +89,35 @@ export class ListPaymentComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.createForm();
+    this.prepareGrid();
+    this.solist();
   }
 
+  createForm() {
+    const date = new Date ;
+    date.setDate(date.getDate() - 2);
+    const date1 = new Date;
+    this.soForm = this.soFB.group({
+    
+      date: [{
+        year:date1.getFullYear(),
+        month: date1.getMonth()+1,
+        day: date1.getDate() 
+      }],
+      date1: [{
+        year:date1.getFullYear(),
+        month: date1.getMonth()+1,
+        day: date1.getDate()
+      }],
+      vend: [""],
+    
+    });
+  
+    
+    
+  
+  }
   
   gridReady(angularGrid: AngularGridInstance) {
     this.angularGrid = angularGrid;
@@ -338,5 +373,43 @@ export class ListPaymentComponent implements OnInit {
       this.gridObj.invalidate(); // invalidate all rows and re-render
     }
   
-  
+    solist(){
+      const controls = this.soForm.controls
+      console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
+      this.dataset = []
+      const date = controls.date.value
+      ? `${controls.date.value.year}/${controls.date.value.month}/${controls.date.value.day}`
+      : null;
+    
+      const date1 = controls.date1.value
+      ? `${controls.date1.value.year}/${controls.date1.value.month}/${controls.date1.value.day}`
+      : null;
+      console.log(date)
+      console.log(date1)
+      let obj= {date,date1}
+    //  this.soService.getCa(obj).subscribe(
+        this.accountShiperService.getByWithAdressP(obj).subscribe(
+        (res: any) => {
+      
+        //(response: any) => (this.dataset = response.data),
+        console.log(res.data)
+        this.dataset  = res.data;
+        //this.setSortingDynamically()
+        this.dataView.setItems(this.dataset)
+        this.setSortingDynamically()
+          
+      //this.dataset = res.data
+      this.loadingSubject.next(false) 
+    })
+    
+    }
+    
+    setSortingDynamically() {
+      this.angularGrid.sortService.updateSorting([
+        // orders matter, whichever is first in array will be the first sorted column
+        
+        { columnId: 'nbr', direction: 'DESC' },
+      ]);
+    }
+    
 }

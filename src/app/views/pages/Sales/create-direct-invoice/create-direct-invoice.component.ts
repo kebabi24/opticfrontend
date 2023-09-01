@@ -1145,7 +1145,7 @@ error = false;
     _so.ds_amt = controls1.tht.value
     _so.ds_tax_amt = controls1.tva.value
     _so.ds_trl1_amt = controls1.timbre.value
-    
+    _so.ds__dec01 = controls1.ttc.value
        
     return _so;
   

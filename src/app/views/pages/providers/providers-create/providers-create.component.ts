@@ -304,7 +304,7 @@ seq: any;
         this.provider = new Provider()
         this.addressForm = this.formBuilder.group({
            // ad_addr: [this.address.ad_addr, Validators.required],
-            ad_name: [{ value: this.address.ad_name },Validators.required],
+            ad_name: [this.address.ad_name ,Validators.required],
             ad_line1:  [{ value: this.address.ad_line1, disabled: !this.isExist },Validators.required],
             ad_city: [{ value: this.address.ad_city, disabled: !this.isExist }],
             ad_state: [{ value: this.address.ad_state, disabled: !this.isExist }],

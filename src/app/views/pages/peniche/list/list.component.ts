@@ -9,6 +9,8 @@ import {
     Editors,
     FieldType,
     OnEventArgs,
+    GridService,
+    AngularGridInstance,
 } from "angular-slickgrid"
 import { FormGroup, FormBuilder, Validators } from "@angular/forms"
 import { Observable, BehaviorSubject, Subscription, of } from "rxjs"
@@ -35,10 +37,14 @@ import { PenicheService } from "../../../../core/erp"
 export class ListComponent implements OnInit {
 
   
-  // slick grid
-  columnDefinitions: Column[] = []
-  gridOptions: GridOption = {}
-  dataset: any[] = []
+    columnDefinitions: Column[] = []
+    gridOptions: GridOption = {}
+    dataset: any[] = []
+   
+    angularGrid: AngularGridInstance;
+     grid: any;
+     gridService: GridService;
+     dataView: any;
   constructor(
       private activatedRoute: ActivatedRoute,
       private router: Router,
@@ -51,7 +57,13 @@ export class ListComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  angularGridReady(angularGrid: AngularGridInstance) {
+    this.angularGrid = angularGrid;
+    this.dataView = angularGrid.dataView;
+    this.grid = angularGrid.slickGrid;
+    this.gridService = angularGrid.gridService;
+  
+  }
   prepareGrid() {
       this.columnDefinitions = [
         {
@@ -114,8 +126,32 @@ export class ListComponent implements OnInit {
             width: 200,
             filterable: true,
             type: FieldType.string,
-        },
-        
+         },
+         {
+            id: "pen_user1",
+            name: "Code Client",
+            field: "pen_user1",
+            sortable: true,
+            filterable: true,
+            type: FieldType.string,
+          },
+         {
+            id: "pen_phys_addr",
+            name: "Nom Client",
+            field: "pen_phys_addr",
+            sortable: true,
+            filterable: true,
+            type: FieldType.string,
+          },
+          {
+            id: "pen_used",
+            name: "Utilise",
+            field: "pen_used",
+            sortable: true,
+            filterable: true,
+            type: FieldType.boolean,
+            formatter: Formatters.checkmark
+          },
           
           
       ]
@@ -134,16 +170,13 @@ export class ListComponent implements OnInit {
       // fill the dataset with your data
       this.dataset = []
       this.penicheService.getAll().subscribe(
-        
-          (response: any) => {
-          //  console.log(response.data),
-            (this.dataset = response.data),
-         
+          (response: any) => {this.dataset = response.data
+             this.dataView.setItems(this.dataset)
+           },
           (error) => {
               this.dataset = []
           },
           () => {}
-         } )
-        
-  }
-}
+      )
+        }
+    }

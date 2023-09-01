@@ -3794,7 +3794,7 @@ newCust(content) {
  // this.is_list = false;
  this.modalService.dismissAll;
   this.createAddressForm();
-  this.modalService.open(content, { size: "lg" });
+  this.modalService.open(content, { size: "xl" });
 }
 
 onSubmitCust() {
@@ -4144,6 +4144,22 @@ prepareGrid8() {
       type: FieldType.string,
     },*/
     {
+      id: "rc",
+      name: "RC",
+      field: "rc",
+      sortable: true,
+      filterable: true,
+      type: FieldType.string,
+    },
+    {
+      id: "indice",
+      name: "Indice",
+      field: "indice",
+      sortable: true,
+      filterable: true,
+      type: FieldType.string,
+    },
+    {
       id: "desc",
       name: "desc",
       field: "desc",
@@ -4460,7 +4476,7 @@ open8(content) {
    
   }
   this.prepareGrid8();
-  this.modalService.open(content, { size: "lg" });
+  this.modalService.open(content, { size: "xl" });
 }
 
 

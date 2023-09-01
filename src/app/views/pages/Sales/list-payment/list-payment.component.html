@@ -7,12 +7,56 @@
     </kt-portlet-header>
     <kt-portlet-body>
         <div class="example-preview">
+            <form class="form" [formGroup]="soForm">
+               
+                <div class="row">
+                    <div class="form-group col-3">
+                       
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-sm form-control-solid"  formControlName="date" 
+                                 placeholder="jj-mm-aaaa" name="date" ngbDatepicker f
+                                #date="ngbDatepicker"   >
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="date.toggle()"  type="button">
+                                    <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                </button>
+                            </div>
+                            
+                        </div>
+
+                    </div>
+                    <div class="form-group col-3">
+                       
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-sm form-control-solid"  formControlName="date1" 
+                                 placeholder="jj-mm-aaaa" name="date1" ngbDatepicker f
+                                #date1="ngbDatepicker"   >
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="date1.toggle()"  type="button">
+                                    <i class="flaticon-calendar-with-a-clock-time-tools"></i>
+                                </button>
+                            </div>
+                            
+                        </div>
+
+                    </div>
+               
+                    <div class="form-group col-4">
+                  
+                        <div class="input-group input-group-sm">
+
+                        <button type="button"  (click)="solist()" class="btn btn-sm btn-primary btn-elevate col-lg-4">Valider </button>
+                        </div>
+                    </div>    
+                </div>
+            
             <div class="row">
                 <angular-slickgrid class="col-12"  gridId="gridCode" [columnDefinitions]="columnDefinitions"
                 (onAngularGridCreated)="gridReady($event)"
                     [gridOptions]="gridOptions" [dataset]="dataset">
                 </angular-slickgrid>
             </div>
+            </form>
             
         </div>
 
